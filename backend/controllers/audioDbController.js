@@ -1,15 +1,11 @@
 const getArtist = async (req, res) => {
   try {
-    const apiKey = req.headers['x-api-key'];
-    const user_search = req.query.q || req.params.id;
-    if (!apiKey) {
-      return res.status(400).json({ error: 'API key missing in X-API-KEY header' });
+    const user_search = req.query.s;
+    if (!user_search) {
+      return res.status(400).json({ error: 'Missing artist name' });
     }
-    const response = await fetch(`https://www.theaudiodb.com/api/v2/json/search/artist/${encodeURIComponent(user_search)}`, {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
+    const url = `https://www.theaudiodb.com/api/v1/json/123/search.php?s=${encodeURIComponent(user_search)}`;
+    const response = await fetch(url);
     if (!response.ok) {
       return res.status(response.status).json({ error: 'Failed to fetch artist info' });
     }
@@ -18,19 +14,20 @@ const getArtist = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
-}
+};
 const getAlbum = async (req, res) => {
   try {
-    const apiKey = req.headers['x-api-key'];
-    const user_search = req.query.q || req.params.id;
-    if (!apiKey) {
-      return res.status(400).json({ error: 'API key missing in X-API-KEY header' });
+    const artist = req.query.artist || req.params.artist;
+    const album = req.query.album || req.params.album;
+    let url;
+    if (artist && album) {
+      url = `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(artist)}&a=${encodeURIComponent(album)}`;
+    } else if (artist) {
+      url = `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(artist)}`;
+    } else {
+      return res.status(400).json({ error: 'Missing artist name' });
     }
-    const response = await fetch(`https://www.theaudiodb.com/api/v2/json/search/album/${encodeURIComponent(user_search)}`, {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
+    const response = await fetch(url);
     if (!response.ok) {
       return res.status(response.status).json({ error: 'Failed to fetch album info' });
     }
@@ -39,20 +36,17 @@ const getAlbum = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
-}
+};
 
 const getTrack = async (req, res) => {
   try {
-    const apiKey = req.headers['x-api-key'];
-    const user_search = req.query.q || req.params.id;
-    if (!apiKey) {
-      return res.status(400).json({ error: 'API key missing in X-API-KEY header' });
+    const artist = req.query.artist || req.params.artist;
+    const track = req.query.track || req.params.track;
+    if (!artist || !track) {
+      return res.status(400).json({ error: 'Missing artist or track name' });
     }
-    const response = await fetch(`https://www.theaudiodb.com/api/v2/json/search/track/${encodeURIComponent(user_search)}`, {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
+    const url = `https://www.theaudiodb.com/api/v1/json/123/searchtrack.php?s=${encodeURIComponent(artist)}&t=${encodeURIComponent(track)}`;
+    const response = await fetch(url);
     if (!response.ok) {
       return res.status(response.status).json({ error: 'Failed to fetch track info' });
     }
@@ -61,21 +55,17 @@ const getTrack = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
-}
+};
 
-// Lookup endpoints
+// Lookup endpoints v1
 const lookupArtist = async (req, res) => {
   try {
-    const apiKey = req.headers['x-api-key'];
     const idArtist = req.params.id;
-    if (!apiKey) {
-      return res.status(400).json({ error: 'API key missing in X-API-KEY header' });
+    if (!idArtist) {
+      return res.status(400).json({ error: 'Missing artist id' });
     }
-    const response = await fetch(`https://www.theaudiodb.com/api/v2/json/lookup/artist/${encodeURIComponent(idArtist)}`, {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
+    const url = `https://www.theaudiodb.com/api/v1/json/123/artist.php?i=${encodeURIComponent(idArtist)}`;
+    const response = await fetch(url);
     if (!response.ok) {
       return res.status(response.status).json({ error: 'Failed to fetch artist details' });
     }
@@ -84,20 +74,16 @@ const lookupArtist = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
-}
+};
 
 const lookupAlbum = async (req, res) => {
   try {
-    const apiKey = req.headers['x-api-key'];
     const idAlbum = req.params.id;
-    if (!apiKey) {
-      return res.status(400).json({ error: 'API key missing in X-API-KEY header' });
+    if (!idAlbum) {
+      return res.status(400).json({ error: 'Missing album id' });
     }
-    const response = await fetch(`https://www.theaudiodb.com/api/v2/json/lookup/album/${encodeURIComponent(idAlbum)}`, {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
+    const url = `https://www.theaudiodb.com/api/v1/json/123/album.php?m=${encodeURIComponent(idAlbum)}`;
+    const response = await fetch(url);
     if (!response.ok) {
       return res.status(response.status).json({ error: 'Failed to fetch album details' });
     }
@@ -106,20 +92,16 @@ const lookupAlbum = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
-}
+};
 
 const lookupTrack = async (req, res) => {
   try {
-    const apiKey = req.headers['x-api-key'];
     const idTrack = req.params.id;
-    if (!apiKey) {
-      return res.status(400).json({ error: 'API key missing in X-API-KEY header' });
+    if (!idTrack) {
+      return res.status(400).json({ error: 'Missing track id' });
     }
-    const response = await fetch(`https://www.theaudiodb.com/api/v2/json/lookup/track/${encodeURIComponent(idTrack)}`, {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
+    const url = `https://www.theaudiodb.com/api/v1/json/123/track.php?h=${encodeURIComponent(idTrack)}`;
+    const response = await fetch(url);
     if (!response.ok) {
       return res.status(response.status).json({ error: 'Failed to fetch track details' });
     }
@@ -128,7 +110,7 @@ const lookupTrack = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
-}
+};
 
 // v1 endpoints
 
