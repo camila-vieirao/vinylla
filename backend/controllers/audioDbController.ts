@@ -1,6 +1,9 @@
-const getArtist = async (req, res) => {
+// Conversão para TypeScript do controller
+import { Request, Response } from 'express';
+
+export const getArtist = async (req: Request, res: Response) => {
   try {
-    const user_search = req.query.s;
+    const user_search = req.query.s as string;
     if (!user_search) {
       return res.status(400).json({ error: 'Missing artist name' });
     }
@@ -11,15 +14,16 @@ const getArtist = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
-const getAlbum = async (req, res) => {
+
+export const getAlbum = async (req: Request, res: Response) => {
   try {
-    const artist = req.query.artist || req.params.artist;
-    const album = req.query.album || req.params.album;
-    let url;
+    const artist = (req.query.artist || req.params.artist) as string;
+    const album = (req.query.album || req.params.album) as string;
+    let url: string;
     if (artist && album) {
       url = `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(artist)}&a=${encodeURIComponent(album)}`;
     } else if (artist) {
@@ -33,15 +37,15 @@ const getAlbum = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
 
-const getTrack = async (req, res) => {
+export const getTrack = async (req: Request, res: Response) => {
   try {
-    const artist = req.query.artist || req.params.artist;
-    const track = req.query.track || req.params.track;
+    const artist = (req.query.artist || req.params.artist) as string;
+    const track = (req.query.track || req.params.track) as string;
     if (!artist || !track) {
       return res.status(400).json({ error: 'Missing artist or track name' });
     }
@@ -52,13 +56,12 @@ const getTrack = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
 
-// Lookup endpoints v1
-const lookupArtist = async (req, res) => {
+export const lookupArtist = async (req: Request, res: Response) => {
   try {
     const idArtist = req.params.id;
     if (!idArtist) {
@@ -71,12 +74,12 @@ const lookupArtist = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
 
-const lookupAlbum = async (req, res) => {
+export const lookupAlbum = async (req: Request, res: Response) => {
   try {
     const idAlbum = req.params.id;
     if (!idAlbum) {
@@ -89,12 +92,12 @@ const lookupAlbum = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
 
-const lookupTrack = async (req, res) => {
+export const lookupTrack = async (req: Request, res: Response) => {
   try {
     const idTrack = req.params.id;
     if (!idTrack) {
@@ -107,19 +110,16 @@ const lookupTrack = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
 
-// v1 endpoints
-
-// v1 Music Charts endpoints
-const getMusicCharts = async (req, res) => {
+export const getMusicCharts = async (req: Request, res: Response) => {
   try {
-    const artist = req.query.artist;
-    const mbid = req.query.mbid;
-    let url;
+    const artist = req.query.artist as string;
+    const mbid = req.query.mbid as string;
+    let url: string;
     if (artist) {
       url = `https://www.theaudiodb.com/api/v1/json/123/track-top10.php?s=${encodeURIComponent(artist)}`;
     } else if (mbid) {
@@ -133,14 +133,14 @@ const getMusicCharts = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
 
-const getMostLoved = async (req, res) => {
+export const getMostLoved = async (req: Request, res: Response) => {
   try {
-    const format = req.query.format || 'track'; // 'track' or 'album'
+    const format = (req.query.format as string) || 'track';
     const url = `https://www.theaudiodb.com/api/v1/json/123/mostloved.php?format=${encodeURIComponent(format)}`;
     const response = await fetch(url);
     if (!response.ok) {
@@ -148,17 +148,16 @@ const getMostLoved = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
 
-// v1 Trending endpoints
-const getTrending = async (req, res) => {
+export const getTrending = async (req: Request, res: Response) => {
   try {
-    const country = req.query.country || 'us';
-    const type = req.query.type || 'itunes';
-    const format = req.query.format || 'albums'; // 'albums' or 'singles'
+    const country = (req.query.country as string) || 'us';
+    const type = (req.query.type as string) || 'itunes';
+    const format = (req.query.format as string) || 'albums';
     const url = `https://www.theaudiodb.com/api/v1/json/123/trending.php?country=${encodeURIComponent(country)}&type=${encodeURIComponent(type)}&format=${encodeURIComponent(format)}`;
     const response = await fetch(url);
     if (!response.ok) {
@@ -166,19 +165,7 @@ const getTrending = async (req, res) => {
     }
     const data = await response.json();
     res.status(200).json(data);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 };
-
-module.exports = {
-  getArtist,
-  getAlbum,
-  getTrack,
-  getMusicCharts,
-  getMostLoved,
-  getTrending,
-  lookupArtist,
-  lookupAlbum,
-  lookupTrack
-}

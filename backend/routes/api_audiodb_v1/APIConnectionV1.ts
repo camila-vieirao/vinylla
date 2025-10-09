@@ -1,20 +1,19 @@
-const express = require('express');
+import express from 'express';
+import {
+  getArtist,
+  getAlbum,
+  getTrack,
+  getMusicCharts,
+  getMostLoved,
+  getTrending,
+  lookupArtist,
+  lookupAlbum,
+  lookupTrack
+} from '../../controllers/audioDbController';
+
 const router = express.Router();
 
-const {
-    getArtist,
-    getAlbum,
-    getTrack,
-    getMusicCharts,
-    getMostLoved,
-    getTrending,
-    lookupArtist,
-    lookupAlbum,
-    lookupTrack
-} = require('../../controllers/audioDbController');
-
 // SEARCH endpoints (v1)
-
 router.get('/v1/artist', getArtist);
 router.get('/v1/album', getAlbum);
 router.get('/v1/track', getTrack);
@@ -29,4 +28,4 @@ router.get('/v1/music-charts', getMusicCharts);
 router.get('/v1/most-loved', getMostLoved);
 router.get('/v1/trending', getTrending);
 
-module.exports = router;
+export default router;
