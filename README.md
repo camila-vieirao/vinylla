@@ -1,6 +1,5 @@
 # SETUP DATABASE
-1. create a MySQL schema named "vinylla"
-2. run the all the SQL scripts in "vinylla/db/" to create the necessary tables
+1. run the script `dump.sql` located in the `vinylla/db` folder to create the necessary database schema.
 
 # RUN BACKEND SERVER
 ```
