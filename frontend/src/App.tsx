@@ -1,6 +1,7 @@
-import { Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Bounce, ToastContainer } from "react-toastify";
+import Feed from "./pages/Feed/Feed";
 
 function App() {
   return (
@@ -18,7 +19,9 @@ function App() {
         theme="light"
         transition={Bounce}
       />
-      <Routes></Routes>
+      <Routes>
+        <Route path="/feed" element={<Feed />} />
+      </Routes>
     </>
   );
 }
