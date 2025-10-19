@@ -10,10 +10,10 @@ import logo from "../../assets/logo 1.png";
 const Header: React.FC = () => {
   return (
     <nav className="bg-[#262730]">
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-2 ">
         <div className="flex items-center gap-8">
           <Link to="/feed" className="flex items-center rtl:space-x-reverse">
-            <img src={logo} className="w-20" alt="Logo Vinylla" />
+            <img src={logo} className="w-25" alt="Logo Vinylla" />
             <span className="cursor-pointer text-2xl font-bold text-white">
               Vinylla.
             </span>
