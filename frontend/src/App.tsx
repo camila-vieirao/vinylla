@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Bounce, ToastContainer } from "react-toastify";
-import Feed from "./components/Feed/Feed";
+import Feed from "./pages/Feed/Feed";
 
 function App() {
   return (

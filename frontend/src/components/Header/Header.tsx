@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 
+import { FaSearch } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoIosNotifications, IoIosPeople, IoMdSettings } from "react-icons/io";
-import { FaSearch } from "react-icons/fa";
 
 import avatar from "../../assets/borabill_avatar.jpeg";
 import logo from "../../assets/logo 1.png";
 
-const Feed: React.FC = () => {
+const Header: React.FC = () => {
   return (
     <nav className="bg-[#262730]">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
@@ -89,4 +89,4 @@ const Feed: React.FC = () => {
   );
 };
 
-export default Feed;
+export default Header;
