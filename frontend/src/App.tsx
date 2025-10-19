@@ -2,8 +2,13 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Bounce, ToastContainer } from "react-toastify";
 import Feed from "./pages/Feed/Feed";
+import Sidebar from "./components/Sidebar/Sidebar";
+import { AlbumSearchModal } from "./components/ReviewModal/AlbumSearchModal";
+import { useState } from "react";
 
 function App() {
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   return (
     <>
       <ToastContainer
@@ -19,9 +24,19 @@ function App() {
         theme="light"
         transition={Bounce}
       />
+      <Sidebar onReviewClick={() => setShowReviewModal(true)} />
       <Routes>
         <Route path="/feed" element={<Feed />} />
       </Routes>
+      {showReviewModal && (
+        <AlbumSearchModal
+          onSelect={album => {
+            // Aqui você pode avançar para a tela de avaliação depois
+            setShowReviewModal(false);
+          }}
+          onClose={() => setShowReviewModal(false)}
+        />
+      )}
     </>
   );
 }

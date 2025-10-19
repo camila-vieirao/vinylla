@@ -5,7 +5,6 @@ const Feed: React.FC = () => {
   return (
     <div>
       <Header />
-      <Sidebar />
     </div>
   );
 };
