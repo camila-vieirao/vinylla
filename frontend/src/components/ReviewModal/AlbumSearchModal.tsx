@@ -9,7 +9,12 @@ type Album = {
   strAlbumThumb: string;
 };
 
-export function AlbumSearchModal({ onSelect, onClose }) {
+interface AlbumSearchModalProps {
+  onSelect: (album: Album) => void;
+  onClose: () => void;
+}
+
+export function AlbumSearchModal({ onSelect, onClose }: AlbumSearchModalProps) {
   const [searchArtist, setSearchArtist] = useState('');
   const [searchAlbum, setSearchAlbum] = useState('');
   const [results, setResults] = useState<Album[]>([]);
@@ -57,7 +62,7 @@ export function AlbumSearchModal({ onSelect, onClose }) {
           {loading ? "Searching..." : "Search"}
         </button>
         <div
-          className="max-h-64 overflow-y-auto mb-2 pr-1 pl-6"
+          className="max-h-64 overflow-y-auto mb-2 pr-1 pl-6 custom-scrollbar"
           style={{
             scrollbarWidth: 'thin',
             scrollbarColor: '#262730 #464753',
