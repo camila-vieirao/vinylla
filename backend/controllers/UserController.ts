@@ -50,7 +50,11 @@ export const createUser = async (req: Request, res: Response) => {
       .status(201)
       .json({ message: "User created", userId: (result as any).insertId });
   } catch (error) {
-    res.status(500).json({ error: "Failed to create user" });
+    if ((error as any).code === "ER_DUP_ENTRY") {
+      res.status(400).json({ error: "Username or email already exists" });
+    } else {
+      res.status(500).json({ error: "Failed to create user" });
+    }
   }
 };
 
