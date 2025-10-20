@@ -34,7 +34,7 @@ export function AlbumSearchModal({ onSelect, onClose }: AlbumSearchModalProps) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black/10">
-  <div className="bg-[#464753] rounded-lg p-8 shadow-lg w-[520px] relative">
+  <div className="bg-[#272730] rounded-lg p-8 shadow-lg w-[520px] relative">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl"

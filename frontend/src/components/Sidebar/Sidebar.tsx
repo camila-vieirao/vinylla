@@ -9,10 +9,10 @@ const Sidebar: React.FC<{ onReviewClick: () => void }> = ({ onReviewClick }) => 
   return (
     <div>
       <aside
-        className="fixed top-28 left-0 z-40 w-28 h-[calc(100vh-4rem)] transition-transform -translate-x-full sm:translate-x-0"
+        className="fixed top-[100px] left-0 z-40 w-28 h-[calc(100vh-72px)] transition-transform sm:translate-x-0 bg-[#262731]"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-[#262731]">
+  <div className="h-full px-3 py-4 overflow-y-auto">
           <ul className="flex flex-col items-center space-y-6 font-medium">
             <li>
               <Link
