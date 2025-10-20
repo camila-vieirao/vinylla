@@ -31,7 +31,7 @@ function App() {
       {showReviewModal && (
         <AlbumSearchModal
           onSelect={album => {
-            // Aqui você pode avançar para a tela de avaliação depois
+            // avançar para a tela de avaliação depois
             setShowReviewModal(false);
           }}
           onClose={() => setShowReviewModal(false)}
