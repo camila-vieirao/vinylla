@@ -4,10 +4,12 @@ import { Bounce, ToastContainer } from "react-toastify";
 import Feed from "./pages/Feed/Feed";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { AlbumSearchModal } from "./components/ReviewModal/AlbumSearchModal";
+import { ReviewFormModal } from "./components/ReviewModal/ReviewFormModal";
 import { useState } from "react";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedAlbum, setSelectedAlbum] = useState(null);
 
   return (
     <>
@@ -28,13 +30,26 @@ function App() {
       <Routes>
         <Route path="/feed" element={<Feed />} />
       </Routes>
-      {showReviewModal && (
+      {showReviewModal && !selectedAlbum && (
         <AlbumSearchModal
           onSelect={album => {
-            // avançar para a tela de avaliação depois
-            setShowReviewModal(false);
+            setSelectedAlbum(album);
           }}
           onClose={() => setShowReviewModal(false)}
+        />
+      )}
+      {showReviewModal && selectedAlbum && (
+        <ReviewFormModal
+          album={selectedAlbum}
+          onClose={() => {
+            setShowReviewModal(false);
+            setSelectedAlbum(null);
+          }}
+          onSubmit={review => {
+            // Aqui você pode enviar o review para o backend
+            setShowReviewModal(false);
+            setSelectedAlbum(null);
+          }}
         />
       )}
     </>
