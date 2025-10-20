@@ -64,28 +64,28 @@ export const SearchResults: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-50 py-8">
-      <h1 className="text-2xl font-bold mb-4">Results for "{q}"</h1>
+      <h1 className="text-2xl font-bold mb-4 text-[#FEF4EA]">Results for "{q}"</h1>
       {loading ? (
         <div>Loading...</div>
       ) : (
         <>
           {results.length === 0 ? (
-            <div className="text-gray-500">No results found.</div>
+            <div className="text-[#FEF4EA]">No results found.</div>
           ) : (
             <ul>
               {results.map(item => (
                 <li
                   key={item.type + item.id}
-                  className="flex items-center px-4 py-2 cursor-pointer hover:bg-[#f3f3f3] rounded"
+                  className="flex items-center px-4 py-2 cursor-pointer hover:bg-[#262730] transition rounded"
                   onClick={() => handleSelect(item)}
                 >
                   {item.thumb && (
                     <img src={item.thumb} alt={item.name} className="w-10 h-10 rounded mr-3" />
                   )}
                   <div>
-                    <div className="font-medium">{item.name}</div>
-                    {item.subtitle && <div className="text-xs text-gray-500">{item.subtitle}</div>}
-                    <span className="text-xs text-[#8078a5]">{item.type}</span>
+                    <div className="font-medium text-[#FEF4EA]">{item.name}</div>
+                    {item.subtitle && <div className="text-xs text-[#FEF4EA]">{item.subtitle}</div>}
+                    <span className="text-xs text-[#FEF4EA]">{item.type}</span>
                   </div>
                 </li>
               ))}
@@ -99,7 +99,7 @@ export const SearchResults: React.FC = () => {
             >
               Previous
             </button>
-            <span>
+            <span className="text-[#FEF4EA]">
               Page {page} of {Math.ceil(total / 10) || 1}
             </span>
             <button
