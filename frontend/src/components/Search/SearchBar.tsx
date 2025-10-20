@@ -41,9 +41,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
         // Busca álbum
         const albumRes = await fetch(`http://localhost:3000/api_audiodb/v1/album?artist=${encodeURIComponent(value)}`);
         const albumData = await albumRes.json();
-        // Busca track
-        const trackRes = await fetch(`http://localhost:3000/api_audiodb/v1/track?artist=${encodeURIComponent(value)}&track=${encodeURIComponent(value)}`);
-        const trackData = await trackRes.json();
 
         const results: SearchResult[] = [
           ...(artistData.artists || []).map((a: any) => ({
@@ -59,13 +56,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
             name: a.strAlbum,
             thumb: a.strAlbumThumb,
             subtitle: a.strArtist,
-          })),
-          ...(trackData.track || []).map((t: any) => ({
-            id: t.idTrack,
-            type: "track",
-            name: t.strTrack,
-            thumb: t.strTrackThumb,
-            subtitle: t.strArtist,
           })),
         ].slice(0, 10);
 
@@ -86,7 +76,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
     setQuery("");
     if (item.type === "artist") navigate(`/artist/${item.id}`);
     else if (item.type === "album") navigate(`/album/${item.id}`);
-    else if (item.type === "track") navigate(`/track/${item.id}`);
   };
 
   // Ao submeter (enter ou botão)
@@ -112,6 +101,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
       />
       {showDropdown && results.length > 0 && (
         <div className="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+          <div
+            className="text-left pl-4 py-2 text-[#8078a5] cursor-pointer hover:underline"
+            onClick={() => {
+              setShowDropdown(false);
+              navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+            }}
+          >
+            See all results
+          </div>
           {results.map(item => (
             <div
               key={item.type + item.id}
@@ -128,15 +126,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
               </div>
             </div>
           ))}
-          <div
-            className="text-center py-2 text-[#8078a5] cursor-pointer hover:underline"
-            onClick={() => {
-              setShowDropdown(false);
-              navigate(`/search?q=${encodeURIComponent(query.trim())}`);
-            }}
-          >
-            See all results
-          </div>
         </div>
       )}
       {showDropdown && !loading && results.length === 0 && (

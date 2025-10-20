@@ -28,9 +28,6 @@ export const SearchResults: React.FC = () => {
         // Busca álbum
         const albumRes = await fetch(`http://localhost:3000/api_audiodb/v1/album?artist=${encodeURIComponent(q)}`);
         const albumData = await albumRes.json();
-        // Busca track
-        const trackRes = await fetch(`http://localhost:3000/api_audiodb/v1/track?artist=${encodeURIComponent(q)}&track=${encodeURIComponent(q)}`);
-        const trackData = await trackRes.json();
 
         const allResults: SearchResult[] = [
           ...(artistData.artists || []).map((a: any) => ({
@@ -46,13 +43,6 @@ export const SearchResults: React.FC = () => {
             name: a.strAlbum,
             thumb: a.strAlbumThumb,
             subtitle: a.strArtist,
-          })),
-          ...(trackData.track || []).map((t: any) => ({
-            id: t.idTrack,
-            type: "track",
-            name: t.strTrack,
-            thumb: t.strTrackThumb,
-            subtitle: t.strArtist,
           })),
         ];
 
@@ -70,11 +60,10 @@ export const SearchResults: React.FC = () => {
   const handleSelect = (item: SearchResult) => {
     if (item.type === "artist") navigate(`/artist/${item.id}`);
     else if (item.type === "album") navigate(`/album/${item.id}`);
-    else if (item.type === "track") navigate(`/track/${item.id}`);
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
+    <div className="max-w-2xl mx-50 py-8">
       <h1 className="text-2xl font-bold mb-4">Results for "{q}"</h1>
       {loading ? (
         <div>Loading...</div>
