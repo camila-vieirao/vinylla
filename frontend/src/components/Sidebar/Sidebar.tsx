@@ -5,7 +5,7 @@ import { IoMdHome } from "react-icons/io";
 import { MdExplore, MdOutlineShoppingBag } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ onReviewClick: () => void }> = ({ onReviewClick }) => {
   return (
     <div>
       <aside
@@ -13,7 +13,7 @@ const Sidebar: React.FC = () => {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-[#262731]">
-          <ul className="space-y-6 font-medium">
+          <ul className="flex flex-col items-center space-y-6 font-medium">
             <li>
               <Link
                 to="/"
@@ -24,7 +24,6 @@ const Sidebar: React.FC = () => {
                 </span>
               </Link>
             </li>
-
             <li>
               <Link
                 to="/explore"
@@ -35,11 +34,9 @@ const Sidebar: React.FC = () => {
                 </span>
               </Link>
             </li>
-
             <li>
-              {/* Trocar rota depois */}
               <Link
-                to=""
+                to="/cart"
                 className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
               >
                 <span>
@@ -47,10 +44,9 @@ const Sidebar: React.FC = () => {
                 </span>
               </Link>
             </li>
-
             <li>
               <Link
-                to=""
+                to="/notifications"
                 className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
               >
                 <span>
@@ -58,21 +54,18 @@ const Sidebar: React.FC = () => {
                 </span>
               </Link>
             </li>
-
             <li>
-              {/* Trocar rota depois */}
-              <Link
-                to=""
+              <button
+                onClick={onReviewClick}
                 className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
+                style={{ width: "100%" }}
               >
                 <span>
                   <FaStarHalfAlt className="text-3xl" />
                 </span>
-              </Link>
+              </button>
             </li>
-
             <li>
-              {/* Trocar rota depois */}
               <Link
                 to=""
                 className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
