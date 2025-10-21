@@ -21,3 +21,7 @@ input[type="search"]::-webkit-search-cancel-button {
     no-repeat center center;
   cursor: pointer;
 }
+
+body {
+  background-color: #464753;
+}

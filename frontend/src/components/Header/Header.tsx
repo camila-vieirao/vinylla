@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
 
-import { FaSearch } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoIosNotifications, IoIosPeople, IoMdSettings } from "react-icons/io";
+import { SearchBar } from "../Search/SearchBar";
 
 import avatar from "../../assets/borabill_avatar.jpeg";
 import logo from "../../assets/logo 1.png";
 
 const Header: React.FC = () => {
   return (
-    <nav className="bg-[#262730]">
+    <nav className="bg-[#262730] sticky top-0 z-50">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-2 ">
         <div className="flex items-center gap-8">
           <Link to="/feed" className="flex items-center rtl:space-x-reverse">
@@ -19,8 +19,9 @@ const Header: React.FC = () => {
             </span>
           </Link>
 
-          <form className="w-64">
-            <label className="sr-only">Search</label>
+          <div className="w-64">
+            <SearchBar />
+            {/* <label className="sr-only">Search</label>
 
             <div className="relative">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -34,7 +35,9 @@ const Header: React.FC = () => {
                 required
               />
             </div>
-          </form>
+            */}
+
+          </div>
         </div>
 
         <div className="flex items-center gap-6 text-3xl">
