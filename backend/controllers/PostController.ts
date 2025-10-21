@@ -37,7 +37,7 @@ export const getPostById = async (req: Request, res: Response) => {
 // Get de todos os Posts de um usuário específico pelo ID do usuário
 export const getPostsByUserId = async (req: Request, res: Response) => {
   const userId = req.params.userId;
-  const sql = "SELECT * FROM posts WHERE user_id = ?";
+  const sql = "SELECT * FROM posts WHERE userid = ?";
 
   try {
     const [rows] = await pool.query(sql, [userId]);
@@ -56,10 +56,11 @@ export const createPostByUserId = async (req: Request, res: Response) => {
   // `createdAt` DATETIME NULL,
 
   const userId = req.params.userId;
+  console.log(userId);
   const { postText, postImg, postMention } = req.body;
 
   const sql = `
-    INSERT INTO posts (postText, postImg, user_id, postMention, createdAt)
+    INSERT INTO posts (postText, postImg, userid, postMention, createdAt)
     VALUES (?, ?, ?, ?, NOW())
   `;
 
@@ -99,7 +100,7 @@ export const deletePostById = async (req: Request, res: Response) => {
 
 export const deletePostsByUserId = async (req: Request, res: Response) => {
   const userId = req.params.userId;
-  const sql = "DELETE FROM posts WHERE user_id = ?";
+  const sql = "DELETE FROM posts WHERE userid = ?";
 
   try {
     await pool.query(sql, [userId]);

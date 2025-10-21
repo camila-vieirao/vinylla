@@ -13,12 +13,12 @@ import {
 const router = express.Router();
 
 // Rota para obter todos os posts
-router.get("/posts", getPosts);
-router.get("/posts/:id", getPostById);
-router.get("/posts/user/:userId", getPostsByUserId);
-router.post("/posts/user/:userId", createPostByUserId);
-router.delete("/posts/:id", deletePostById);
-router.delete("/posts/user/:userId", deletePostsByUserId);
-router.put("/posts/:id", updatePostById);
+router.get('/posts', getPosts); // x
+router.get('/posts/:id', getPostById); // x
+router.get('/posts/user/:userId', getPostsByUserId); //x
+router.post('/posts/user/:userId', createPostByUserId); // x
+router.delete('/posts/:id', deletePostById); // x
+router.delete('/posts/user/:userId', deletePostsByUserId);
+router.put('/posts/:id', updatePostById);
 
 export default router;
