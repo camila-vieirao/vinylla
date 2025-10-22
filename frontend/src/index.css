@@ -7,6 +7,11 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* Cor de fundo global */
+body {
+  background-color: #464753;
+}
+
 /* Alterar o "X" que aparece quando vc digita algo em um input, alterando pra um melhor pq do padrão do navegador não combina com o projeto. */
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
