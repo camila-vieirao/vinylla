@@ -5,14 +5,16 @@ import { IoMdHome } from "react-icons/io";
 import { MdExplore, MdOutlineShoppingBag } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const Sidebar: React.FC<{ onReviewClick: () => void }> = ({ onReviewClick }) => {
+const Sidebar: React.FC<{ onReviewClick: () => void }> = ({
+  onReviewClick,
+}) => {
   return (
     <div>
       <aside
         className="fixed top-[100px] left-0 z-40 w-28 h-[calc(100vh-72px)] transition-transform sm:translate-x-0 bg-[#262731]"
         aria-label="Sidebar"
       >
-  <div className="h-full px-3 py-4 overflow-y-auto">
+        <div className="h-full px-3 py-4 overflow-y-auto">
           <ul className="flex flex-col items-center space-y-6 font-medium">
             <li>
               <Link
@@ -57,7 +59,7 @@ const Sidebar: React.FC<{ onReviewClick: () => void }> = ({ onReviewClick }) => 
             <li>
               <button
                 onClick={onReviewClick}
-                className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
+                className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5] cursor-pointer"
                 style={{ width: "100%" }}
               >
                 <span>
