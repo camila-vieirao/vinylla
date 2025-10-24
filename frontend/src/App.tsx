@@ -8,10 +8,11 @@ import { AlbumSearchModal } from "./components/ReviewModal/AlbumSearchModal";
 import { ReviewFormModal } from "./components/ReviewModal/ReviewFormModal";
 import { useState } from "react";
 import { SearchResults } from "./pages/Search/SearchResults";
-
+import CreatePostModal from "./components/CreatePostModal/CreatePostModal";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
 
   return (
@@ -30,14 +31,20 @@ function App() {
         transition={Bounce}
       />
       <Header />
-      <Sidebar onReviewClick={() => setShowReviewModal(true)} />
+      <Sidebar
+        onReviewClick={() => setShowReviewModal(true)}
+        onPostClick={() => setShowPostModal(true)}
+      />
       <Routes>
         <Route path="/feed" element={<Feed />} />
         <Route path="/search" element={<SearchResults />} />
       </Routes>
+      {showPostModal && (
+        <CreatePostModal onClose={() => setShowPostModal(false)} />
+      )}
       {showReviewModal && !selectedAlbum && (
         <AlbumSearchModal
-          onSelect={album => {
+          onSelect={(album) => {
             setSelectedAlbum(album);
           }}
           onClose={() => setShowReviewModal(false)}
@@ -50,7 +57,7 @@ function App() {
             setShowReviewModal(false);
             setSelectedAlbum(null);
           }}
-          onSubmit={review => {
+          onSubmit={(review) => {
             // Aqui você pode enviar o review para o backend
             setShowReviewModal(false);
             setSelectedAlbum(null);
