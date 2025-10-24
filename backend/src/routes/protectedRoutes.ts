@@ -15,6 +15,12 @@ import {
   deletePostsByUserId,
   updatePostById,
 } from "../controllers/PostController";
+import {
+  createComment,
+  getCommentsByPost,
+  deleteComment,
+  updateComment,
+} from "../controllers/CommentController";
 
 const protectedRoutes = Router();
 
@@ -28,12 +34,15 @@ protectedRoutes.delete("/users/:id", deleteUser);
 protectedRoutes.put("/users/:id", updateUser);
 
 // Posts
-protectedRoutes.get("/posts", getPosts);
 protectedRoutes.get("/posts/:id", getPostById);
-protectedRoutes.get("/posts/user/:userId", getPostsByUserId);
 protectedRoutes.post("/posts", createPostByUserId); // Require userId from token
 protectedRoutes.delete("/posts/:id", deletePostById);
 protectedRoutes.delete("/posts", deletePostsByUserId); // Require userId from token
 protectedRoutes.put("/posts/:id", updatePostById);
+
+// Comments
+protectedRoutes.post("/comments/post/:postId", createComment); // Require userId from token
+protectedRoutes.delete("/comments/:commentId", deleteComment); // Require userId from token
+protectedRoutes.put("/comments/:commentId", updateComment); // Require userId from token
 
 export { protectedRoutes };
