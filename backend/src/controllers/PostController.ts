@@ -55,7 +55,7 @@ export const createPostByUserId = async (req: Request, res: Response) => {
   // `postMention` VARCHAR(200) NULL,
   // `createdAt` DATETIME NULL,
 
-  const userId = req.params.userId;
+  const userId = (req as any).user.id;
   console.log(userId);
   const { postText, postImg, postMention } = req.body;
 
@@ -99,7 +99,7 @@ export const deletePostById = async (req: Request, res: Response) => {
 // Caso queiramos deletar um usuário, a chave estrangeira dos posts vai barrar. Portanto
 
 export const deletePostsByUserId = async (req: Request, res: Response) => {
-  const userId = req.params.userId;
+  const userId = (req as any).user.id;
   const sql = "DELETE FROM posts WHERE userid = ?";
 
   try {
