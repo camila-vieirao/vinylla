@@ -4,7 +4,8 @@ import { Request, Response } from "express";
 export const createComment = async (req: Request, res: Response) => {
   // `commentText`, `createdAt`, `userid`, `postid`
   const userId = (req as any).user.id;
-  const { postId, commentText } = req.body;
+  const postId = req.params.postId;
+  const commentText = req.body.commentText;
 
   const sql =
     "INSERT INTO comments (commentText, createdAt, userid, postid) VALUES (?, NOW(), ?, ?)";
@@ -17,6 +18,11 @@ export const createComment = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
+
+    if ((error as any).code === "ER_NO_REFERENCED_ROW_2") {
+      return res.status(400).json({ message: "Post does not exist." });
+    }
+
     return res.status(500).json({ message: "Internal server error." });
   }
 };
