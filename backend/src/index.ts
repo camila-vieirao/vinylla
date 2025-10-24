@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import apiV1Routes from "./routes/api_audiodb_v1/APIConnectionV1";
-import UserRoutes from "./routes/UserRoutes";
-import PostRoutes from "./routes/PostRoutes";
 import { publicRoutes } from "./routes/publicRoutes";
 import { protectedRoutes } from "./routes/protectedRoutes";
 

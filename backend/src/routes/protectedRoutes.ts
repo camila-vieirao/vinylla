@@ -31,9 +31,9 @@ protectedRoutes.put("/users/:id", updateUser);
 protectedRoutes.get("/posts", getPosts);
 protectedRoutes.get("/posts/:id", getPostById);
 protectedRoutes.get("/posts/user/:userId", getPostsByUserId);
-protectedRoutes.post("/posts/user/:userId", createPostByUserId);
+protectedRoutes.post("/posts", createPostByUserId); // Require userId from token
 protectedRoutes.delete("/posts/:id", deletePostById);
-protectedRoutes.delete("/posts/user/:userId", deletePostsByUserId);
+protectedRoutes.delete("/posts", deletePostsByUserId); // Require userId from token
 protectedRoutes.put("/posts/:id", updatePostById);
 
 export { protectedRoutes };
