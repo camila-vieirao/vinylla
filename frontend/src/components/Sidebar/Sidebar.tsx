@@ -5,9 +5,10 @@ import { IoMdHome } from "react-icons/io";
 import { MdExplore, MdOutlineShoppingBag } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const Sidebar: React.FC<{ onReviewClick: () => void }> = ({
-  onReviewClick,
-}) => {
+const Sidebar: React.FC<{
+  onReviewClick: () => void;
+  onPostClick: () => void;
+}> = ({ onReviewClick, onPostClick }) => {
   return (
     <div>
       <aside
@@ -68,14 +69,14 @@ const Sidebar: React.FC<{ onReviewClick: () => void }> = ({
               </button>
             </li>
             <li>
-              <Link
-                to=""
-                className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
+              <button
+                onClick={onPostClick}
+                className="cursor-pointer flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
               >
                 <span>
                   <FaCirclePlus className="text-3xl" />
                 </span>
-              </Link>
+              </button>
             </li>
           </ul>
         </div>

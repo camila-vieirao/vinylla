@@ -1,5 +1,3 @@
-import Header from "../../components/Header/Header";
-import Sidebar from "../../components/Sidebar/Sidebar";
 import { FaImage, FaVideo, FaMusic } from "react-icons/fa";
 import avatar from "../../assets/borabill_avatar.jpeg";
 import { MdGroups } from "react-icons/md";
@@ -8,9 +6,6 @@ import { IoPersonAddSharp } from "react-icons/io5";
 const Feed: React.FC = () => {
   return (
     <div>
-      <Header />
-      <Sidebar />
-
       <div className="p-14 ml-[112px] flex gap-8">
         <div className="flex flex-col items-start flex-1">
           <div className="bg-[#262730] max-w-2xl w-full p-6 rounded-2xl">
