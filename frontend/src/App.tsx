@@ -10,6 +10,7 @@ import { useState } from "react";
 import { SearchResults } from "./pages/Search/SearchResults";
 import CreatePostModal from "./components/CreatePostModal/CreatePostModal";
 import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -49,6 +50,7 @@ function App() {
         <Route path="/feed" element={<Feed />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
       {showPostModal && (
         <CreatePostModal onClose={() => setShowPostModal(false)} />

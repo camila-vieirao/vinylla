@@ -5,21 +5,28 @@ import logo from "../../assets/logo 1.png";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../services/api/api";
 import { toast } from "react-toastify";
+import { IoMdPerson } from "react-icons/io";
+import { FaUserCheck } from "react-icons/fa";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
 
     try {
-      const res = await api.post("/api/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userData", JSON.stringify(res.data.user));
-      navigate("/");
-      toast.success("You have successfully logged in!");
+      const res = await api.post("/api/users", {
+        name,
+        username,
+        email,
+        password,
+      });
+      navigate("/login");
+      toast.success("Account created successfully!");
     } catch (error: any) {
       toast.error(error.response?.data?.message);
     }
@@ -37,17 +44,52 @@ const Login: React.FC = () => {
           </div>
         </div>
 
-        <h2 className="text-white text-xl font-semibold">Log In</h2>
+        <h2 className="text-white text-xl font-semibold">Register</h2>
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-6 w-full">
+        <form onSubmit={handleRegister} className="flex flex-col gap-6 w-full">
+          {/* Name */}
+          <div className="flex flex-col gap-1 relative">
+            <label className="text-gray-300 text-sm font-medium">Name</label>
+            <div className="relative">
+              <IoMdPerson
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+              <input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="John Doe"
+                className="pl-10 px-4 py-3 rounded-md bg-[#f2e8e4] text-base text-gray-700 outline-none focus:ring-2 focus:ring-[#7b5b78] transition w-full"
+              />
+            </div>
+          </div>
+
+          {/* Username */}
+          <div className="flex flex-col gap-1 relative">
+            <label className="text-gray-300 text-sm font-medium">
+              Username
+            </label>
+            <div className="relative">
+              <FaUserCheck
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+              <input
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                type="text"
+                placeholder="johndoe123"
+                className="pl-10 px-4 py-3 rounded-md bg-[#f2e8e4] text-base text-gray-700 outline-none focus:ring-2 focus:ring-[#7b5b78] transition w-full"
+              />
+            </div>
+          </div>
+
           {/* Email */}
           <div className="flex flex-col gap-1 relative">
-            <label
-              className="text-gray-300 text-sm font-medium"
-              htmlFor="email"
-            >
-              Email
-            </label>
+            <label className="text-gray-300 text-sm font-medium">Email</label>
             <div className="relative">
               <FiMail
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -66,10 +108,7 @@ const Login: React.FC = () => {
 
           {/* Password */}
           <div className="flex flex-col gap-1 relative">
-            <label
-              className="text-gray-300 text-sm font-medium"
-              htmlFor="password"
-            >
+            <label className="text-gray-300 text-sm font-medium">
               Password
             </label>
             <div className="relative">
@@ -92,21 +131,21 @@ const Login: React.FC = () => {
             type="submit"
             className="bg-[#7b5b78] text-white py-3 rounded-lg cursor-pointer mt-2 font-medium hover:bg-[#8d6c8b] transition"
           >
-            Log In
+            Register
           </button>
+          <p className="text-center text-white">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="ml-2 text-blue-400 font-italic underline cursor-pointer"
+            >
+              Log In here
+            </Link>
+          </p>
         </form>
-        <p className="text-center text-white">
-          Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="ml-2 text-blue-400 font-italic underline cursor-pointer"
-          >
-            Register here
-          </Link>
-        </p>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;
