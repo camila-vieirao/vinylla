@@ -18,28 +18,10 @@ const Header: React.FC = () => {
               Vinylla.
             </span>
           </Link>
-
           <div className="w-64">
             <SearchBar />
-            {/* <label className="sr-only">Search</label>
-
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <FaSearch className="text-neutral-600" />
-              </div>
-              <input
-                type="search"
-                id="default-search"
-                className="block w-full p-3 ps-10 text-sm text-neutral-600 border border-[#3c3e4e] rounded-3xl bg-white placeholder-neutral-600 outline-none"
-                placeholder="Search here..."
-                required
-              />
-            </div>
-            */}
-
           </div>
         </div>
-
         <div className="flex items-center gap-6 text-3xl">
           <ul className="flex gap-6 p-2 pl-6 pr-6 bg-[#30323F] rounded-3xl">
             <li>
@@ -75,7 +57,6 @@ const Header: React.FC = () => {
               </Link>
             </li>
           </ul>
-
           <button
             type="button"
             className="flex text-sm bg-gray-800 rounded-full cursor-pointer"

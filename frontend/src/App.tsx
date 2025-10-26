@@ -9,6 +9,7 @@ import { ReviewFormModal } from "./components/ReviewModal/ReviewFormModal";
 import { useState } from "react";
 import { SearchResults } from "./pages/Search/SearchResults";
 import CreatePostModal from "./components/CreatePostModal/CreatePostModal";
+import { ArtistPage } from  "./pages/Artist/ArtistPage";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -38,6 +39,7 @@ function App() {
       <Routes>
         <Route path="/feed" element={<Feed />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/artist/:id" element={<ArtistPage />} />
       </Routes>
       {showPostModal && (
         <CreatePostModal onClose={() => setShowPostModal(false)} />
