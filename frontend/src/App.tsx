@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import { Bounce, ToastContainer } from "react-toastify";
 import Feed from "./pages/Feed/Feed";
@@ -9,12 +9,19 @@ import { ReviewFormModal } from "./components/ReviewModal/ReviewFormModal";
 import { useState } from "react";
 import { SearchResults } from "./pages/Search/SearchResults";
 import CreatePostModal from "./components/CreatePostModal/CreatePostModal";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 import { ArtistPage } from  "./pages/Artist/ArtistPage";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+
+  const location = useLocation();
+
+  const hideLayout =
+    location.pathname === "/login" || location.pathname === "/register";
 
   return (
     <>
@@ -31,14 +38,20 @@ function App() {
         theme="light"
         transition={Bounce}
       />
-      <Header />
-      <Sidebar
-        onReviewClick={() => setShowReviewModal(true)}
-        onPostClick={() => setShowPostModal(true)}
-      />
+      {!hideLayout && (
+        <>
+          <Header />
+          <Sidebar
+            onReviewClick={() => setShowReviewModal(true)}
+            onPostClick={() => setShowPostModal(true)}
+          />
+        </>
+      )}
       <Routes>
         <Route path="/feed" element={<Feed />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/artist/:id" element={<ArtistPage />} />
       </Routes>
       {showPostModal && (
