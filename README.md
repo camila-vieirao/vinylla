@@ -5,7 +5,7 @@
 ```
 cd backend
 npm install
-npm run dev
+npm start
 ```
 # RUN FRONTEND SERVER
 ```
