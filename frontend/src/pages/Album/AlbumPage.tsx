@@ -185,7 +185,7 @@ export const AlbumPage: React.FC = () => {
           </div>
         </div>
         {/* Retângulo de tracks à direita, alinhado */}
-        <div style={{ width: '496px', minHeight: '340px', background: '#30323F', borderRadius: '18px', padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)' }}>
+        <div style={{ width: '496px', minHeight: '340px', background: '#30323F', borderRadius: '18px', padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', marginBottom: '15px' }}>
           <div style={{ color: '#FEF4EA', fontSize: '28px', fontWeight: 600, marginBottom: '18px', marginLeft: '10px' }}>Tracks</div>
           <ul style={{ color: '#FEF4EA', fontSize: '18px', fontWeight: 500, marginLeft: '10px' }}>
             {tracks.length === 0 ? (
