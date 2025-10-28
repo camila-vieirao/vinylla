@@ -134,9 +134,7 @@ export const lookupTrack = async (req: Request, res: Response) => {
     if (!idTrack) {
       return res.status(400).json({ error: "Missing track id" });
     }
-    const url = `https://www.theaudiodb.com/api/v1/json/123/track.php?h=${encodeURIComponent(
-      idTrack
-    )}`;
+    const url = `https://www.theaudiodb.com/api/v1/json/123/track.php?m=${encodeURIComponent(idTrack)}`;
     const response = await fetch(url);
     if (!response.ok) {
       return res

@@ -12,6 +12,7 @@ import CreatePostModal from "./components/CreatePostModal/CreatePostModal";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import { ArtistPage } from  "./pages/Artist/ArtistPage";
+import { AlbumPage } from "./pages/Album/AlbumPage";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -53,6 +54,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/artist/:id" element={<ArtistPage />} />
+        <Route path="/album/:id" element={<AlbumPage />} />
       </Routes>
       {showPostModal && (
         <CreatePostModal onClose={() => setShowPostModal(false)} />
