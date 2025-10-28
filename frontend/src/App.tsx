@@ -10,6 +10,7 @@ import { useState } from "react";
 import { SearchResults } from "./pages/Search/SearchResults";
 import CreatePostModal from "./components/CreatePostModal/CreatePostModal";
 import { ArtistPage } from  "./pages/Artist/ArtistPage";
+import { AlbumPage } from "./pages/Album/AlbumPage";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -40,6 +41,7 @@ function App() {
         <Route path="/feed" element={<Feed />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/artist/:id" element={<ArtistPage />} />
+        <Route path="/album/:id" element={<AlbumPage />} />
       </Routes>
       {showPostModal && (
         <CreatePostModal onClose={() => setShowPostModal(false)} />

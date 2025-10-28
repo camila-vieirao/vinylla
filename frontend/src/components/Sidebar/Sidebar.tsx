@@ -19,7 +19,7 @@ const Sidebar: React.FC<{
           <ul className="flex flex-col items-center space-y-6 font-medium">
             <li>
               <Link
-                to="/"
+                to="/feed"
                 className="flex justify-center items-center text-[#A9A4BF] p-2 rounded-lg transition-colors duration-300 group hover:text-[#8078a5]"
               >
                 <span>
