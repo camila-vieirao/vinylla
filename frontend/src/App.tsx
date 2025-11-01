@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import { Bounce, ToastContainer } from "react-toastify";
 import Feed from "./pages/Feed/Feed";
@@ -11,7 +11,7 @@ import { SearchResults } from "./pages/Search/SearchResults";
 import CreatePostModal from "./components/CreatePostModal/CreatePostModal";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import { ArtistPage } from  "./pages/Artist/ArtistPage";
+import { ArtistPage } from "./pages/Artist/ArtistPage";
 import { AlbumPage } from "./pages/Album/AlbumPage";
 
 function App() {
@@ -49,6 +49,7 @@ function App() {
         </>
       )}
       <Routes>
+        <Route path="/" element={<Navigate to="/feed" />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/login" element={<Login />} />

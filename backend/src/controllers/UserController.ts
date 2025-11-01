@@ -33,23 +33,36 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  // Campos na criacao: username, email, password, name
-
-  var { username, email, password, name } = req.body;
+  const { username, email, password, name } = req.body;
 
   const salt = await bcrypt.genSalt(Number(process.env.BCRYPT_SALT_ROUNDS));
   const hashedPassword = await bcrypt.hash(password, salt);
-  password = hashedPassword;
 
-  const sql =
-    "INSERT INTO users (username, email, password, name) VALUES (?, ?, ?, ?)";
+  // default images
+  const profilePicture = "default-profile.png";
+  const headerPicture = "default-header.png";
+
+  const sql = `
+    INSERT INTO users (username, email, password, name, profilePicture, headerPicture)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
 
   try {
-    const [result] = await pool.query(sql, [username, email, password, name]);
-    res
-      .status(201)
-      .json({ message: "User created", userId: (result as any).insertId });
+    const [result] = await pool.query(sql, [
+      username,
+      email,
+      hashedPassword,
+      name,
+      profilePicture,
+      headerPicture,
+    ]);
+
+    res.status(201).json({
+      message: "User created",
+      userId: (result as any).insertId,
+    });
   } catch (error) {
+    console.error(error);
     if ((error as any).code === "ER_DUP_ENTRY") {
       res.status(400).json({ error: "Username or email already exists" });
     } else {
@@ -120,5 +133,30 @@ export const updateUser = async (req: Request, res: Response) => {
     res.status(200).json({ message: "User updated" });
   } catch (error) {
     res.status(500).json({ error: "Failed to update user" });
+  }
+};
+
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+    const sql = `
+      SELECT id, name, email, username, profilePicture, headerPicture
+      FROM users
+      WHERE id = ?
+    `;
+
+    const [rows] = await pool.query(sql, [userId]);
+    const results = rows as any[];
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json(results[0]);
+  } catch (err) {
+    console.error("getMe error:", err);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
