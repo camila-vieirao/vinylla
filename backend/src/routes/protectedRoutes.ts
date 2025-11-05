@@ -22,6 +22,7 @@ import {
   deleteComment,
   updateComment,
 } from "../controllers/CommentController";
+import { upload } from "../middlewares/UploadMiddleware";
 
 const protectedRoutes = Router();
 
@@ -37,7 +38,7 @@ protectedRoutes.put("/users/:id", updateUser);
 
 // Posts
 protectedRoutes.get("/posts/:id", getPostById);
-protectedRoutes.post("/posts", createPostByUserId); // Require userId from token
+protectedRoutes.post("/posts", upload.single("postImg"), createPostByUserId); // Require userId from token
 protectedRoutes.delete("/posts/:id", deletePostById);
 protectedRoutes.delete("/posts", deletePostsByUserId); // Require userId from token
 protectedRoutes.put("/posts/:id", updatePostById);

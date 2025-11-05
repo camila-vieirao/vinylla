@@ -9,11 +9,13 @@ import { toast } from "react-toastify";
 const Feed: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [postText, setPostText] = useState("");
+  const [postImg, setPostImg] = useState<File | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
       try {
         const token = localStorage.getItem("token");
+
         if (!token) return;
 
         const res = await api.get("/api/users/me", {
@@ -36,14 +38,19 @@ const Feed: React.FC = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      await api.post(
-        "/api/posts",
-        { postText, postImg: null, postMention: null },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const formData = new FormData();
+      formData.append("postText", postText);
+      if (postImg) formData.append("postImg", postImg);
+
+      await api.post("/api/posts", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       setPostText("");
-      toast.success("Post created sucessfully!");
+      setPostImg(null);
     } catch (error: any) {
       toast.error(error);
     }
@@ -83,7 +90,21 @@ const Feed: React.FC = () => {
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex gap-4 text-gray-600">
                       <button className="flex items-center gap-1 hover:text-black transition cursor-pointer">
-                        <FaImage /> Image
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          id="post-image"
+                          onChange={(e) =>
+                            setPostImg(e.target.files?.[0] || null)
+                          }
+                        />
+                        <label
+                          htmlFor="post-image"
+                          className="flex items-center gap-1 hover:text-black transition cursor-pointer"
+                        >
+                          <FaImage /> Image
+                        </label>
                       </button>
                       <button className="flex items-center gap-1 hover:text-black transition cursor-pointer">
                         <FaVideo /> Video
