@@ -4,9 +4,11 @@ import { MdGroups } from "react-icons/md";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import api from "../../services/api/api";
+import { toast } from "react-toastify";
 
 const Feed: React.FC = () => {
   const [user, setUser] = useState<any>(null);
+  const [postText, setPostText] = useState("");
 
   useEffect(() => {
     async function fetchUser() {
@@ -26,6 +28,26 @@ const Feed: React.FC = () => {
 
     fetchUser();
   }, []);
+
+  async function handleCreatePost() {
+    if (!postText.trim()) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      await api.post(
+        "/api/posts",
+        { postText, postImg: null, postMention: null },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setPostText("");
+      toast.success("Post created sucessfully!");
+    } catch (error: any) {
+      toast.error(error);
+    }
+  }
 
   return (
     <div>
@@ -54,6 +76,8 @@ const Feed: React.FC = () => {
                     type="text"
                     className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-500"
                     placeholder={`What's on your mind, ${user.name}?`}
+                    value={postText}
+                    onChange={(e) => setPostText(e.target.value)}
                   />
 
                   <div className="flex items-center justify-between text-sm">
@@ -68,7 +92,10 @@ const Feed: React.FC = () => {
                         <FaMusic /> Music
                       </button>
                     </div>
-                    <button className="bg-[#6a4c7d] font-semibold cursor-pointer text-white px-8 py-1 rounded-full hover:bg-[#5a3f6b] transition">
+                    <button
+                      onClick={handleCreatePost}
+                      className="bg-[#6a4c7d] font-semibold cursor-pointer text-white px-8 py-1 rounded-full hover:bg-[#5a3f6b] transition"
+                    >
                       Post
                     </button>
                   </div>
