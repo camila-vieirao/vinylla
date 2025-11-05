@@ -51,6 +51,7 @@ const Feed: React.FC = () => {
 
       setPostText("");
       setPostImg(null);
+      toast.success("Post created successfully!");
     } catch (error: any) {
       toast.error(error);
     }
