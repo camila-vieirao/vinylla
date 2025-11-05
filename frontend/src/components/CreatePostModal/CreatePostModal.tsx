@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaImage, FaMusic, FaVideo } from "react-icons/fa";
 import avatar from "../../assets/borabill_avatar.jpeg";
 import api from "../../services/api/api";
+import { toast } from "react-toastify";
 
 interface CreatePostModalProps {
   onClose: () => void;
@@ -9,6 +10,8 @@ interface CreatePostModalProps {
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
   const [user, setUser] = useState<any>(null);
+  const [postText, setPostText] = useState("");
+  const [postImg, setPostImg] = useState<File | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -28,6 +31,33 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
 
     fetchUser();
   }, []);
+
+  async function handleCreatePost() {
+    if (!postText.trim()) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const formData = new FormData();
+      formData.append("postText", postText);
+      if (postImg) formData.append("postImg", postImg);
+
+      await api.post("/api/posts", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setPostText("");
+      setPostImg(null);
+      toast.success("Post created successfully!");
+      onClose();
+    } catch (error: any) {
+      toast.error(error);
+    }
+  }
 
   return (
     <div
@@ -74,12 +104,26 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
                 type="text"
                 className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-500"
                 placeholder={`What's on your mind, ${user?.name}?`}
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
               />
 
               <div className="flex items-center justify-between text-sm">
                 <div className="flex gap-4 text-gray-600">
                   <button className="flex items-center gap-1 hover:text-black transition cursor-pointer">
-                    <FaImage /> Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="modal-post-image"
+                      onChange={(e) => setPostImg(e.target.files?.[0] || null)}
+                    />
+                    <label
+                      htmlFor="modal-post-image"
+                      className="flex items-center gap-1 hover:text-black transition cursor-pointer"
+                    >
+                      <FaImage /> Image
+                    </label>
                   </button>
                   <button className="flex items-center gap-1 hover:text-black transition cursor-pointer">
                     <FaVideo /> Video
@@ -88,7 +132,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
                     <FaMusic /> Music
                   </button>
                 </div>
-                <button className="bg-[#6a4c7d] font-semibold cursor-pointer text-white px-8 py-1 rounded-full hover:bg-[#5a3f6b] transition">
+                <button
+                  onClick={handleCreatePost}
+                  className="bg-[#6a4c7d] font-semibold cursor-pointer text-white px-8 py-1 rounded-full hover:bg-[#5a3f6b] transition"
+                >
                   Post
                 </button>
               </div>
