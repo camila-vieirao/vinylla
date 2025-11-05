@@ -37,7 +37,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <nav className="bg-[#262730] fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-[#262730] sticky top-0 z-50">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-2 ">
         <div className="flex items-center gap-8">
           <Link to="/feed" className="flex items-center rtl:space-x-reverse">
