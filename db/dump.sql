@@ -218,6 +218,33 @@ LOCK TABLES `topfavorites` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_music_tags`
+--
+
+DROP TABLE IF EXISTS `user_music_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_music_tags` (
+  `userid` int NOT NULL,
+  `tagid` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`userid`,`tagid`),
+  KEY `umt_tag_idx` (`tagid`),
+  CONSTRAINT `umt_tag_fk` FOREIGN KEY (`tagid`) REFERENCES `music_tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `umt_user_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_music_tags`
+--
+
+LOCK TABLES `user_music_tags` WRITE;
+/*!40000 ALTER TABLE `user_music_tags` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_music_tags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -259,4 +286,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-06 12:00:46
+-- Dump completed on 2025-11-06 12:08:12
