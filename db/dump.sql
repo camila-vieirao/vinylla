@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `vinylla` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `vinylla`;
--- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.43, for macos15 (arm64)
 --
 -- Host: localhost    Database: vinylla
 -- ------------------------------------------------------
--- Server version	8.0.43
+-- Server version	9.4.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -75,6 +73,31 @@ CREATE TABLE `likes` (
 LOCK TABLES `likes` WRITE;
 /*!40000 ALTER TABLE `likes` DISABLE KEYS */;
 /*!40000 ALTER TABLE `likes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `music_tags`
+--
+
+DROP TABLE IF EXISTS `music_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `music_tags` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `music_tags`
+--
+
+LOCK TABLES `music_tags` WRITE;
+/*!40000 ALTER TABLE `music_tags` DISABLE KEYS */;
+INSERT INTO `music_tags` VALUES (23,'80s'),(39,'90s'),(42,'acoustic'),(4,'alternative'),(9,'alternative rock'),(12,'ambient'),(19,'black metal'),(37,'blues'),(28,'british'),(30,'chillout'),(11,'classic rock'),(35,'Classical'),(22,'dance'),(24,'death metal'),(2,'electronic'),(31,'electronica'),(13,'experimental'),(7,'female vocalists'),(14,'folk'),(48,'german'),(18,'hard rock'),(27,'hardcore'),(26,'heavy metal'),(44,'hip hop'),(17,'Hip-Hop'),(47,'House'),(6,'indie'),(15,'indie rock'),(33,'industrial'),(20,'instrumental'),(43,'japanese'),(10,'jazz'),(8,'metal'),(40,'metalcore'),(50,'new wave'),(5,'pop'),(45,'post-rock'),(46,'Progressive metal'),(25,'Progressive rock'),(41,'psychedelic'),(16,'punk'),(34,'punk rock'),(32,'rap'),(1,'rock'),(3,'seen live'),(21,'singer-songwriter'),(29,'soul'),(36,'Soundtrack'),(49,'techno'),(38,'thrash metal');
+/*!40000 ALTER TABLE `music_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -211,9 +234,10 @@ CREATE TABLE `users` (
   `profilePicture` varchar(100) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,6 +246,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'tuchanski','tuchanski@example.com','$2b$10$cA0kboI1aUhkvKKLjUkb9uOsn0z.RdW4NaLemwBw5bmVXrMP8Uf/S','Guilherme Rocha','default-header.png','default-profile.png',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -234,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-19 19:21:26
+-- Dump completed on 2025-11-06 12:00:46
