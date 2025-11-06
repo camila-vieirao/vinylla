@@ -79,11 +79,8 @@ const Post: React.FC = () => {
   // Estado para controlar expansão dos comentários por post
   const [expandedComments, setExpandedComments] = useState<{ [key: number]: boolean }>({});
 
-  const handleExpandComment = (postId: number) => {
-    setExpandedComments(prev => ({ ...prev, [postId]: true }));
-  };
-  const handleCloseComment = (postId: number) => {
-    setExpandedComments(prev => ({ ...prev, [postId]: false }));
+  const handleToggleComment = (postId: number) => {
+    setExpandedComments(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
   return (
@@ -107,7 +104,7 @@ const Post: React.FC = () => {
             <AlbumMention albumId={post.postMention} fetchAlbum={fetchAlbum} />
           )}
           {/* Post text */}
-          <div style={{flex: 1, paddingLeft: '40px', paddingRight: '40px', paddingTop: '24px', paddingBottom: '24px', color: '#23232A', fontSize: '18px', fontWeight: 400, wordBreak: 'break-word', overflowY: 'auto' }}>
+          <div style={{flex: 1, paddingLeft: '40px', paddingRight: '40px', paddingTop: '20px', paddingBottom: '20px', color: '#23232A', fontSize: '18px', fontWeight: 400, wordBreak: 'break-word', overflowY: 'auto' }}>
             {post.postText}
           </div>
           {/* Post image (if any) */}
@@ -116,7 +113,7 @@ const Post: React.FC = () => {
           )}
           {/* Interações: linha dos ícones */}
           <div style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '18px', padding: '12px 24px 0 24px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '18px', padding: '0px 40px 20px 40px', alignItems: 'center' }}>
               <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} title="Upvote">
                 <FaRegThumbsUp size={22} color="#8078a5" />
               </button>
@@ -124,10 +121,10 @@ const Post: React.FC = () => {
                 <FaRegThumbsDown size={22} color="#8078a5" />
               </button>
               {/* Botão de comentário, não área expandida */}
-              <CommentSection postId={post.id} users={users} iconOnly show={!!expandedComments[post.id]} onExpand={() => handleExpandComment(post.id)} />
+              <CommentSection postId={post.id} users={users} iconOnly show={!!expandedComments[post.id]} onExpand={() => handleToggleComment(post.id)} />
             </div>
             {/* Nova linha: área de comentários expandida */}
-            <CommentSection postId={post.id} users={users} expandedArea show={!!expandedComments[post.id]} onClose={() => handleCloseComment(post.id)} />
+            <CommentSection postId={post.id} users={users} expandedArea show={!!expandedComments[post.id]} />
           </div>
         </div>
       ))}

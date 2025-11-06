@@ -66,9 +66,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, users, iconOnly
       <button
         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginLeft: '2px' }}
         onClick={onExpand}
-        title="Comentar"
+        title={show ? "Fechar comentários" : "Comentar"}
       >
-        <FaRegComment size={22} color="#8078a5" />
+        <FaRegComment size={22} color={show ? "#6a4c7d" : "#8078a5"} />
       </button>
     );
   }
@@ -78,15 +78,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, users, iconOnly
     if (!show) return null;
     return (
       <div style={{ width: '100%', padding: '20px 24px 16px 24px', boxSizing: 'border-box' }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button
-            onClick={onClose}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', zIndex: 2 }}
-            title="Fechar"
-          >
-            <FaTimes size={18} color="#8078a5" />
-          </button>
-        </div>
         <div style={{ maxHeight: '180px', overflowY: 'auto', marginBottom: '12px', marginTop: '8px' }}>
           {comments.length === 0 ? (
             <span style={{ color: '#8078a5' }}>Nenhum comentário ainda.</span>
@@ -112,16 +103,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, users, iconOnly
             type="text"
             value={newComment}
             onChange={e => setNewComment(e.target.value)}
-            placeholder="Escreva seu comentário..."
-            style={{ flex: 1, padding: '8px', borderRadius: '8px', border: '1px solid #ddd' }}
+            placeholder="Comment here..."
+            style={{ flex: 1, padding: '8px', borderRadius: '16px', border: '1px solid #ddd' }}
             disabled={loading}
           />
           <button
             onClick={handleSend}
-            style={{ background: '#6a4c7d', color: '#fff', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 500, cursor: 'pointer' }}
+            style={{ background: '#6a4c7d', color: '#fff', border: 'none', borderRadius: '20px', padding: '8px 16px', fontWeight: 500, cursor: 'pointer' }}
             disabled={loading}
           >
-            Enviar
+            Send
           </button>
         </div>
       </div>
