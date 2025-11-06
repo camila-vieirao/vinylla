@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import CommentSection from "../CommentSection/CommentSection";
+import { FaRegThumbsUp, FaRegThumbsDown, FaRegComment } from "react-icons/fa";
 
 interface Post {
   id: number;
@@ -74,10 +76,20 @@ const Post: React.FC = () => {
     return `${Math.floor(diff / 86400)}d ago`;
   }
 
+  // Estado para controlar expansão dos comentários por post
+  const [expandedComments, setExpandedComments] = useState<{ [key: number]: boolean }>({});
+
+  const handleExpandComment = (postId: number) => {
+    setExpandedComments(prev => ({ ...prev, [postId]: true }));
+  };
+  const handleCloseComment = (postId: number) => {
+    setExpandedComments(prev => ({ ...prev, [postId]: false }));
+  };
+
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px', padding: '32px' }}>
       {posts.map(post => (
-  <div key={post.id} style={{ width: '484px', background: '#FEF4EA', borderRadius: '18px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+        <div key={post.id} style={{ width: '484px', background: '#FEF4EA', borderRadius: '18px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
           {/* Top bar */}
           <div style={{ height: '83px', background: '#E7DBC5F4', display: 'flex', alignItems: 'center', padding: '0 24px', position: 'relative' }}>
             {/* Profile picture */}
@@ -87,7 +99,7 @@ const Post: React.FC = () => {
             {/* User name and time */}
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <span style={{ fontWeight: 600, fontSize: '20px', color: '#23232A' }}>{users[post.userid]?.username || 'Usuário'}</span>
-              <span style={{ fontSize: '15px', color: '#8078a5', marginTop: '2px' }}>{timeAgo(post.createdAt)}</span>
+              <span style={{ fontSize: '15px', color: '#8078a5' }}>{timeAgo(post.createdAt)}</span>
             </div>
           </div>
           {/* Album mention (if any) */}
@@ -102,6 +114,21 @@ const Post: React.FC = () => {
           {post.postImg && (
             <img src={`/uploads/${post.postImg}`} alt="post" style={{ width: '100%', maxHeight: '120px', objectFit: 'cover', borderRadius: '0 0 18px 18px' }} />
           )}
+          {/* Interações: linha dos ícones */}
+          <div style={{ width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '18px', padding: '12px 24px 0 24px', alignItems: 'center' }}>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} title="Upvote">
+                <FaRegThumbsUp size={22} color="#8078a5" />
+              </button>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} title="Downvote">
+                <FaRegThumbsDown size={22} color="#8078a5" />
+              </button>
+              {/* Botão de comentário, não área expandida */}
+              <CommentSection postId={post.id} users={users} iconOnly show={!!expandedComments[post.id]} onExpand={() => handleExpandComment(post.id)} />
+            </div>
+            {/* Nova linha: área de comentários expandida */}
+            <CommentSection postId={post.id} users={users} expandedArea show={!!expandedComments[post.id]} onClose={() => handleCloseComment(post.id)} />
+          </div>
         </div>
       ))}
     </div>
