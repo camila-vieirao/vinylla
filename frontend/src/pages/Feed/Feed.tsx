@@ -4,6 +4,7 @@ import { MdGroups } from "react-icons/md";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import api from "../../services/api/api";
+import Post from "../../components/Post/Post";
 
 const Feed: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -93,6 +94,9 @@ const Feed: React.FC = () => {
                 </button>
               </div>
             )}
+            <div className="px-10">
+              <Post />
+            </div>
           </div>
         </div>
 
