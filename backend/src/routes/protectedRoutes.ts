@@ -23,7 +23,11 @@ import {
   updateComment,
 } from "../controllers/CommentController";
 
-import { addTagToUser, removeTagFromUser } from "../controllers/TagController";
+import {
+  addTagToUser,
+  removeTagFromUser,
+  getTagsPerUser,
+} from "../controllers/TagController";
 
 const protectedRoutes = Router();
 
@@ -52,5 +56,6 @@ protectedRoutes.put("/comments/:commentId", updateComment); // Require userId fr
 // Tags
 protectedRoutes.post("/users/tags/:tagId", addTagToUser); // Require userId from token
 protectedRoutes.delete("/users/tags/:tagId", removeTagFromUser); // Require userId from token
+protectedRoutes.get("/users/:userId/tags", getTagsPerUser);
 
 export { protectedRoutes };

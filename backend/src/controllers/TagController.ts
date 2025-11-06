@@ -32,6 +32,20 @@ export const getTagById = async (req: Request, res: Response) => {
   }
 };
 
+export const getTagsPerUser = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const sql =
+    "SELECT id, name FROM music_tags JOIN user_music_tags ON id = tagid WHERE userid = ?";
+
+  try {
+    const [rows] = await pool.query(sql, [userId]);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching tags for user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const addTagToUser = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
   const tagId = req.params.tagId;
