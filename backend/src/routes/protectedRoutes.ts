@@ -23,6 +23,8 @@ import {
   updateComment,
 } from "../controllers/CommentController";
 
+import { addTagToUser, removeTagFromUser } from "../controllers/TagController";
+
 const protectedRoutes = Router();
 
 // Aplica o middleware JWT p/ todas rotas abaixo
@@ -46,5 +48,9 @@ protectedRoutes.put("/posts/:id", updatePostById);
 protectedRoutes.post("/comments/post/:postId", createComment); // Require userId from token
 protectedRoutes.delete("/comments/:commentId", deleteComment); // Require userId from token
 protectedRoutes.put("/comments/:commentId", updateComment); // Require userId from token
+
+// Tags
+protectedRoutes.post("/users/tags/:tagId", addTagToUser); // Require userId from token
+protectedRoutes.delete("/users/tags/:tagId", removeTagFromUser); // Require userId from token
 
 export { protectedRoutes };
