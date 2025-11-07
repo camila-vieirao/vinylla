@@ -4,6 +4,8 @@ import { createUser } from "../controllers/UserController";
 import { getCommentsByPost } from "../controllers/CommentController";
 import { getPosts } from "../controllers/PostController";
 import { getPostsByUserId } from "../controllers/PostController";
+import { getTags } from "../controllers/TagController";
+import { getTagById } from "../controllers/TagController";
 
 const publicRoutes = Router();
 
@@ -17,5 +19,9 @@ publicRoutes.get("/posts/user/:userId", getPostsByUserId);
 
 // Comments
 publicRoutes.get("/comments/post/:postId", getCommentsByPost);
+
+// Tags
+publicRoutes.get("/tags", getTags);
+publicRoutes.get("/tags/:id", getTagById);
 
 export { publicRoutes };
