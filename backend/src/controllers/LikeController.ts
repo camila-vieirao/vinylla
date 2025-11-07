@@ -5,6 +5,15 @@ export const likePost = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
   const postId = req.params.postId;
 
+  const validationSql =
+    "SELECT userid, postid FROM likes WHERE userid = ? AND postid = ?";
+
+  const [validationResult] = await pool.query(validationSql, [userId, postId]);
+
+  if ((validationResult as any[]).length > 0) {
+    return res.status(400).json({ message: "Post already liked" });
+  }
+
   const sql = "INSERT INTO likes (userid, postid) VALUES (?, ?)";
   const values = [userId, postId];
 
