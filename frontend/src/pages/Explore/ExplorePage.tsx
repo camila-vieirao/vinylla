@@ -71,7 +71,7 @@ export const ExplorePage: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#23232A] py-38" style={{ paddingLeft: '150px', paddingBottom: '32px' }}>
+    <div className="bg-[#23232A] py-10" style={{ paddingLeft: '150px', paddingBottom: '32px' }}>
       <h1 style={{ color: '#FEF4EA', fontSize: '38px', fontWeight: 700, marginBottom: '32px' }}>Explore</h1>
       {tags.length === 0 ? (
         <div style={{ color: '#FEF4EA', background: '#23232A', fontSize: '20px', marginBottom: '32px' }}>No genres/tags selected. Go to your profile to add some!</div>

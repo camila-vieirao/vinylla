@@ -49,6 +49,7 @@ function App() {
           />
         </>
       )}
+      <main className={!hideLayout ? "pt-26" : ""}></main>
       <Routes>
         <Route path="/" element={<Navigate to="/feed" />} />
         <Route path="/feed" element={<Feed />} />
