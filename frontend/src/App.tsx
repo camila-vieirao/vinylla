@@ -49,17 +49,18 @@ function App() {
           />
         </>
       )}
-      <main className={!hideLayout ? "pt-26" : ""}></main>
-      <Routes>
-        <Route path="/" element={<Navigate to="/feed" />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/search" element={<SearchResults />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/artist/:id" element={<ArtistPage />} />
-        <Route path="/album/:id" element={<AlbumPage />} />
-        <Route path="/explore" element={<ExplorePage />} />
-      </Routes>
+      <main className={!hideLayout ? "pt-26" : ""}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/feed" />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/artist/:id" element={<ArtistPage />} />
+          <Route path="/album/:id" element={<AlbumPage />} />
+          <Route path="/explore" element={<ExplorePage />} />
+        </Routes>
+      </main>
       {showPostModal && (
         <CreatePostModal onClose={() => setShowPostModal(false)} />
       )}
