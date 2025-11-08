@@ -57,7 +57,8 @@ export const createPostByUserId = async (req: Request, res: Response) => {
 
   const userId = (req as any).user.id;
   console.log(userId);
-  const { postText, postImg, postMention } = req.body;
+  const { postText, postMention } = req.body;
+  const postImg = req.file ? req.file.filename : null;
 
   const sql = `
     INSERT INTO posts (postText, postImg, userid, postMention, createdAt)
