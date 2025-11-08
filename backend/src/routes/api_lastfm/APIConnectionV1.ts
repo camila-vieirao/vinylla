@@ -1,13 +1,10 @@
 import express from "express";
 import {
-  getTopArtists,
-  getTopTracks,
+  getTopAlbumsByTag,
 } from "../../controllers/LastfmController";
 
 const router = express.Router();
 
-// top artists/tracks endpoints (v1)
-router.get("/v1/topartists", getTopArtists);
-router.get("/v1/toptracks", getTopTracks);
+router.get("/v1/topalbums/tag/:tag", getTopAlbumsByTag);
 
 export default router;
