@@ -1,4 +1,5 @@
 import { FaImage, FaVideo, FaMusic } from "react-icons/fa";
+import Post from "../../components/Post/Post";
 import avatar from "../../assets/borabill_avatar.jpeg";
 import { MdGroups } from "react-icons/md";
 import { IoPersonAddSharp } from "react-icons/io5";
