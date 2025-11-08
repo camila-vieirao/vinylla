@@ -26,6 +26,17 @@ interface CommentSectionProps {
   onClose?: () => void;
 }
 
+  // Helper: time ago
+  function timeAgo(dateStr: string) {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (diff < 60) return `${diff}s ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    return `${Math.floor(diff / 86400)}d ago`;
+  }
+
 const CommentSection: React.FC<CommentSectionProps> = ({ postId, users, iconOnly, expandedArea, show, onExpand, onClose }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
@@ -91,7 +102,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, users, iconOnly
                 />
                 <div>
                   <span style={{ fontWeight: 600, fontSize: '15px', color: '#23232A' }}>{users[comment.userid]?.username || 'Usuário'}</span>
-                  <span style={{ fontSize: '13px', color: '#8078a5', marginLeft: '8px' }}>{new Date(comment.createdAt).toLocaleString()}</span>
+                  <span style={{ fontSize: '13px', color: '#8078a5', marginLeft: '8px' }}>{timeAgo(comment.createdAt)}</span>
                   <div style={{ color: '#23232A', fontSize: '15px' }}>{comment.commentText}</div>
                 </div>
               </div>
