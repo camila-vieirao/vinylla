@@ -142,6 +142,9 @@ const Feed: React.FC = () => {
                 </button>
               </div>
             )}
+            <div className="px-10">
+              <Post />
+            </div>
           </div>
         </div>
 
