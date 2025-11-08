@@ -30,6 +30,8 @@ import {
   getTagsPerUser,
 } from "../controllers/TagController";
 
+import { likePost, unlikePost } from "../controllers/LikeController";
+
 const protectedRoutes = Router();
 
 // Aplica o middleware JWT p/ todas rotas abaixo
@@ -58,5 +60,9 @@ protectedRoutes.put("/comments/:commentId", updateComment); // Require userId fr
 protectedRoutes.post("/users/tags/:tagId", addTagToUser); // Require userId from token
 protectedRoutes.delete("/users/tags/:tagId", removeTagFromUser); // Require userId from token
 protectedRoutes.get("/users/:userId/tags", getTagsPerUser);
+
+// Likes
+protectedRoutes.post("/posts/:postId/like", likePost); // Require userId from token
+protectedRoutes.delete("/posts/:postId/like", unlikePost); // Require userId from token
 
 export { protectedRoutes };
