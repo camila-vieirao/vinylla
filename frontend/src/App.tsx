@@ -14,6 +14,7 @@ import Register from "./pages/Register/Register";
 import { ArtistPage } from "./pages/Artist/ArtistPage";
 import { AlbumPage } from "./pages/Album/AlbumPage";
 import { ExplorePage } from "./pages/Explore/ExplorePage";
+import SelectTags from "./pages/SelectTags/SelectTags";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -23,7 +24,9 @@ function App() {
   const location = useLocation();
 
   const hideLayout =
-    location.pathname === "/login" || location.pathname === "/register";
+    location.pathname === "/login" ||
+    location.pathname === "/register" ||
+    location.pathname === "/select-tags";
 
   return (
     <>
@@ -56,6 +59,7 @@ function App() {
           <Route path="/search" element={<SearchResults />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/select-tags" element={<SelectTags />} />
           <Route path="/artist/:id" element={<ArtistPage />} />
           <Route path="/album/:id" element={<AlbumPage />} />
           <Route path="/explore" element={<ExplorePage />} />

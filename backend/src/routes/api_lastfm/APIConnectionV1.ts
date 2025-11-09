@@ -1,5 +1,8 @@
 import express from "express";
-import { getTopAlbumsByTag } from "../../controllers/LastfmController";
+import {
+  getTopAlbumsByTag,
+  getTopTags,
+} from "../../controllers/LastfmController";
 
 const router = express.Router();
 
