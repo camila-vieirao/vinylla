@@ -13,6 +13,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import { ArtistPage } from "./pages/Artist/ArtistPage";
 import { AlbumPage } from "./pages/Album/AlbumPage";
+import { ExplorePage } from "./pages/Explore/ExplorePage";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -57,6 +58,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/artist/:id" element={<ArtistPage />} />
           <Route path="/album/:id" element={<AlbumPage />} />
+          <Route path="/explore" element={<ExplorePage />} />
         </Routes>
       </main>
       {showPostModal && (

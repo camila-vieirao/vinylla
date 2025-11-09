@@ -128,6 +128,30 @@ export const lookupAlbum = async (req: Request, res: Response) => {
   }
 };
 
+export const lookupArtistByMBId = async (req: Request, res: Response) => {
+  try {
+    const mbid = req.params.mbid;
+    if (!mbid) {
+      return res.status(400).json({ error: "Missing mb id" });
+    }
+    const url = `https://www.theaudiodb.com/api/v1/json/123/artist-mb.php?i=${encodeURIComponent(
+      mbid
+    )}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      return res
+        .status(response.status)
+        .json({ error: "Failed to fetch artist details (mb)" });
+    }
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.messzage });
+  }
+};
+
 export const lookupTrack = async (req: Request, res: Response) => {
   try {
     const idTrack = req.params.id;

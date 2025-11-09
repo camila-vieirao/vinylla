@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import apiV1Routes from "./routes/api_audiodb_v1/APIConnectionV1";
+import lastfmApiV1Routes from "./routes/api_lastfm/APIConnectionV1";
 import { publicRoutes } from "./routes/publicRoutes";
 import { protectedRoutes } from "./routes/protectedRoutes";
 import path from "path";
@@ -11,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api_audiodb", apiV1Routes);
-
+app.use("/api_lastfm", lastfmApiV1Routes);
 // Uploads
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
