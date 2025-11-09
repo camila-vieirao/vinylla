@@ -13,13 +13,23 @@ const Login: React.FC = () => {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-
     try {
       const res = await api.post("/api/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userData", JSON.stringify(res.data.user));
-      navigate("/");
-      toast.success("You have successfully logged in!");
+
+      const token = res.data.token;
+      const userId = res.data.user.id;
+
+      localStorage.setItem("token", token);
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      const tagsRes = await api.get(`/api/users/me/tags`);
+
+      if (tagsRes.data.length === 0) {
+        return navigate("/select-tags");
+      }
+
+      toast.success("Welcome back!");
+      navigate("/feed");
     } catch (error: any) {
       toast.error(error.response?.data?.message);
     }

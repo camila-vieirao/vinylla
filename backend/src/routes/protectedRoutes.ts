@@ -28,6 +28,7 @@ import {
   addTagToUser,
   removeTagFromUser,
   getTagsPerUser,
+  getMyTags,
 } from "../controllers/TagController";
 
 import { likePost, unlikePost } from "../controllers/LikeController";
@@ -57,10 +58,10 @@ protectedRoutes.delete("/comments/:commentId", deleteComment); // Require userId
 protectedRoutes.put("/comments/:commentId", updateComment); // Require userId from token
 
 // Tags
+protectedRoutes.get("/users/me/tags", getMyTags);
 protectedRoutes.post("/users/tags/:tagId", addTagToUser); // Require userId from token
 protectedRoutes.delete("/users/tags/:tagId", removeTagFromUser); // Require userId from token
 protectedRoutes.get("/users/:userId/tags", getTagsPerUser);
-
 // Likes
 protectedRoutes.post("/posts/:postId/like", likePost); // Require userId from token
 protectedRoutes.delete("/posts/:postId/like", unlikePost); // Require userId from token
