@@ -6,6 +6,7 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import api from "../../services/api/api";
 import { toast } from "react-toastify";
+import Post from "../../components/Post/Post";
 
 const Feed: React.FC = () => {
   const [user, setUser] = useState<any>(null);
