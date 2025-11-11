@@ -84,19 +84,27 @@ const Post: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px', padding: '32px' }}>
+    <div className="w-full max-w-2xl mx-auto flex flex-col gap-6 p-4">
       {posts.map(post => (
-        <div key={post.id} style={{ width: '484px', background: '#FEF4EA', borderRadius: '18px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+        <div
+          key={post.id}
+          className="bg-[#FEF4EA] rounded-2xl shadow-lg overflow-hidden flex flex-col w-full border border-[#D1CFC6]"
+          style={{ minWidth: 0 }}
+        >
           {/* Top bar */}
-          <div style={{ height: '83px', background: '#E7DBC5F4', display: 'flex', alignItems: 'center', padding: '0 24px', position: 'relative' }}>
+          <div className="h-[83px] bg-[#E7DBC5F4] flex items-center px-6 relative">
             {/* Profile picture */}
-            <div style={{ width: '57px', height: '57px', borderRadius: '50%', overflow: 'hidden', background: '#8078a5', marginRight: '18px', border: '3px solid #FEF4EA' }}>
-              <img src={users[post.userid]?.profilePicture ? `http://localhost:3000/uploads/profile/${users[post.userid].profilePicture}` : 'http://localhost:3000/uploads/profile/default-profile.png'} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div className="w-[57px] h-[57px] rounded-full overflow-hidden bg-[#8078a5] mr-4 border-4 border-[#FEF4EA]">
+              <img
+                src={users[post.userid]?.profilePicture ? `http://localhost:3000/uploads/profile/${users[post.userid].profilePicture}` : 'http://localhost:3000/uploads/profile/default-profile.png'}
+                alt="profile"
+                className="w-full h-full object-cover"
+              />
             </div>
             {/* User name and time */}
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <span style={{ fontWeight: 600, fontSize: '20px', color: '#23232A' }}>{users[post.userid]?.username || 'Usuário'}</span>
-              <span style={{ fontSize: '15px', color: '#8078a5' }}>{timeAgo(post.createdAt)}</span>
+            <div className="flex flex-col justify-center">
+              <span className="font-semibold text-xl text-[#23232A]">{users[post.userid]?.username || 'Usuário'}</span>
+              <span className="text-sm text-[#8078a5]">{timeAgo(post.createdAt)}</span>
             </div>
           </div>
           {/* Album mention (if any) */}
@@ -104,20 +112,24 @@ const Post: React.FC = () => {
             <AlbumMention albumId={post.postMention} fetchAlbum={fetchAlbum} />
           )}
           {/* Post text */}
-          <div style={{flex: 1, paddingLeft: '40px', paddingRight: '40px', paddingTop: '20px', paddingBottom: '20px', color: '#23232A', fontSize: '18px', fontWeight: 400, wordBreak: 'break-word', overflowY: 'auto' }}>
+          <div className="px-10 py-5 text-[#23232A] text-lg font-normal break-words overflow-y-auto">
             {post.postText}
           </div>
           {/* Post image (if any) */}
           {post.postImg && (
-            <img src={`/uploads/${post.postImg}`} alt="post" style={{ width: '100%', maxHeight: '120px', objectFit: 'cover', borderRadius: '0 0 18px 18px' }} />
+            <img
+              src={`/uploads/${post.postImg}`}
+              alt="post"
+              className="w-full max-h-[120px] object-cover rounded-b-2xl"
+            />
           )}
           {/* Interações: linha dos ícones */}
-          <div style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '18px', padding: '0px 40px 20px 40px', alignItems: 'center' }}>
-              <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} title="Upvote">
+          <div className="w-full">
+            <div className="flex justify-start gap-5 px-10 pb-5 items-center">
+              <button className="bg-none border-none cursor-pointer p-0" title="Upvote">
                 <FaRegThumbsUp size={22} color="#8078a5" />
               </button>
-              <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} title="Downvote">
+              <button className="bg-none border-none cursor-pointer p-0" title="Downvote">
                 <FaRegThumbsDown size={22} color="#8078a5" />
               </button>
               {/* Botão de comentário, não área expandida */}

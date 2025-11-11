@@ -47,8 +47,8 @@ const Header: React.FC = () => {
             </span>
           </Link>
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <div className="w-64">
+        <div className="flex-1 flex justify-center">
+          <div className="w-[420px]">
             <SearchBar />
           </div>
         </div>
