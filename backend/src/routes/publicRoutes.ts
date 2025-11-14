@@ -7,6 +7,7 @@ import { getPostsByUserId } from "../controllers/PostController";
 import { getTags } from "../controllers/TagController";
 import { getTagById } from "../controllers/TagController";
 import { getLikesByPostId } from "../controllers/LikeController";
+import { getReviewsByUserId } from "../controllers/ReviewController";
 
 const publicRoutes = Router();
 
@@ -27,5 +28,8 @@ publicRoutes.get("/tags/:id", getTagById);
 
 // Likes
 publicRoutes.get("/likes/post/:postId", getLikesByPostId);
+
+// Reviews
+publicRoutes.get("/reviews/user/:userId", getReviewsByUserId);
 
 export { publicRoutes };

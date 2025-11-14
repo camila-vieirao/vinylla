@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
-import { Bounce, ToastContainer } from "react-toastify";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import api from "./services/api/api";
 import Feed from "./pages/Feed/Feed";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Header from "./components/Header/Header";
@@ -19,7 +20,7 @@ import SelectTags from "./pages/SelectTags/SelectTags";
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
-  const [selectedAlbum, setSelectedAlbum] = useState(null);
+  const [selectedAlbum, setSelectedAlbum] = useState<any>(null);
 
   const location = useLocation();
 
@@ -83,10 +84,37 @@ function App() {
             setShowReviewModal(false);
             setSelectedAlbum(null);
           }}
-          onSubmit={(review) => {
-            // Aqui você pode enviar o review para o backend
-            setShowReviewModal(false);
-            setSelectedAlbum(null);
+          onSubmit={async (review) => {
+            try {
+              const token = localStorage.getItem("token");
+              if (!token) {
+                toast.error("You must be signed in to submit a review.");
+                return;
+              }
+
+              await api.post(
+                `/api/reviews/${selectedAlbum.idAlbum}`,
+                {
+                  reviewText: review.description,
+                  reviewRating: review.rating,
+                },
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+
+              toast.success("Review submitted successfully!");
+              setShowReviewModal(false);
+              setSelectedAlbum(null);
+            } catch (error: any) {
+              if (error.response?.status === 400) {
+                toast.error(
+                  error.response.data?.message ||
+                    "You have already reviewed this album."
+                );
+              } else {
+                console.error("Submit review error:", error);
+                toast.error("Failed to submit review.");
+              }
+            }
           }}
         />
       )}
