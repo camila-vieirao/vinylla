@@ -22,64 +22,75 @@ export function ReviewFormModal({
   const [description, setDescription] = useState("");
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black/10">
-      <div className="bg-[#272730] rounded-lg p-8 shadow-lg w-[520px] relative">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl"
-        >
-          ×
-        </button>
-        <div className="flex items-center mb-4">
-          <img
-            src={album.strAlbumThumb}
-            alt={album.strAlbum}
-            className="w-16 h-16 rounded mr-4"
-          />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-[#080b16] text-white shadow-2xl">
+        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
           <div>
-            <div className="text-lg font-bold text-[#FEF4EA]">
-              {album.strAlbum}
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Review</p>
+            <p className="text-xl font-semibold">Share your thoughts</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="cursor-pointer rounded-full border border-white/10 p-2 text-lg text-white/70 transition hover:border-white/40 hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="px-6 py-6 space-y-6">
+          <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <img
+              src={album.strAlbumThumb}
+              alt={album.strAlbum}
+              className="h-16 w-16 rounded-xl object-cover"
+            />
+            <div>
+              <p className="text-lg font-semibold">{album.strAlbum}</p>
+              <p className="text-sm text-white/60">{album.strArtist}</p>
             </div>
-            <div className="text-[#FEF4EA]">{album.strArtist}</div>
           </div>
-        </div>
-        <div className="mb-4">
-          <div className="flex items-center">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                onClick={() => setRating(star)}
-                onMouseEnter={() => setHover(star)}
-                onMouseLeave={() => setHover(0)}
-                className="focus:outline-none cursor-pointer"
-              >
-                <FaStar
-                  size={32}
-                  className={
-                    (hover || rating) >= star
-                      ? "text-[#E16A71]"
-                      : "text-[#FEF4EA]"
-                  }
-                />
-              </button>
-            ))}
+
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-sm uppercase tracking-[0.3em] text-white/60">Rate this record</p>
+            <div className="flex items-center gap-3">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setRating(star)}
+                  onMouseEnter={() => setHover(star)}
+                  onMouseLeave={() => setHover(0)}
+                  className="cursor-pointer rounded-full p-1 transition hover:scale-110 focus:outline-none"
+                >
+                  <FaStar
+                    size={34}
+                    className={
+                      (hover || rating) >= star ? "text-[#ff7ca3]" : "text-white/30"
+                    }
+                  />
+                </button>
+              ))}
+            </div>
           </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-sm uppercase tracking-[0.3em] text-white/60">Tell the community</p>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="What stood out on this spin?"
+              className="mt-3 h-32 w-full resize-none bg-transparent text-base text-white placeholder-white/40 focus:outline-none"
+            />
+          </div>
+
+          <button
+            onClick={() => onSubmit({ rating, description })}
+            className="cursor-pointer w-full rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-lg transition hover:opacity-90 disabled:opacity-40"
+            disabled={rating === 0 || description.trim() === ""}
+          >
+            Submit review
+          </button>
         </div>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Add your review..."
-          className="w-full h-24 p-2 rounded bg-[#6B818C] text-[#FEF4EA] mb-4 resize-none"
-        />
-        <button
-          // #todo: salvar a review no banco de dados
-          onClick={() => onSubmit({ rating, description })}
-          className="cursor-pointer w-full bg-[#8078a5] text-[#FEF4EA] py-2 rounded-full hover:bg-[#9a8fc1]"
-          disabled={rating === 0 || description.trim() === ""}
-        >
-          Submit Review
-        </button>
       </div>
     </div>
   );

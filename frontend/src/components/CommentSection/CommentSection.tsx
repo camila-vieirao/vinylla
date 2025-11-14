@@ -37,7 +37,15 @@ interface CommentSectionProps {
     return `${Math.floor(diff / 86400)}d ago`;
   }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ postId, users, iconOnly, expandedArea, show, onExpand, onClose }) => {
+const CommentSection: React.FC<CommentSectionProps> = ({
+  postId,
+  users,
+  iconOnly,
+  expandedArea,
+  show,
+  onExpand,
+  onClose,
+}) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,56 +79,72 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, users, iconOnly
     setLoading(false);
   };
 
-  // Se for só o ícone
   if (iconOnly) {
     return (
       <button
-        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginLeft: '2px' }}
+        type="button"
+        className={`flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/70 transition ${
+          show ? "border-white/30 text-white" : "hover:border-white/30 hover:text-white"
+        }`}
         onClick={onExpand}
-        title={show ? "Fechar comentários" : "Comentar"}
+        title={show ? "Hide comments" : "Show comments"}
       >
-        <FaRegComment size={22} color={show ? "#6a4c7d" : "#8078a5"} />
+        <FaRegComment />
+        Comments
       </button>
     );
   }
 
-  // Se for a área expandida
   if (expandedArea) {
     if (!show) return null;
     return (
-      <div style={{ width: '100%', padding: '20px 24px 16px 24px', boxSizing: 'border-box' }}>
-        <div style={{ maxHeight: '180px', overflowY: 'auto', marginBottom: '12px', marginTop: '8px' }}>
+      <div className="mt-5 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80 shadow-lg backdrop-blur">
+        <div
+          className="space-y-4 overflow-y-auto pr-1"
+          style={{ maxHeight: "220px", scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.25) transparent" }}
+        >
           {comments.length === 0 ? (
-            <span style={{ color: '#8078a5' }}>Nenhum comentário ainda.</span>
+            <p className="text-white/50">No comments yet.</p>
           ) : (
-            comments.map(comment => (
-              <div key={comment.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                <img
-                  src={users[comment.userid]?.profilePicture ? `http://localhost:3000/uploads/profile/${users[comment.userid].profilePicture}` : 'http://localhost:3000/uploads/profile/default-profile.png'}
-                  alt="profile"
-                  style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', marginRight: '10px' }}
-                />
-                <div>
-                  <span style={{ fontWeight: 600, fontSize: '15px', color: '#23232A' }}>{users[comment.userid]?.username || 'Usuário'}</span>
-                  <span style={{ fontSize: '13px', color: '#8078a5', marginLeft: '8px' }}>{timeAgo(comment.createdAt)}</span>
-                  <div style={{ color: '#23232A', fontSize: '15px' }}>{comment.commentText}</div>
+            comments.map((comment) => (
+              <div key={comment.id} className="flex gap-3">
+                <div className="h-10 w-10 rounded-full border border-white/10 bg-white/10">
+                  <img
+                    src={
+                      users[comment.userid]?.profilePicture
+                        ? `http://localhost:3000/uploads/profile/${users[comment.userid].profilePicture}`
+                        : "http://localhost:3000/uploads/profile/default-profile.png"
+                    }
+                    alt="profile"
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-white">
+                      {users[comment.userid]?.username || "Listener"}
+                    </span>
+                    <span className="text-xs text-white/50">{timeAgo(comment.createdAt)}</span>
+                  </div>
+                  <p className="text-sm text-white/80">{comment.commentText}</p>
                 </div>
               </div>
             ))
           )}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="mt-4 flex gap-3">
           <input
             type="text"
             value={newComment}
-            onChange={e => setNewComment(e.target.value)}
-            placeholder="Comment here..."
-            style={{ flex: 1, padding: '8px', borderRadius: '16px', border: '1px solid #ddd' }}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Share your thoughts..."
+            className="flex-1 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white placeholder-white/40 focus:outline-none"
             disabled={loading}
           />
           <button
+            type="button"
             onClick={handleSend}
-            style={{ background: '#6a4c7d', color: '#fff', border: 'none', borderRadius: '20px', padding: '8px 16px', fontWeight: 500, cursor: 'pointer' }}
+            className="rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:opacity-90 disabled:opacity-40"
             disabled={loading}
           >
             Send
