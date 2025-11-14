@@ -8,6 +8,11 @@ import { getTags } from "../controllers/TagController";
 import { getTagById } from "../controllers/TagController";
 import { getLikesByPostId } from "../controllers/LikeController";
 import { getReviewsByUserId } from "../controllers/ReviewController";
+import {
+  getFollowCounts,
+  getFollowers,
+  getFollowing,
+} from "../controllers/FollowController";
 
 const publicRoutes = Router();
 
@@ -31,5 +36,10 @@ publicRoutes.get("/likes/post/:postId", getLikesByPostId);
 
 // Reviews
 publicRoutes.get("/reviews/user/:userId", getReviewsByUserId);
+
+// Follows
+publicRoutes.get("/follows/:userId/counts", getFollowCounts);
+publicRoutes.get("/follows/:userId/followers", getFollowers);
+publicRoutes.get("/follows/:userId/following", getFollowing);
 
 export { publicRoutes };
