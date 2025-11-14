@@ -17,6 +17,7 @@ import { AlbumPage } from "./pages/Album/AlbumPage";
 import { ExplorePage } from "./pages/Explore/ExplorePage";
 import SelectTags from "./pages/SelectTags/SelectTags";
 import Marketplace from "./pages/Marketplace/Marketplace";
+import { GroupPage } from "./pages/Group/Group";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -74,6 +75,7 @@ function App() {
           <Route path="/album/:id" element={<AlbumPage />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/groups/:groupId" element={<GroupPage />} />
         </Routes>
       </main>
       {showPostModal && (
