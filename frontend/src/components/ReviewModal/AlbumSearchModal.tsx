@@ -33,83 +33,108 @@ export function AlbumSearchModal({ onSelect, onClose }: AlbumSearchModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black/10">
-      <div className="bg-[#272730] rounded-lg p-8 shadow-lg w-[520px] relative">
-        <button
-          onClick={onClose}
-          className="cursor-pointer absolute top-2 right-2 text-gray-500 text-xl"
-        >
-          ×
-        </button>
-        <h2 className="text-xl font-bold mb-4 text-[#FEF4EA]">Search Album</h2>
-        <input
-          value={searchArtist}
-          onChange={(e) => setSearchArtist(e.target.value)}
-          placeholder="Artist"
-          className="w-full mb-2 p-2 border rounded text-[#FEF4EA]"
-        />
-        <input
-          value={searchAlbum}
-          onChange={(e) => setSearchAlbum(e.target.value)}
-          placeholder="Album (optional)"
-          className="w-full mb-4 p-2 border rounded text-[#FEF4EA]"
-        />
-        <button
-          onClick={handleSearch}
-          disabled={loading}
-          className="cursor-pointer w-full bg-[#6B818C] text-[#FEF4EA] py-2 rounded-full mb-4 hover:bg-[#435761]"
-        >
-          {loading ? "Searching..." : "Search"}
-        </button>
-        <div
-          className="max-h-64 overflow-y-auto mb-2 pr-1 pl-6 custom-scrollbar"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "#262730 #464753",
-          }}
-        >
-          <style>{`
-            .custom-scrollbar::-webkit-scrollbar {
-              width: 6px;
-              background: transparent;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-              background: #262730;
-              border-radius: 6px;
-            }
-          `}</style>
-          {results.length === 0 && !loading && hasSearched && (
-            <div className="text-center text-[#E16A71] py-4 font-bold">
-              Could not find the searched album/artist.
-            </div>
-          )}
-          {results.slice(0, visibleCount).map((album) => (
-            <div key={album.idAlbum} className="flex items-center mb-2">
-              <img
-                src={album.strAlbumThumb}
-                alt={album.strAlbum}
-                className="w-12 h-12 mr-2 rounded"
-              />
-              <span className="text-[#FEF4EA] max-w-[160px] break-words whitespace-normal">
-                {album.strAlbum}
-              </span>
-              <button
-                onClick={() => onSelect(album)}
-                className="cursor-pointer ml-auto mr-6 bg-[#8078a5] text-[#FEF4EA] px-5 py-1 rounded-full hover:bg-[#9a8fc1]"
-              >
-                Select
-              </button>
-            </div>
-          ))}
-        </div>
-        {results.length > visibleCount && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-[#080b16] text-white shadow-2xl">
+        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Review</p>
+            <p className="text-xl font-semibold">Search for an album</p>
+          </div>
           <button
-            onClick={() => setVisibleCount(visibleCount + 5)}
-            className="cursor-pointer w-full mt-2 bg-[#6B818C] text-[#FEF4EA] py-2 rounded-full hover:bg-[#435761]"
+            onClick={onClose}
+            className="cursor-pointer rounded-full border border-white/10 p-2 text-lg text-white/70 transition hover:border-white/40 hover:text-white"
           >
-            See more
+            ✕
           </button>
-        )}
+        </div>
+
+        <div className="px-6 py-6 space-y-5">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.3em] text-white/50">Artist</p>
+              <input
+                value={searchArtist}
+                onChange={(e) => setSearchArtist(e.target.value)}
+                placeholder="Enter artist name"
+                className="mt-2 w-full bg-transparent text-sm text-white placeholder-white/40 focus:outline-none"
+              />
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.3em] text-white/50">Album (optional)</p>
+              <input
+                value={searchAlbum}
+                onChange={(e) => setSearchAlbum(e.target.value)}
+                placeholder="Album title"
+                className="mt-2 w-full bg-transparent text-sm text-white placeholder-white/40 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={handleSearch}
+            disabled={loading || !searchArtist.trim()}
+            className="w-full rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-lg transition hover:opacity-90 disabled:opacity-40 cursor-pointer"
+          >
+            {loading ? "Searching..." : "Search"}
+          </button>
+
+          <div
+            className="max-h-64 space-y-3 overflow-y-auto pr-2 custom-scroll"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "#7c5bff transparent",
+            }}
+          >
+            <style>{`
+              .custom-scroll::-webkit-scrollbar {
+                width: 6px;
+              }
+              .custom-scroll::-webkit-scrollbar-track {
+                background: transparent;
+              }
+              .custom-scroll::-webkit-scrollbar-thumb {
+                background: rgba(124, 91, 255, 0.5);
+                border-radius: 999px;
+              }
+            `}</style>
+            {results.length === 0 && !loading && hasSearched && (
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-6 text-center text-sm font-semibold text-white/70">
+                Could not find the searched album/artist.
+              </div>
+            )}
+            {results.slice(0, visibleCount).map((album) => (
+              <div
+                key={album.idAlbum}
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3"
+              >
+                <img
+                  src={album.strAlbumThumb}
+                  alt={album.strAlbum}
+                  className="h-12 w-12 rounded-xl object-cover"
+                />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold">{album.strAlbum}</p>
+                  <p className="text-xs text-white/60">{album.strArtist}</p>
+                </div>
+                <button
+                  onClick={() => onSelect(album)}
+                  className="cursor-pointer rounded-full border border-white/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-white/10"
+                >
+                  Select
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {results.length > visibleCount && (
+            <button
+              onClick={() => setVisibleCount(visibleCount + 5)}
+              className="cursor-pointer w-full rounded-full border border-white/20 py-2 text-sm font-semibold text-white transition hover:bg-white/5"
+            >
+              See more
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

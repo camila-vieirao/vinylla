@@ -15,6 +15,7 @@ import { ArtistPage } from "./pages/Artist/ArtistPage";
 import { AlbumPage } from "./pages/Album/AlbumPage";
 import { ExplorePage } from "./pages/Explore/ExplorePage";
 import SelectTags from "./pages/SelectTags/SelectTags";
+import Marketplace from "./pages/Marketplace/Marketplace";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -55,7 +56,15 @@ function App() {
       <main className={!hideLayout ? "pt-26" : ""}>
         <Routes>
           <Route path="/" element={<Navigate to="/feed" />} />
-          <Route path="/feed" element={<Feed />} />
+          <Route
+            path="/feed"
+            element={
+              <Feed
+                onOpenPostModal={() => setShowPostModal(true)}
+                onOpenReviewModal={() => setShowReviewModal(true)}
+              />
+            }
+          />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -63,6 +72,7 @@ function App() {
           <Route path="/artist/:id" element={<ArtistPage />} />
           <Route path="/album/:id" element={<AlbumPage />} />
           <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/marketplace" element={<Marketplace />} />
         </Routes>
       </main>
       {showPostModal && (

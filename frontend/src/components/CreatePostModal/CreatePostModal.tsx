@@ -61,84 +61,104 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black/40"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative bg-[#262730] max-w-2xl w-full p-6 rounded-2xl shadow-xl"
+        className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-[#080b16] text-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="cursor-pointer absolute top-2 right-4 text-gray-400 hover:text-white transition text-2xl"
-        >
-          ×
-        </button>
+        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">New post</p>
+            <p className="text-xl font-semibold">Share something with the crate</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="cursor-pointer rounded-full border border-white/10 p-2 text-lg text-white/70 transition hover:border-white/40 hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
 
         {!user && (
-          <div className="text-center flex flex-col items-center gap-6 py-8">
-            <p className="text-gray-300 text-lg">Want to create a post?</p>
+          <div className="flex flex-col items-center gap-6 px-6 py-10 text-center">
+            <p className="text-base text-white/70">Want to create a post?</p>
             <button
-              className="bg-[#6a4c7d] text-white px-6 py-2 rounded-full hover:bg-[#5a3f6b] transition cursor-pointer"
+              className="cursor-pointer rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-8 py-2 font-semibold text-white shadow-lg transition hover:opacity-90"
               onClick={() => (window.location.href = "/login")}
             >
-              Sign In to Continue
+              Sign in to continue
             </button>
           </div>
         )}
 
         {user && (
-          <div className="flex items-center gap-4 mt-4">
-            <img
-              className="w-12 h-12 rounded-full object-cover object-center"
-              src={
-                user?.profilePicture
-                  ? `http://localhost:3000/uploads/profile/${user.profilePicture}`
-                  : avatar
-              }
-              alt="user photo"
+          <div className="px-6 py-6 space-y-6">
+            <div className="flex items-center gap-4">
+              <img
+                className="h-14 w-14 rounded-full object-cover object-center border border-white/10"
+                src={
+                  user?.profilePicture
+                    ? `http://localhost:3000/uploads/profile/${user.profilePicture}`
+                    : avatar
+                }
+                alt="user photo"
+              />
+              <div>
+                <p className="text-lg font-semibold">{user?.name}</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-white/50">Posting publicly</p>
+              </div>
+            </div>
+
+            <textarea
+              rows={4}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-base text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+              placeholder={`What are you spinning, ${user?.name}?`}
+              value={postText}
+              onChange={(e) => setPostText(e.target.value)}
             />
 
-            <div className="bg-[#f8f6f3] rounded-2xl p-4 flex-1 flex flex-col gap-4">
-              <input
-                type="text"
-                className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-500"
-                placeholder={`What's on your mind, ${user?.name}?`}
-                value={postText}
-                onChange={(e) => setPostText(e.target.value)}
-              />
+            <div className="flex flex-wrap items-center gap-3">
+              <label
+                htmlFor="modal-post-image"
+                className="group flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/40 hover:bg-white/5 cursor-pointer"
+              >
+                <FaImage size={16} />
+                <span>Photo</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  id="modal-post-image"
+                  onChange={(e) => setPostImg(e.target.files?.[0] || null)}
+                />
+              </label>
+              <button
+                type="button"
+                className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/40 hover:bg-white/5"
+              >
+                <FaVideo size={16} />
+                <span>Video</span>
+              </button>
+              <button
+                type="button"
+                className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/40 hover:bg-white/5"
+              >
+                <FaMusic size={16} />
+                <span>Track</span>
+              </button>
+            </div>
 
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex gap-4 text-gray-600">
-                  <button className="flex items-center gap-1 hover:text-black transition cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="modal-post-image"
-                      onChange={(e) => setPostImg(e.target.files?.[0] || null)}
-                    />
-                    <label
-                      htmlFor="modal-post-image"
-                      className="flex items-center gap-1 hover:text-black transition cursor-pointer"
-                    >
-                      <FaImage /> Image
-                    </label>
-                  </button>
-                  <button className="flex items-center gap-1 hover:text-black transition cursor-pointer">
-                    <FaVideo /> Video
-                  </button>
-                  <button className="flex items-center gap-1 hover:text-black transition cursor-pointer">
-                    <FaMusic /> Music
-                  </button>
-                </div>
-                <button
-                  onClick={handleCreatePost}
-                  className="bg-[#6a4c7d] font-semibold cursor-pointer text-white px-8 py-1 rounded-full hover:bg-[#5a3f6b] transition"
-                >
-                  Post
-                </button>
-              </div>
+            <div className="flex items-center justify-between border-t border-white/10 pt-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-white/50">Followers see this instantly</p>
+              <button
+                onClick={handleCreatePost}
+                className="cursor-pointer rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-8 py-2 font-semibold text-white shadow-lg transition hover:opacity-90 disabled:opacity-40"
+                disabled={!postText.trim()}
+              >
+                Post
+              </button>
             </div>
           </div>
         )}

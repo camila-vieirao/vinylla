@@ -37,28 +37,31 @@ const Header: React.FC = () => {
   };
 
   return (
-    <nav className="bg-[#262730] fixed top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between p-2">
-        <div className="flex items-center">
-          <Link to="/feed" className="flex items-center">
-            <img src={logo} className="w-25" alt="Logo Vinylla" />
-            <span className="cursor-pointer text-2xl font-bold text-white">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#1a1b24]/95 via-[#1c1e2b]/95 to-[#1a1b24]/95 backdrop-blur-lg shadow-lg transition-shadow duration-500">
+      <div className="flex items-center justify-between px-6 py-3">
+        <div className="flex items-center gap-3">
+          <Link
+            to="/feed"
+            className="flex items-center gap-3 rounded-full px-2 py-1 transition-all duration-300 hover:scale-105"
+          >
+            <img src={logo} className="w-20" alt="Logo Vinylla" />
+            <span className="cursor-pointer text-2xl font-semibold tracking-wide text-white">
               Vinylla.
             </span>
           </Link>
         </div>
-        <div className="flex-1 flex justify-center">
-          <div className="w-[420px]">
+        <div className="flex flex-1 justify-center px-6">
+          <div className="w-full max-w-[420px] rounded-full border border-white/10 bg-white/5 px-4 py-2 shadow-inner transition focus-within:border-white/40">
             <SearchBar />
           </div>
         </div>
         <div className="flex items-center gap-6 text-3xl">
           {user && (
-            <ul className="flex gap-6 p-2 pl-6 pr-6 bg-[#30323F] rounded-3xl">
+            <ul className="flex gap-4 rounded-3xl border border-white/10 bg-white/5 px-6 py-2 text-white/70 shadow-inner">
               <li>
                 <Link
                   to="/marketplace"
-                  className="text-white hover:text-[#795277] transition-colors duration-300"
+                  className="flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-300 hover:text-white hover:shadow-lg hover:shadow-rose-500/20 active:scale-95"
                 >
                   <FaCartShopping />
                 </Link>
@@ -66,7 +69,7 @@ const Header: React.FC = () => {
               <li>
                 <Link
                   to="/groups"
-                  className="text-white hover:text-[#795277] transition-colors duration-300"
+                  className="flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-300 hover:text-white hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95"
                 >
                   <IoIosPeople />
                 </Link>
@@ -74,7 +77,7 @@ const Header: React.FC = () => {
               <li>
                 <Link
                   to=""
-                  className="text-white hover:text-[#795277] transition-colors duration-400"
+                  className="flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-300 hover:text-white hover:shadow-lg hover:shadow-amber-400/20 active:scale-95"
                 >
                   <IoIosNotifications />
                 </Link>
@@ -82,7 +85,7 @@ const Header: React.FC = () => {
               <li>
                 <Link
                   to="/user/settings"
-                  className="text-white hover:text-[#795277] transition-colors duration-400"
+                  className="flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-300 hover:text-white hover:shadow-lg hover:shadow-emerald-400/20 active:scale-95"
                 >
                   <IoMdSettings />
                 </Link>
@@ -94,10 +97,10 @@ const Header: React.FC = () => {
             <div className="flex items-center gap-4">
               <button
                 type="button"
-                className="flex text-sm bg-gray-800 rounded-full cursor-pointer"
+                className="flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-1 text-sm text-white shadow-inner transition hover:border-white/40 hover:bg-white/10 active:scale-95"
               >
                 <img
-                  className="w-12 h-12 rounded-full object-cover object-center"
+                  className="h-12 w-12 rounded-full object-cover object-center"
                   src={
                     user.profilePicture
                       ? `http://localhost:3000/uploads/profile/${user.profilePicture}`
@@ -108,7 +111,7 @@ const Header: React.FC = () => {
               </button>
               <button
                 onClick={handleLogout}
-                className="cursor-pointer text-white text-sm bg-[#6a4c7d] px-4 py-2 rounded-full hover:bg-[#5a3f6b] transition"
+                className="cursor-pointer rounded-full bg-gradient-to-r from-[#7c5bff] via-[#ff6ec4] to-[#ff9671] px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-[#ff6ec4]/40 active:scale-95"
               >
                 Logout
               </button>
@@ -117,13 +120,13 @@ const Header: React.FC = () => {
             <div className="flex items-center gap-4">
               <Link
                 to="/login"
-                className="text-white text-sm bg-[#6a4c7d] px-4 py-2 rounded-full hover:bg-[#5a3f6b] transition"
+                className="rounded-full bg-[#6a4c7d] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#5a3f6b] hover:shadow-lg hover:shadow-[#6a4c7d]/40 active:scale-95"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="text-white text-sm bg-transparent border border-[#6a4c7d] px-4 py-2 rounded-full hover:bg-[#6a4c7d] transition"
+                className="rounded-full border border-[#6a4c7d] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#6a4c7d] hover:shadow-lg hover:shadow-[#6a4c7d]/40 active:scale-95"
               >
                 Sign Up
               </Link>
