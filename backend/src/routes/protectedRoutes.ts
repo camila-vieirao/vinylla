@@ -33,6 +33,8 @@ import {
 
 import { likePost, unlikePost } from "../controllers/LikeController";
 
+import { createReview, deleteReviewById } from "../controllers/ReviewController";
+
 const protectedRoutes = Router();
 
 // Aplica o middleware JWT p/ todas rotas abaixo
@@ -65,5 +67,10 @@ protectedRoutes.get("/users/:userId/tags", getTagsPerUser);
 // Likes
 protectedRoutes.post("/posts/:postId/like", likePost); // Require userId from token
 protectedRoutes.delete("/posts/:postId/like", unlikePost); // Require userId from token
+
+// Reviews
+protectedRoutes.post("/reviews/:albumId", createReview); // Require userId from token)
+protectedRoutes.delete("/reviews/:reviewId", deleteReviewById); // Require userId from token
+
 
 export { protectedRoutes };
