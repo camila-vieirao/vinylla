@@ -63,55 +63,73 @@ export const SearchResults: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-50 py-8">
-      <h1 className="text-2xl font-bold mb-4 text-[#FEF4EA]">Results for "{q}"</h1>
-      {loading ? (
-        <div>Loading...</div>
+    <div className="min-h-screen bg-[#05060b] text-white sm:pl-32">
+      <div className="mx-auto max-w-4xl px-6 py-10">
+        <header className="mb-8">
+          <p className="text-xs uppercase tracking-[0.4em] text-white/60">Search</p>
+          <h1 className="text-4xl font-semibold">Results for “{q}”</h1>
+          <p className="text-sm text-white/60">{total} matches across artists and albums</p>
+        </header>
+        {loading ? (
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center text-sm uppercase tracking-[0.4em] text-white/60 shadow-xl backdrop-blur">
+          Loading…
+        </div>
       ) : (
         <>
           {results.length === 0 ? (
-            <div className="text-[#FEF4EA]">No results found.</div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center text-white/70 shadow-xl backdrop-blur">
+              No results found. Try a different artist or album.
+            </div>
           ) : (
-            <ul>
-              {results.map(item => (
-                <li
-                  key={item.type + item.id}
-                  className="flex items-center px-4 py-2 cursor-pointer hover:bg-[#262730] transition rounded"
-                  onClick={() => handleSelect(item)}
-                >
-                  {item.thumb && (
-                    <img src={item.thumb} alt={item.name} className="w-10 h-10 rounded mr-3" />
-                  )}
-                  <div>
-                    <div className="font-medium text-[#FEF4EA]">{item.name}</div>
-                    {item.subtitle && <div className="text-xs text-[#FEF4EA]">{item.subtitle}</div>}
-                    <span className="text-xs text-[#FEF4EA]">{item.type}</span>
-                  </div>
+            <ul className="space-y-3">
+              {results.map((item) => (
+                <li key={item.type + item.id}>
+                  <button
+                    type="button"
+                    className="group flex w-full items-center gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 text-left shadow-lg backdrop-blur transition hover:border-white/30 hover:bg-white/10"
+                    onClick={() => handleSelect(item)}
+                  >
+                    {item.thumb ? (
+                      <img src={item.thumb} alt={item.name} className="h-14 w-14 rounded-2xl object-cover" />
+                    ) : (
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-xs uppercase text-white/60">
+                        No art
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <p className="text-base font-semibold text-white">{item.name}</p>
+                      {item.subtitle && <p className="text-sm text-white/70">{item.subtitle}</p>}
+                      <span className="text-xs uppercase tracking-[0.3em] text-white/50">{item.type}</span>
+                    </div>
+                  </button>
                 </li>
               ))}
             </ul>
           )}
-          <div className="flex justify-between mt-4">
+          <div className="mt-8 flex items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-6 py-4 text-sm shadow-lg backdrop-blur">
             <button
+              type="button"
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-              className="px-4 py-2 rounded bg-[#8078a5] text-white disabled:opacity-50"
+              className="rounded-full border border-white/15 px-4 py-2 text-white/70 transition hover:border-white/30 hover:text-white disabled:opacity-30"
             >
               Previous
             </button>
-            <span className="text-[#FEF4EA]">
+            <span className="text-white/70">
               Page {page} of {Math.ceil(total / 10) || 1}
             </span>
             <button
+              type="button"
               disabled={page * 10 >= total}
               onClick={() => setPage(page + 1)}
-              className="px-4 py-2 rounded bg-[#8078a5] text-white disabled:opacity-50"
+              className="rounded-full border border-white/15 px-4 py-2 text-white/70 transition hover:border-white/30 hover:text-white disabled:opacity-30"
             >
               Next
             </button>
           </div>
         </>
-      )}
+        )}
+      </div>
     </div>
   );
 };

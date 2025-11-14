@@ -49,9 +49,9 @@ const curatedStories: CuratedStory[] = [
 ];
 
 const featuredGroups = [
-  { id: "indie", name: "Indie Underground", members: "18.4k listening" },
-  { id: "jazz", name: "Late Night Jazz Club", members: "9.2k listening" },
-  { id: "electro", name: "Analog Synth Circle", members: "12.1k listening" },
+  { id: "indie", name: "Indie Underground", members: "18.4k members" },
+  { id: "jazz", name: "Late Night Jazz Club", members: "9.2k members" },
+  { id: "electro", name: "Analog Synth Circle", members: "12.1k members" },
 ];
 
 const suggestedPeople = [
@@ -84,6 +84,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
   const [user, setUser] = useState<any>(null);
   const [postText, setPostText] = useState("");
   const [postImg, setPostImg] = useState<File | null>(null);
+  const [storiesCollapsed, setStoriesCollapsed] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -155,30 +156,50 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
           <section className="space-y-8">
             {user ? (
               <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl">
-                <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <p className="text-2xl font-semibold">Drop something quick</p>
+                <div className="mb-5 flex items-center justify-between">
+                  <p className="text-2xl font-semibold">Drop something quick</p>
+                  <button
+                    type="button"
+                    className="rounded-full border border-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/70 transition hover:border-white/30 hover:text-white"
+                    onClick={() => setStoriesCollapsed((prev) => !prev)}
+                  >
+                    {storiesCollapsed ? "Expand" : "Minimize"}
+                  </button>
+                </div>
+                {storiesCollapsed ? (
+                  <div className="flex flex-wrap gap-3">
+                    {curatedStories.map((story) => (
+                      <button
+                        type="button"
+                        key={story.id}
+                        onClick={() => handleStoryAction(story.action)}
+                        className={`flex items-center gap-2 rounded-full border border-white/15 bg-gradient-to-r ${story.gradient} px-4 py-2 text-xs font-semibold text-[#100b1f] shadow-sm transition hover:-translate-y-0.5`}
+                      >
+                        <span className="text-[0.6rem] uppercase tracking-[0.3em]">{story.badge}</span>
+                      </button>
+                    ))}
                   </div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {curatedStories.map((story) => (
-                    <button
-                      type="button"
-                      key={story.id}
-                      onClick={() => handleStoryAction(story.action)}
-                      className={`group relative flex aspect-square flex-col justify-between rounded-3xl bg-gradient-to-br ${story.gradient} p-4 text-left text-[#100b1f] shadow-xl transition-transform duration-300 hover:-translate-y-1 focus:outline-none`}
-                    >
-                      <div className="space-y-2">
-                        <p className="text-[0.6rem] uppercase tracking-[0.35em] opacity-70">{story.badge}</p>
-                        <p className="text-lg font-semibold leading-tight">{story.title}</p>
-                        <p className="text-xs opacity-80">{story.description}</p>
-                      </div>
-                      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[#100b1f]/60 transition group-hover:text-[#100b1f]">
-                        Tap to open
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {curatedStories.map((story) => (
+                      <button
+                        type="button"
+                        key={story.id}
+                        onClick={() => handleStoryAction(story.action)}
+                        className={`group relative flex aspect-square flex-col justify-between rounded-3xl bg-gradient-to-br ${story.gradient} p-4 text-left text-[#100b1f] shadow-xl transition-transform duration-300 hover:-translate-y-1 focus:outline-none`}
+                      >
+                        <div className="space-y-2">
+                          <p className="text-[0.6rem] uppercase tracking-[0.35em] opacity-70">{story.badge}</p>
+                          <p className="text-lg font-semibold leading-tight">{story.title}</p>
+                          <p className="text-xs opacity-80">{story.description}</p>
+                        </div>
+                        <span className="text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[#100b1f]/60 transition group-hover:text-[#100b1f]">
+                          Tap to open
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-white/0 p-10 text-center shadow-2xl backdrop-blur">

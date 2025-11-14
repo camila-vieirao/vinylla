@@ -15,7 +15,6 @@ interface Tag {
 
 export const ExplorePage: React.FC = () => {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState<number | null>(null);
   const [tags, setTags] = useState<Tag[]>([]);
   const [albumsByTag, setAlbumsByTag] = useState<{ [tag: string]: Album[] }>({});
   const [loading, setLoading] = useState(true);
@@ -29,7 +28,6 @@ export const ExplorePage: React.FC = () => {
     })
       .then(res => res.json())
       .then(user => {
-        setUserId(user.id);
         // Fetch tags for user
         fetch(`http://localhost:3000/api/users/${user.id}/tags`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -40,7 +38,7 @@ export const ExplorePage: React.FC = () => {
             // For each tag, fetch top albums
             Promise.all(
               tagsRes.map((tag: Tag) =>
-                fetch(`http://localhost:3000/api_lastfm/v1/topalbums/tag/${encodeURIComponent(tag.name)}?limit=14`)
+                fetch(`http://localhost:3000/api_lastfm/v1/topalbums/tag/${encodeURIComponent(tag.name)}?limit=12`)
                   .then(res => res.json())
                   .then(data => ({ tag: tag.name, albums: data.albums?.album || [] }))
                   .catch(() => ({ tag: tag.name, albums: [] }))
@@ -60,57 +58,97 @@ export const ExplorePage: React.FC = () => {
           });
       })
       .catch(() => {
-        setUserId(null);
         setTags([]);
         setLoading(false);
       });
   }, []);
 
   if (loading) {
-    return <div className="text-center py-8 text-[#FEF4EA]">Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#05060b] text-white sm:pl-32">
+        <p className="text-sm uppercase tracking-[0.4em] text-white/60">Loading recommendations…</p>
+      </div>
+    );
   }
 
   return (
-    <div className="bg-[#23232A] py-10" style={{ paddingLeft: '150px', paddingBottom: '32px' }}>
-      <h1 style={{ color: '#FEF4EA', fontSize: '38px', fontWeight: 700, marginBottom: '32px' }}>Explore</h1>
-      {tags.length === 0 ? (
-        <div style={{ color: '#FEF4EA', background: '#23232A', fontSize: '20px', marginBottom: '32px' }}>No genres/tags selected. Go to your profile to add some!</div>
-      ) : (
-        tags.map(tag => (
-          <div key={tag.id} style={{ marginBottom: '48px' }}>
-            <div style={{ color: '#FEF4EA', fontSize: '28px', fontWeight: 600, marginBottom: '18px' }}>{tag.name}</div>
-            <div style={{ display: 'flex', gap: '36px', flexWrap: 'wrap' }}>
+    <div className="min-h-screen bg-[#05060b] text-white sm:pl-32">
+      <section className="bg-[radial-gradient(circle_at_top,_rgba(124,91,255,0.15),_transparent_60%)] py-12">
+        <div className="mx-auto max-w-5xl px-6">
+          <p className="text-xs uppercase tracking-[0.4em] text-white/60">Discover</p>
+          <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">Curated albums for you</h1>
+          <p className="mt-3 text-white/70">
+            Fresh drops based on your favorite tags and listening habits.
+          </p>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-5xl px-6 pb-16">
+        {tags.length === 0 ? (
+          <div className="mt-12 rounded-3xl border border-white/10 bg-white/5 p-8 text-center text-lg text-white/70 shadow-xl backdrop-blur">
+            You haven’t selected any genres yet. Head over to your profile to choose a few and personalize this feed.
+          </div>
+        ) : (
+          tags.map((tag) => (
+            <section key={tag.id} className="mt-10 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="h-6 w-6 rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4]" />
+                  <h2 className="text-2xl font-semibold">{tag.name}</h2>
+                </div>
+              </div>
+
               {albumsByTag[tag.name]?.length === 0 ? (
-                <span style={{ color: '#FEF4EA', fontSize: '16px' }}>No albums found for this genre.</span>
+                <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/60">
+                  No albums found for this genre.
+                </p>
               ) : (
-                albumsByTag[tag.name].map(album => {
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {albumsByTag[tag.name].map((album) => {
                   const imgObj = album.image?.find((img: any) => img.size === 'extralarge') || album.image?.[album.image.length - 1];
                   const handleAlbumClick = async () => {
-                    // Remove '(Remastered)' do nome do álbum
-                    const cleanAlbumName = album.name.replace(/\s*\(Remastered\)/gi, '').trim();
-                    // Busca idAlbum na AudioDB
-                    const res = await fetch(`http://localhost:3000/api_audiodb/v1/album?artist=${encodeURIComponent(album.artist.name)}&album=${encodeURIComponent(cleanAlbumName)}`);
-                    const data = await res.json();
-                    if (data.album && Array.isArray(data.album) && data.album.length > 0) {
-                      const idAlbum = data.album[0].idAlbum;
-                      navigate(`/album/${idAlbum}`);
-                    } else {
-                      alert('Album not found in AudioDB');
-                    }
-                  };
-                  return (
-                    <div key={album.name + album.artist.name} style={{ width: '160px', cursor: 'pointer', background: '#30323F', borderRadius: '14px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.10)', display: 'flex', flexDirection: 'column', alignItems: 'center' }} onClick={handleAlbumClick}>
-                      <img src={imgObj?.['#text'] || ''} alt={album.name} style={{ width: '120px', height: '120px', borderRadius: '10px', objectFit: 'cover', marginBottom: '10px', background: '#8078a5' }} />
-                      <span style={{ color: '#FEF4EA', fontSize: '16px', fontWeight: 600, textAlign: 'center', wordBreak: 'break-word', marginBottom: '4px' }}>{album.name}</span>
-                      <span style={{ color: '#FEF4EA', fontSize: '15px', textAlign: 'center', wordBreak: 'break-word' }}>{album.artist?.name}</span>
-                    </div>
-                  );
-                })
+                      const cleanAlbumName = album.name.replace(/\s*\(Remastered\)/gi, '').trim();
+                      const res = await fetch(
+                        `http://localhost:3000/api_audiodb/v1/album?artist=${encodeURIComponent(album.artist.name)}&album=${encodeURIComponent(cleanAlbumName)}`
+                      );
+                      const data = await res.json();
+                      if (data.album && Array.isArray(data.album) && data.album.length > 0) {
+                        navigate(`/album/${data.album[0].idAlbum}`);
+                      } else {
+                        alert("Album not found in AudioDB");
+                      }
+                    };
+                    return (
+                      <button
+                        type="button"
+                        key={album.name + album.artist.name}
+                        onClick={handleAlbumClick}
+                        className="group rounded-3xl border border-white/10 bg-white/5 p-4 text-left shadow-lg backdrop-blur transition hover:border-white/30 hover:bg-white/10"
+                      >
+                        {imgObj?.["#text"] ? (
+                          <img
+                            src={imgObj["#text"]}
+                            alt={album.name}
+                            className="h-50 w-50 rounded-2xl object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-40 w-full items-center justify-center rounded-2xl bg-white/10 text-xs uppercase text-white/60">
+                            No cover
+                          </div>
+                        )}
+                        <div className="mt-3 space-y-1">
+                          <p className="text-sm font-semibold text-white">{album.name}</p>
+                          <p className="text-xs uppercase tracking-[0.3em] text-white/50">{album.artist?.name}</p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               )}
-            </div>
-          </div>
-        ))
-      )}
+            </section>
+          ))
+        )}
+      </div>
     </div>
   );
 };
