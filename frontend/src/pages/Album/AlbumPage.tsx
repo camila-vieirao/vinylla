@@ -87,116 +87,180 @@ export const AlbumPage: React.FC = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center py-8 text-[#FEF4EA]">Loading...</div>;
+    return <div className="py-8 text-center text-[#FEF4EA]">Loading...</div>;
   }
 
   if (!album) {
-    return <div className="text-center py-8 text-[#FEF4EA]">Album not found.</div>;
+    return <div className="py-8 text-center text-[#FEF4EA]">Album not found.</div>;
   }
 
   return (
-    <div className="relative w-full min-h-screen">
-      {/* Banner do álbum */}
-      <div className="w-full h-[300px] overflow-hidden relative" style={{ background: 'none' }}>
-        {album.strAlbumThumb && (
-          <img
-            src={album.strAlbumThumb}
-            alt={album.strAlbum}
-            className="absolute top-0 left-1/2 -translate-x-1/2 h-[300px] w-full object-cover object-center"
-            style={{ objectPosition: 'center' }}
-          />
-        )}
-        {/* Fade suave para o fundo, sem bg escuro */}
+    <div className="min-h-screen bg-[#05060b] text-white sm:pl-32">
+      <section className="relative isolate">
         <div
-          className="absolute top-0 left-0 w-full h-full pointer-events-none"
-          style={{
-            background: 'linear-gradient(to bottom, rgba(17, 18, 19, 0.7) 30%, #464753 100%)',
-          }}
+          className="h-60 w-full bg-[#30323F]"
+          style={
+            album.strAlbumThumb
+              ? {
+                  backgroundImage: `url(${album.strAlbumThumb})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }
+              : undefined
+          }
         />
-      </div>
-      {/* Cards principais sobrepostos ao banner, alinhados com padding/margin */}
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', position: 'absolute', top: '60px', left: '180px', right: '40px', gap: '32px', zIndex: 3 }}>
-        {/* Coluna esquerda: infos e descrição */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '750px' }}>
-          {/* Retângulo principal com infos do álbum */}
-          <div style={{ display: 'flex', background: '#30323F', borderRadius: '18px', padding: '32px 24px 24px 24px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)' }}>
-            {/* Capa do álbum à esquerda */}
-            {album.strAlbumThumb && (
-              <div style={{ marginRight: '32px', display: 'flex', alignItems: 'flex-start', height: '110px' }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-[#05060b]" />
+      </section>
+
+      <div className="relative z-10 mx-auto -mt-24 max-w-6xl px-6">
+        <div className="flex flex-col gap-6 rounded-3xl p-6 shadow-2xl sm:flex-row sm:items-center">
+          <div className="flex items-center gap-6">
+            <div className="h-32 w-32 rounded-2xl border border-white/10 bg-white/10 shadow-2xl sm:h-40 sm:w-40">
+              {album.strAlbumThumb ? (
                 <img
                   src={album.strAlbumThumb}
                   alt={album.strAlbum}
-                  style={{ width: '110px', height: '110px', borderRadius: '12px', objectFit: 'cover', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}
+                  className="h-full w-full rounded-2xl object-cover"
                 />
-              </div>
-            )}
-            {/* Infos do álbum */}
-            <div style={{ flex: 1 }}>
-              <div style={{ color: '#FEF4EA', fontSize: '36px', fontWeight: 600, marginBottom: '10px', wordBreak: 'break-word' }}>{album.strAlbum}</div>
-              <div
-                style={{ color: '#FEF4EA', fontSize: '22px', fontWeight: 500, marginBottom: '10px', wordBreak: 'break-word', cursor: 'pointer', textDecoration: 'none' }}
-                onClick={() => navigate(`/artist/${idArtist}`)}
-                onMouseOver={e => (e.currentTarget.style.textDecoration = 'none')}
-                onMouseOut={e => (e.currentTarget.style.textDecoration = 'none')}
-              >
-                {album.strArtist}
-              </div>
-              <div style={{ color: '#FEF4EA', fontSize: '18px', fontWeight: 500, marginBottom: '10px' }}>
-                {album.intYearReleased && <span>{album.intYearReleased} • </span>}
-                {album.strStyle && <span>{album.strStyle} • </span>}
-                {album.strLabel && <span>{album.strLabel}</span>}
-              </div>
-            </div>
-          </div>
-          {/* descrição do álbum */}
-          <div style={{ background: '#30323F', borderRadius: '18px', padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', position: 'relative' }}>
-            <div style={{ color: '#FEF4EA', fontSize: '18px', fontWeight: 400, marginBottom: '18px', whiteSpace: 'pre-line', wordBreak: 'break-word' }}>
-              {album.strDescriptionEN || 'No description available.'}
-            </div>
-          </div>
-          {/* More from {artist} */}
-          <div style={{ background: '#30323F', borderRadius: '18px', padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', marginTop: '8px', marginBottom: '20px', position: 'relative', minHeight: '120px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <span style={{ color: '#FEF4EA', fontSize: '22px', fontWeight: 600 }}>
-                More from {album.strArtist}
-              </span>
-              <button
-                style={{ background: '#8078a5', color: '#FEF4EA', border: 'none', borderRadius: '8px', padding: '8px 18px', fontWeight: 600, fontSize: '15px', cursor: 'pointer' }}
-                onClick={() => navigate(`/artist/${idArtist}`)}
-              >
-                Visit artist page
-              </button>
-            </div>
-            <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap', marginBottom: '8px' }}>
-              {moreAlbums.length === 0 ? (
-                <span style={{ color: '#FEF4EA', fontSize: '16px' }}>No other albums found.</span>
               ) : (
-                moreAlbums.map(a => {
-                  const albumName = a.strAlbum.length > 15 ? a.strAlbum.slice(0, 15) + '...' : a.strAlbum;
-                  return (
-                    <div key={a.idAlbum} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', cursor: 'pointer', marginLeft: '5px', marginRight: '5px' }} onClick={() => navigate(`/album/${a.idAlbum}`)}>
-                      <img src={a.strAlbumThumb || ''} alt={a.strAlbum} style={{ width: '90px', height: '90px', borderRadius: '10px', objectFit: 'cover', marginBottom: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }} />
-                      <span style={{ color: '#FEF4EA', fontSize: '14px', textAlign: 'center', wordBreak: 'break-word' }}>{albumName}</span>
-                    </div>
-                  );
-                })
+                <div className="flex h-full w-full items-center justify-center rounded-2xl text-sm uppercase text-white/50">
+                  No cover
+                </div>
               )}
             </div>
+            <div className="space-y-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Album</p>
+                <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">{album.strAlbum}</h1>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate(`/artist/${idArtist}`)}
+                className="text-left text-lg font-semibold text-white/80 transition hover:text-white"
+              >
+                {album.strArtist}
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-3 text-sm">
+            {album.intYearReleased && (
+              <span className="rounded-full border border-white/20 bg-white/5 px-4 py-1 text-white/80">
+                {album.intYearReleased}
+              </span>
+            )}
+            {album.strStyle && (
+              <span className="rounded-full border border-white/20 bg-white/5 px-4 py-1 text-white/80">
+                {album.strStyle}
+              </span>
+            )}
+            {album.strLabel && (
+              <span className="rounded-full border border-white/20 bg-white/5 px-4 py-1 text-white/80">
+                {album.strLabel}
+              </span>
+            )}
           </div>
         </div>
-        {/* Retângulo de tracks à direita, alinhado */}
-        <div style={{ width: '496px', minHeight: '340px', background: '#30323F', borderRadius: '18px', padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', marginBottom: '15px' }}>
-          <div style={{ color: '#FEF4EA', fontSize: '28px', fontWeight: 600, marginBottom: '18px', marginLeft: '10px' }}>Tracks</div>
-          <ul style={{ color: '#FEF4EA', fontSize: '18px', fontWeight: 500, marginLeft: '10px' }}>
-            {tracks.length === 0 ? (
-              <li>No tracks found.</li>
-            ) : (
-              tracks.map(track => (
-                <li key={track.idTrack} style={{ marginBottom: '10px', padding: '8px 0', borderBottom: '1px solid #8078a5' }}>{track.strTrack}</li>
-              ))
-            )}
-          </ul>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-6 pb-12 pt-12 space-y-8">
+        <div className="grid gap-8 lg:grid-cols-[1.7fr_1fr]">
+          <section className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+            <div className="flex items-center gap-3">
+              <span className="h-10 w-10 rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4]" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Overview</p>
+                <h2 className="text-3xl font-semibold">Description</h2>
+              </div>
+            </div>
+            <div
+              className="mt-6 max-h-72 overflow-y-auto pr-2 text-lg leading-relaxed text-white/80 whitespace-pre-line"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(255,255,255,0.25) transparent",
+              }}
+            >
+              {album.strDescriptionEN || "No description available."}
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+            <div className="flex items-center gap-3">
+              <span className="h-10 w-10 rounded-full bg-gradient-to-r from-[#ffb347] to-[#ffcc33]" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Listing</p>
+                <h2 className="text-3xl font-semibold">Tracks</h2>
+              </div>
+            </div>
+            <div
+              className="mt-6 max-h-80 overflow-y-auto pr-2"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(255,255,255,0.25) transparent",
+              }}
+            >
+              {tracks.length === 0 ? (
+                <p className="text-white/70">No tracks found.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {tracks.map((track, index) => (
+                    <li
+                      key={track.idTrack}
+                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/80"
+                    >
+                      <span className="text-white/50">{index + 1}.</span>
+                      <span className="flex-1 px-3 text-white">{track.strTrack}</span>
+                      <span className="h-2 w-2 rounded-full bg-white/20" />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </section>
         </div>
+
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.4em] text-white/60">More</p>
+              <h2 className="text-3xl font-semibold">More from {album.strArtist}</h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate(`/artist/${idArtist}`)}
+              className="rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/10"
+            >
+              Visit artist page
+            </button>
+          </div>
+
+          {moreAlbums.length === 0 ? (
+            <p className="mt-6 text-white/70">No other albums found.</p>
+          ) : (
+            <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {moreAlbums.map((item) => (
+                <button
+                  type="button"
+                  key={item.idAlbum}
+                  onClick={() => navigate(`/album/${item.idAlbum}`)}
+                  className="group rounded-2xl border border-white/10 bg-white/5 p-2 text-left transition hover:border-white/30 hover:bg-white/10"
+                >
+                  {item.strAlbumThumb ? (
+                    <img
+                      src={item.strAlbumThumb}
+                      alt={item.strAlbum}
+                      className="h-35 w-35 items-center justify-center rounded-xl object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-28 w-full items-center justify-center rounded-xl bg-white/10 text-xs uppercase text-white/60">
+                      No cover
+                    </div>
+                  )}
+                  <p className="mt-3 text-sm font-semibold text-white">{item.strAlbum}</p>
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

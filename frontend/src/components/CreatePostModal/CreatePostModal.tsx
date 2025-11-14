@@ -71,7 +71,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
         <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
           <div>
             <p className="text-xs uppercase tracking-[0.4em] text-white/50">New post</p>
-            <p className="text-xl font-semibold">Share something with the crate</p>
+            <p className="text-xl pt-2 font-semibold">Share something with the community</p>
           </div>
           <button
             onClick={onClose}
@@ -106,15 +106,14 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
                 alt="user photo"
               />
               <div>
-                <p className="text-lg font-semibold">{user?.name}</p>
-                <p className="text-xs uppercase tracking-[0.3em] text-white/50">Posting publicly</p>
+                <p className="text-lg font-semibold">{user?.username}</p>
               </div>
             </div>
 
             <textarea
               rows={4}
               className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-base text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
-              placeholder={`What are you spinning, ${user?.name}?`}
+              placeholder={`What are you spinning, ${user?.username}?`}
               value={postText}
               onChange={(e) => setPostText(e.target.value)}
             />
@@ -151,7 +150,6 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
             </div>
 
             <div className="flex items-center justify-between border-t border-white/10 pt-4">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/50">Followers see this instantly</p>
               <button
                 onClick={handleCreatePost}
                 className="cursor-pointer rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-8 py-2 font-semibold text-white shadow-lg transition hover:opacity-90 disabled:opacity-40"

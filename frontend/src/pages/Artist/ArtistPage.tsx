@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import CreatePostModal from "../../components/CreatePostModal/CreatePostModal";
 
 type Artist = {
   idArtist: string;
@@ -36,17 +35,15 @@ export const ArtistPage: React.FC = () => {
     if (!id) return;
     setLoading(true);
 
-    // Busca dados do artista
     fetch(`http://localhost:3000/api_audiodb/v1/lookup/artist/${id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.artists && data.artists.length > 0) {
           const foundArtist = data.artists[0];
           setArtist(foundArtist);
-          // Busca álbuns usando o nome do artista
           fetch(`http://localhost:3000/api_audiodb/v1/album?artist=${encodeURIComponent(foundArtist.strArtist)}`)
-            .then(res => res.json())
-            .then(albumData => {
+            .then((res) => res.json())
+            .then((albumData) => {
               if (albumData.album && Array.isArray(albumData.album)) {
                 setAlbums(albumData.album);
               } else {
@@ -72,207 +69,175 @@ export const ArtistPage: React.FC = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center py-8 text-[#FEF4EA]">Loading...</div>;
+    return <div className="py-8 text-center text-[#FEF4EA]">Loading...</div>;
   }
 
   if (!artist) {
-    return <div className="text-center py-8 text-[#FEF4EA]">Artist not found.</div>;
+    return <div className="py-8 text-center text-[#FEF4EA]">Artist not found.</div>;
   }
 
-  // Banner: pega wide, se não, fanart
   const bannerUrl = artist.strArtistBanner || artist.strArtistWideThumb || artist.strArtistFanart || "";
+  const infoChips = [artist.strStyle, artist.strGenre, artist.intFormedYear, artist.strCountry].filter(Boolean) as string[];
 
   return (
-    <div className="relative w-full min-h-screen">
-      {/* Banner */}
-      <div
-        className="w-full h-[234px] overflow-hidden relative"
-        style={{ background: bannerUrl ? `url(${bannerUrl}) center center / cover no-repeat` : '#30323F' }}
-      >
-        {bannerUrl && (
-          <img
-            src={bannerUrl}
-            alt="Artist Banner"
-            className="absolute top-0 left-1/2 -translate-x-1/2 h-[234px] w-full object-cover object-center"
-            style={{ objectPosition: 'center' }}
-          />
-        )}
-        {/* Overlay escuro/fade */}
+    <div className="min-h-screen bg-[#05060b] text-white sm:pl-32">
+      <section className="relative isolate">
         <div
-          className="absolute top-0 left-0 w-full h-full pointer-events-none"
-          style={{
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.85) 100%)',
-            mixBlendMode: 'multiply',
-          }}
+          className="h-60 w-full bg-[#30323F]"
+          style={
+            bannerUrl
+              ? {
+                  backgroundImage: `url(${bannerUrl})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }
+              : undefined
+          }
         />
-      </div>
-      {/* Faixa abaixo do banner */}
-      <div className="w-full h-[118px] bg-[#30323F]" />
-      {/* Foto de perfil */}
-      {artist.strArtistThumb && (
-        <img
-          src={artist.strArtistThumb}
-          alt={artist.strArtist}
-          className="absolute rounded-full shadow"
-          style={{
-            width: '220px',
-            height: '220px',
-            top: '100px',
-            left: '220px',
-            objectFit: 'cover',
-            border: '6px solid #30323F',
-            background: '#30323F',
-          }}
-        />
-      )}
-      {/* Nome do artista */}
-      <div
-        className="absolute"
-        style={{
-          top: '160px',
-          left: '460px',
-          padding: '10px',
-          zIndex: 2,
-        }}
-      >
-        <div
-          style={{
-            fontSize: '40px',
-            fontWeight: 600,
-            color: '#FEF4EA',
-            lineHeight: '1.1',
-            padding: '10px',
-          }}
-        >
-          {artist.strArtist}
-        </div>
-      </div>
-      {/* Faixa cinza com infos */}
-      <div
-        className="absolute flex items-center gap-6"
-        style={{
-          top: '235px',
-          left: '460px',
-          height: '58px',
-          minWidth: '320px',
-          background: '#30323F',
-          borderRadius: '12px',
-          padding: '10px 18px',
-          zIndex: 2,
-          color: '#FEF4EA'
-        }}
-      >
-        <span style={{ fontWeight: 500, fontSize: '18px' }}>{artist.strStyle}</span><span> • </span>
-        <span style={{ fontWeight: 500, fontSize: '18px' }}>{artist.strGenre}</span><span> • </span>
-        <span style={{ fontWeight: 500, fontSize: '18px' }}>{artist.intFormedYear}</span><span> • </span>
-        <span style={{ fontWeight: 500, fontSize: '18px' }}>{artist.strCountry}</span>
-      </div>
-      {/* Biografia e link LastFM */}
-      
-      <div
-        className="absolute"
-        style={{
-          top: '380px', // mesma altura da discografia
-          left: '180px',
-          width: '750px',
-          minHeight: '180px',
-          background: '#30323F',
-          borderRadius: '18px',
-          padding: '18px 18px 18px 18px',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
-          zIndex: 2,
-        }}
-      >
-        <div
-          style={{
-            color: '#FEF4EA',
-            fontSize: '36px',
-            fontWeight: 600,
-            marginBottom: '18px',
-          }}
-        >
-          Biography
-        </div>
-        <div style={{ color: '#FEF4EA', fontSize: '18px', fontWeight: 500, marginBottom: '18px', whiteSpace: 'pre-line' }}>
-          {artist.strBiographyEN || 'No biography available.'}
-        </div>
-        {artist.strLastFMChart && (
-          <div style={{ marginTop: '8px' }}>
-            <a
-              href={artist.strLastFMChart}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: '#FEF4EA', fontWeight: 600, fontSize: '18px', textDecoration: 'underline', display: 'inline-block' }}
-            >
-              View on LastFM
-            </a>
-          </div>
-        )}
-      </div>
-      {/* Conteúdo principal */}
-      {/* Discografia: retângulo à direita */}
-      <div
-        className="absolute"
-        style={{
-          top: '380px',
-          right: '40px',
-          width: '496px',
-          minHeight: '340px',
-          background: '#30323F',
-          borderRadius: '18px',
-          padding: '10px',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
-          zIndex: 2,
-        }}
-      >
-        <div
-          style={{
-            color: '#FEF4EA',
-            fontSize: '36px',
-            fontWeight: 600,
-            marginBottom: '18px',
-            marginLeft: '10px',
-          }}
-        >
-          Discography
-        </div>
-        {albums.length === 0 ? (
-          <div style={{ color: '#FEF4EA', marginLeft: '10px' }}>No albums found.</div>
-        ) : (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '24px 10px',
-              padding: '10px',
-            }}
-          >
-            {albums.map(album => (
-              <div
-                key={album.idAlbum}
-                className="flex flex-col items-center cursor-pointer hover:bg-[#262730] p-2 rounded transition"
-                onClick={() => navigate(`/album/${album.idAlbum}`)}
-                style={{ minHeight: '180px' }}
-              >
-                {album.strAlbumThumb ? (
-                  <img
-                    src={album.strAlbumThumb}
-                    alt={album.strAlbum}
-                    style={{ width: '114px', height: '114px', borderRadius: '10px', objectFit: 'cover', marginBottom: '10px' }}
-                  />
-                ) : (
-                  <div style={{ width: '114px', height: '114px', background: '#8078a5', borderRadius: '10px', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FEF4EA' }}>
-                    No cover
-                  </div>
-                )}
-                <div style={{ color: '#FEF4EA', fontSize: '20px', fontWeight: 600, textAlign: 'center', marginBottom: '4px', wordBreak: 'break-word' }}>{album.strAlbum}</div>
-                {album.intYearReleased && (
-                  <div style={{ color: '#FEF4EA', fontSize: '14px', textAlign: 'center' }}>{album.intYearReleased}</div>
-                )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-[#05060b]" />
+      </section>
+
+      <div className="relative z-10 mx-auto -mt-40 max-w-6xl px-6">
+        <div className="flex flex-col gap-6 rounded-3xl pt-16 shadow-2xl sm:flex-row sm:items-center">
+          {artist.strArtistThumb && (
+            <img
+              src={artist.strArtistThumb}
+              alt={artist.strArtist}
+              className="h-40 w-40 rounded-2xl border border-white/10 object-cover shadow-2xl sm:h-48 sm:w-48"
+            />
+          )}
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.4em] text-white/60">Artist</p>
+              <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">{artist.strArtist}</h1>
+            </div>
+            {infoChips.length > 0 && (
+              <div className="flex flex-wrap gap-3">
+                {infoChips.map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-white/20 bg-white/5 px-4 py-1 text-sm font-medium text-white/80"
+                  >
+                    {chip}
+                  </span>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        )}
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-6 pb-12 pt-12">
+        <div className="grid gap-8 lg:grid-cols-[1.7fr_1fr]">
+          <section className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+            <div className="flex items-center gap-3">
+              <span className="h-10 w-10 rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4]" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Story</p>
+                <h2 className="text-3xl font-semibold">Biography</h2>
+              </div>
+            </div>
+            <div
+              className="biography-scroll mt-6 max-h-100 overflow-y-auto pr-2 text-lg leading-relaxed text-white/80 whitespace-pre-line"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(255,255,255,0.25) transparent",
+              }}
+            >
+              {artist.strBiographyEN || "No biography available."}
+            </div>
+            <style>{`
+              .biography-scroll::-webkit-scrollbar {
+                width: 6px;
+              }
+              .biography-scroll::-webkit-scrollbar-track {
+                background: transparent;
+              }
+              .biography-scroll::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,0.25);
+                border-radius: 999px;
+              }
+            `}</style>
+            {artist.strLastFMChart && (
+              <a
+                href={artist.strLastFMChart}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.3em] text-white/80 underline-offset-4 hover:text-white"
+              >
+                View on LastFM →
+              </a>
+            )}
+          </section>
+
+          <section className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+            <div className="flex items-center gap-3">
+              <span className="h-10 w-10 rounded-full bg-gradient-to-r from-[#ffb347] to-[#ffcc33]" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Catalogue</p>
+                <h2 className="text-3xl font-semibold">Discography</h2>
+              </div>
+            </div>
+            {albums.length === 0 ? (
+              <p className="mt-6 text-white/70">No albums found.</p>
+            ) : (
+              <div
+                className="mt-6 space-y-3 overflow-y-auto pr-2"
+                style={{
+                  maxHeight: "28rem",
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(255,255,255,0.3) transparent",
+                }}
+              >
+                <style>{`
+                  .artist-scroll::-webkit-scrollbar {
+                    width: 6px;
+                  }
+                  .artist-scroll::-webkit-scrollbar-track {
+                    background: transparent;
+                  }
+                  .artist-scroll::-webkit-scrollbar-thumb {
+                    background: rgba(255,255,255,0.25);
+                    border-radius: 999px;
+                  }
+                `}</style>
+                <div className="artist-scroll space-y-3">
+                  {albums.map((album) => (
+                    <button
+                      type="button"
+                      key={album.idAlbum}
+                      onClick={() => navigate(`/album/${album.idAlbum}`)}
+                      className="group flex w-full items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-3 text-left transition hover:border-white/30 hover:bg-white/10"
+                    >
+                      {album.strAlbumThumb ? (
+                        <img
+                          src={album.strAlbumThumb}
+                          alt={album.strAlbum}
+                          className="h-16 w-16 rounded-xl object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-white/10 text-xs uppercase text-white/60">
+                          No cover
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <p className="text-base font-semibold">{album.strAlbum}</p>
+                        {album.intYearReleased && (
+                          <p className="text-xs uppercase tracking-[0.4em] text-white/50">
+                            {album.intYearReleased}
+                          </p>
+                        )}
+                      </div>
+                      <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50 transition group-hover:text-white">
+                        View
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
       </div>
     </div>
   );
