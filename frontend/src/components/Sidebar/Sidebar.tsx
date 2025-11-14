@@ -22,7 +22,7 @@ const Sidebar: React.FC<{ onReviewClick: () => void; onPostClick: () => void }> 
   return (
     <div>
       <aside className="fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] w-32 bg-transparent transition-transform sm:translate-x-0" aria-label="Sidebar">
-        <div className="flex h-full flex-col items-center rounded-r-3xl bg-[#1a1b24]/80 px-3 py-6 text-white shadow-2xl backdrop-blur-xl">
+        <div className="flex h-full flex-col items-center rounded-r-3xl bg-[#080b16]/90 px-3 py-6 text-white shadow-2xl backdrop-blur-xl">
           <ul className="flex w-full flex-col items-center space-y-5 pt-14 font-medium">
             {items.map(item => (
               <li key={item.key} className="flex w-full flex-col items-center">

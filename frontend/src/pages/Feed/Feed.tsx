@@ -238,9 +238,9 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                   </button>
                   <div>
                     <p className="text-lg font-semibold leading-tight">{user.name}</p>
-                    <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white/60">
+                    <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] pt-1 text-white/60">
                       <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                      Followers
+                      @{user.username}
                     </p>
                   </div>
                 </div>

@@ -37,7 +37,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#1a1b24]/95 via-[#1c1e2b]/95 to-[#1a1b24]/95 backdrop-blur-lg shadow-lg transition-shadow duration-500">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#080b16]/90 via-[#1c1e2b]/95 to-[#080b16]/90 backdrop-blur-lg shadow-lg transition-shadow duration-500">
       <div className="flex items-center justify-between px-6 py-3">
         <div className="flex items-center gap-3">
           <Link
