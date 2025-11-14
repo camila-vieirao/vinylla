@@ -84,68 +84,82 @@ const Post: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col gap-6 p-4">
-      {posts.map(post => (
-        <div
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6">
+      {posts.map((post) => (
+        <article
           key={post.id}
-          className="bg-[#FEF4EA] rounded-2xl shadow-lg overflow-hidden flex flex-col w-full border border-[#D1CFC6]"
-          style={{ minWidth: 0 }}
+          className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-xl backdrop-blur"
         >
-          {/* Top bar */}
-          <div className="h-[83px] bg-[#E7DBC5F4] flex items-center px-6 relative">
-            {/* Profile picture */}
-            <div className="w-[57px] h-[57px] rounded-full overflow-hidden bg-[#8078a5] mr-4 border-4 border-[#FEF4EA]">
+          <header className="flex items-center gap-4">
+            <div className="h-14 w-14 rounded-full border border-white/20 bg-white/10">
               <img
-                src={users[post.userid]?.profilePicture ? `http://localhost:3000/uploads/profile/${users[post.userid].profilePicture}` : 'http://localhost:3000/uploads/profile/default-profile.png'}
+                src={
+                  users[post.userid]?.profilePicture
+                    ? `http://localhost:3000/uploads/profile/${users[post.userid].profilePicture}`
+                    : "http://localhost:3000/uploads/profile/default-profile.png"
+                }
                 alt="profile"
-                className="w-full h-full object-cover"
+                className="h-full w-full rounded-full object-cover"
               />
             </div>
-            {/* User name and time */}
-            <div className="flex flex-col justify-center">
-              <span className="font-semibold text-xl text-[#23232A]">{users[post.userid]?.username || 'Usuário'}</span>
-              <span className="text-sm text-[#8078a5]">{timeAgo(post.createdAt)}</span>
+            <div className="flex-1">
+              <p className="text-lg font-semibold">{users[post.userid]?.username || "Listener"}</p>
+              <p className="text-xs text-white/60">{timeAgo(post.createdAt)}</p>
             </div>
-          </div>
-          {/* Album mention (if any) */}
+          </header>
+
           {post.postMention && (
-            <AlbumMention albumId={post.postMention} fetchAlbum={fetchAlbum} />
-          )}
-          {/* Post text */}
-          <div className="px-10 py-5 text-[#23232A] text-lg font-normal break-words overflow-y-auto">
-            {post.postText}
-          </div>
-          {/* Post image (if any) */}
-          {post.postImg && (
-            <img
-              src={`/uploads/${post.postImg}`}
-              alt="post"
-              className="w-full max-h-[120px] object-cover rounded-b-2xl"
-            />
-          )}
-          {/* Interações: linha dos ícones */}
-          <div className="w-full">
-            <div className="flex justify-start gap-5 px-10 pb-5 items-center">
-              <button className="bg-none border-none cursor-pointer p-0" title="Upvote">
-                <FaRegThumbsUp size={22} color="#8078a5" />
-              </button>
-              <button className="bg-none border-none cursor-pointer p-0" title="Downvote">
-                <FaRegThumbsDown size={22} color="#8078a5" />
-              </button>
-              {/* Botão de comentário, não área expandida */}
-              <CommentSection postId={post.id} users={users} iconOnly show={!!expandedComments[post.id]} onExpand={() => handleToggleComment(post.id)} />
+            <div className="mt-5">
+              <AlbumMention albumId={post.postMention} fetchAlbum={fetchAlbum} />
             </div>
-            {/* Nova linha: área de comentários expandida */}
-            <CommentSection postId={post.id} users={users} expandedArea show={!!expandedComments[post.id]} />
-          </div>
-        </div>
+          )}
+
+          <p className="mt-5 text-base leading-relaxed text-white/90">{post.postText}</p>
+
+          {post.postImg && (
+            <div className="mt-4 overflow-hidden rounded-2xl border border-white/10">
+              <img src={`/uploads/${post.postImg}`} alt="post" className="h-64 w-full object-cover" />
+            </div>
+          )}
+
+          <footer className="mt-6 flex items-center gap-4 text-white/60">
+            <button
+              type="button"
+              className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white"
+              title="Upvote"
+            >
+              <FaRegThumbsUp />
+              Upvote
+            </button>
+            <button
+              type="button"
+              className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white"
+              title="Downvote"
+            >
+              <FaRegThumbsDown />
+              Downvote
+            </button>
+            <CommentSection
+              postId={post.id}
+              users={users}
+              iconOnly
+              show={!!expandedComments[post.id]}
+              onExpand={() => handleToggleComment(post.id)}
+            />
+          </footer>
+
+          <CommentSection postId={post.id} users={users} expandedArea show={!!expandedComments[post.id]} />
+        </article>
       ))}
     </div>
   );
 };
 
 // Album mention component
-const AlbumMention: React.FC<{ albumId: string; fetchAlbum: (id: string) => Promise<Album | undefined>; }> = ({ albumId, fetchAlbum }) => {
+const AlbumMention: React.FC<{ albumId: string; fetchAlbum: (id: string) => Promise<Album | undefined> }> = ({
+  albumId,
+  fetchAlbum,
+}) => {
   const [album, setAlbum] = useState<Album | undefined>(undefined);
 
   useEffect(() => {
@@ -154,11 +168,17 @@ const AlbumMention: React.FC<{ albumId: string; fetchAlbum: (id: string) => Prom
 
   if (!album) return null;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', borderRadius: '12px', margin: '18px 24px 0 24px', padding: '5px 18px' }}>
-      <img src={album.strAlbumThumb || '/uploads/default-album.png'} alt={album.strAlbum} style={{ width: '100px', height: '100px', borderRadius: '8px', objectFit: 'cover', marginRight: '18px', background: '#8078a5' }} />
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{ color: '#262731', fontWeight: 600, fontSize: '17px', marginBottom: '2px', wordBreak: 'break-word' }}>{album.strAlbum}</span>
-        <span style={{ color: '#262731', fontSize: '15px', wordBreak: 'break-word' }}>{album.strArtist}</span>
+    <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+      {album.strAlbumThumb ? (
+        <img src={album.strAlbumThumb} alt={album.strAlbum} className="h-20 w-20 rounded-xl object-cover" />
+      ) : (
+        <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-white/10 text-xs uppercase text-white/60">
+          No cover
+        </div>
+      )}
+      <div className="text-sm font-semibold text-white">
+        <p>{album.strAlbum}</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-white/60">{album.strArtist}</p>
       </div>
     </div>
   );
