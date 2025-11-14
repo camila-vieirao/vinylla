@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CommentSection from "../CommentSection/CommentSection";
-import { FaRegThumbsUp, FaRegThumbsDown, FaRegComment } from "react-icons/fa";
+import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 
 interface Post {
   id: number;
@@ -35,7 +35,10 @@ const Post: React.FC = () => {
     // Get all posts
     axios.get("http://localhost:3000/api/posts")
       .then(res => {
-        setPosts(res.data);
+        const ordered = [...res.data].sort(
+          (a: Post, b: Post) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setPosts(ordered);
         // Get all users for mapping
         const token = localStorage.getItem("token");
         axios.get("http://localhost:3000/api/users", {

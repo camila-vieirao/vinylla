@@ -3,6 +3,12 @@ import { FiClock } from "react-icons/fi";
 import type { IconType } from "react-icons";
 import Post from "../../components/Post/Post";
 import avatar from "../../assets/borabill_avatar.jpeg";
+import groupIndie from "../../assets/misfits.jpg";
+import groupJazz from "../../assets/peter.jpg";
+import groupElectro from "../../assets/monark.jpg";
+import marinaAvatar from "../../assets/bruninho.jpg";
+import liamAvatar from "../../assets/images.jpeg";
+import sofiaAvatar from "../../assets/manoel.jpg";
 import { MdGroups } from "react-icons/md";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
@@ -49,15 +55,15 @@ const curatedStories: CuratedStory[] = [
 ];
 
 const featuredGroups = [
-  { id: "indie", name: "Indie Underground", members: "18.4k members" },
-  { id: "jazz", name: "Late Night Jazz Club", members: "9.2k members" },
-  { id: "electro", name: "Analog Synth Circle", members: "12.1k members" },
+  { id: "indie", name: "Indie Underground", members: "18.4k members", image: groupIndie },
+  { id: "jazz", name: "Late Night Jazz Club", members: "9.2k members", image: groupJazz },
+  { id: "electro", name: "Analog Synth Circle", members: "12.1k members", image: groupElectro },
 ];
 
 const suggestedPeople = [
-  { id: "marina", name: "Marina Flores", tagline: "Curates dream pop gems", avatar },
-  { id: "liam", name: "Liam Duarte", tagline: "Analog synth collector", avatar },
-  { id: "sofia", name: "Sofia Reis", tagline: "Vinyl photographer", avatar },
+  { id: "marina", name: "Marina Flores", tagline: "Curates dream pop gems", avatar: marinaAvatar },
+  { id: "liam", name: "Liam Duarte", tagline: "Analog synth collector", avatar: liamAvatar },
+  { id: "sofia", name: "Sofia Reis", tagline: "Vinyl photographer", avatar: sofiaAvatar },
 ];
 
 const trendingTopics = ["shoegaze", "vinylfinds", "nowplaying", "analoglove", "festivaldiaries"];
@@ -389,7 +395,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                     <div className="flex items-center gap-3">
                       <img
                         className="w-10 h-10 rounded-full object-cover object-center"
-                        src={avatar}
+                        src={group.image}
                         alt="group avatar"
                       />
                       <div>
@@ -400,8 +406,15 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                     <button
                       type="button"
                       className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#0d0d15]"
+                      onClick={() => {
+                        if (group.id === "indie") {
+                          navigate(`/groups/${group.id}`);
+                        } else {
+                          toast.info("This room is coming soon.");
+                        }
+                      }}
                     >
-                      Join
+                      {group.id === "indie" ? "Enter" : "Soon"}
                     </button>
                   </li>
                 ))}
