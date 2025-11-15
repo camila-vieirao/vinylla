@@ -150,65 +150,81 @@ const Header: React.FC = () => {
                 {isUserDropdownOpen && (
                   <div
                     ref={dropdownRef}
-                    className="absolute right-0 top-12 w-80 rounded-2xl border border-white/10 bg-[#080b16] p-4 shadow-2xl backdrop-blur-xl"
+                    className="absolute right-0 top-12 w-[22rem] rounded-3xl border border-white/10 bg-gradient-to-b from-[#0a0c15] via-[#0b0d19] to-[#05060b] p-5 text-white shadow-2xl backdrop-blur-xl"
                   >
-                    <div className="mb-3">
-                      <h3 className="text-lg font-semibold text-white mb-2">
-                        Find Users
-                      </h3>
-                      <input
-                        type="text"
-                        placeholder="Search users..."
-                        value={searchQuery}
-                        onChange={(e) => handleUserSearch(e.target.value)}
-                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-                        autoFocus
-                      />
+                    <div className="mb-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-[0.6rem] uppercase tracking-[0.4em] text-white/60">
+                            Community
+                          </p>
+                          <h3 className="text-lg font-semibold">
+                            Find crate pals
+                          </h3>
+                        </div>
+                        <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60">
+                          {searchResults.length} results
+                        </span>
+                      </div>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="Type a name or username"
+                          value={searchQuery}
+                          onChange={(e) => handleUserSearch(e.target.value)}
+                          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/40 focus:border-white/40 focus:outline-none"
+                          autoFocus
+                        />
+                        <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs uppercase tracking-[0.3em] text-white/40">
+                          Search
+                        </span>
+                      </div>
                     </div>
-
-                    <div className="max-h-60 overflow-y-auto">
+                    <div
+                      className="space-y-2 overflow-y-auto pr-1"
+                      style={{ maxHeight: "16rem" }}
+                    >
                       {isSearching ? (
-                        <div className="flex justify-center py-4">
-                          <div className="text-white/60">Searching...</div>
+                        <div className="flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/5 py-6 text-sm text-white/60">
+                          Searching...
                         </div>
                       ) : searchResults.length > 0 ? (
-                        <div className="space-y-2">
-                          {searchResults.map((user) => (
-                            <button
-                              key={user.id}
-                              onClick={() => handleUserSelect(user)}
-                              className="flex w-full items-center gap-3 rounded-xl p-3 text-left transition-all duration-200 hover:bg-white/5 active:scale-95"
-                            >
-                              <img
-                                src={
-                                  user.profilePicture &&
-                                  user.profilePicture !== "default-profile.png"
-                                    ? `http://localhost:3000/uploads/profile/${user.profilePicture}`
-                                    : avatar
-                                }
-                                alt={user.name}
-                                className="h-10 w-10 rounded-full object-cover"
-                              />
-                              <div className="flex-1 min-w-0">
-                                <p className="font-semibold text-white truncate">
-                                  {user.name}
+                        searchResults.map((result) => (
+                          <button
+                            key={result.id}
+                            onClick={() => handleUserSelect(result)}
+                            className="group flex w-full items-center gap-3 rounded-2xl border border-white/5 bg-white/0 p-3 text-left transition hover:border-white/30 hover:bg-white/5 active:scale-95"
+                          >
+                            <img
+                              src={
+                                result.profilePicture &&
+                                result.profilePicture !== "default-profile.png"
+                                  ? `http://localhost:3000/uploads/profile/${result.profilePicture}`
+                                  : avatar
+                              }
+                              alt={result.name}
+                              className="h-11 w-11 rounded-2xl object-cover"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="truncate text-sm font-semibold text-white">
+                                {result.name}
+                              </p>
+                              <p className="truncate text-xs text-white/60">
+                                @{result.username}
                                 </p>
-                                <p className="text-sm text-white/60 truncate">
-                                  @{user.username}
-                                </p>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
+                            </div>
+                            <span className="rounded-full border border-white/15 px-2 py-1 text-[0.6rem] uppercase tracking-[0.3em] text-white/50 transition group-hover:border-white/40 group-hover:text-white/80">
+                              View
+                            </span>
+                          </button>
+                        ))
                       ) : searchQuery.length >= 2 ? (
-                        <div className="flex justify-center py-4">
-                          <div className="text-white/60">No users found</div>
+                        <div className="rounded-2xl border border-white/10 bg-white/5 py-6 text-center text-sm text-white/60">
+                          No users match that search.
                         </div>
                       ) : (
-                        <div className="flex justify-center py-4">
-                          <div className="text-white/60 text-center">
-                            Type 2+ characters
-                          </div>
+                        <div className="rounded-2xl border border-white/10 bg-white/5 py-6 text-center text-sm text-white/60">
+                          Start typing to explore profiles.
                         </div>
                       )}
                     </div>
