@@ -1,0 +1,33 @@
+.Toastify__toast {
+  background: rgba(8, 11, 22, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(18px);
+  color: #f8f7ff !important;
+  box-shadow: 0 20px 35px rgba(3, 6, 17, 0.55);
+  font-family: "Inter", "Sora", "Space Grotesk", system-ui, -apple-system,
+    BlinkMacSystemFont, Segoe UI, sans-serif;
+}
+
+.Toastify__toast-icon svg {
+  color: #f8f7ff !important;
+  filter: drop-shadow(0 4px 10px rgba(124, 91, 255, 0.45));
+}
+
+.Toastify__toast-body {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.Toastify__progress-bar-theme--light {
+  background: linear-gradient(90deg, #7c5bff, #ff6ec4) !important;
+}
+
+.Toastify__close-button {
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: 0.2s ease;
+}
+
+.Toastify__close-button:hover {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
