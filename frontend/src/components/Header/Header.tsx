@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaCartShopping } from "react-icons/fa6";
+import { FaBagShopping } from "react-icons/fa6";
 import { IoIosNotifications, IoIosPeople, IoMdSettings } from "react-icons/io";
 import { SearchBar } from "../Search/SearchBar";
 import { useEffect, useState, useRef } from "react";
@@ -128,10 +128,10 @@ const Header: React.FC = () => {
             <ul className="flex gap-4 rounded-3xl border border-white/10 bg-white/5 px-6 py-2 text-white/70 shadow-inner">
               <li>
                 <Link
-                  to="/marketplace"
+                  to="/cart"
                   className="flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-300 hover:text-white hover:shadow-lg hover:shadow-rose-500/20 active:scale-95"
                 >
-                  <FaCartShopping />
+                  <FaBagShopping />
                 </Link>
               </li>
               <li className="relative">

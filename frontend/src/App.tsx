@@ -19,6 +19,8 @@ import SelectTags from "./pages/SelectTags/SelectTags";
 import Marketplace from "./pages/Marketplace/Marketplace";
 import { GroupPage } from "./pages/Group/Group";
 import Profile from "./pages/Profile/Profile";
+import Product from "./pages/Product/Product";
+import Cart from "./pages/Cart/Cart";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -79,6 +81,8 @@ function App() {
           <Route path="/groups/:groupId" element={<GroupPage />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/profile/:username" element={<Profile />} />
+          <Route path="/product/:productId" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </main>
       {showPostModal && (
