@@ -33,34 +33,37 @@ const Post: React.FC = () => {
 
   useEffect(() => {
     // Get all posts
-    axios.get("http://localhost:3000/api/posts")
-      .then(res => {
-        const ordered = [...res.data].sort(
-          (a: Post, b: Post) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        setPosts(ordered);
-        // Get all users for mapping
-        const token = localStorage.getItem("token");
-        axios.get("http://localhost:3000/api/users", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
+    axios.get("http://localhost:3000/api/posts").then((res) => {
+      const ordered = [...res.data].sort(
+        (a: Post, b: Post) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setPosts(ordered);
+      // Get all users for mapping
+      const token = localStorage.getItem("token");
+      axios
+        .get("http://localhost:3000/api/users", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         })
-          .then(userRes => {
-            const userMap: { [key: number]: User } = {};
-            userRes.data.forEach((u: User) => {
-              userMap[u.id] = u;
-            });
-            setUsers(userMap);
+        .then((userRes) => {
+          const userMap: { [key: number]: User } = {};
+          userRes.data.forEach((u: User) => {
+            userMap[u.id] = u;
           });
-      });
+          setUsers(userMap);
+        });
+    });
   }, []);
 
   // Helper: fetch album info if needed
   const fetchAlbum = async (albumId: string) => {
     if (albumCache[albumId]) return albumCache[albumId];
     try {
-      const res = await axios.get(`http://localhost:3000/api_audiodb/v1/lookup/album/${albumId}`);
+      const res = await axios.get(
+        `http://localhost:3000/api_audiodb/v1/lookup/album/${albumId}`
+      );
       if (res.data.album && res.data.album.length > 0) {
-        setAlbumCache(prev => ({ ...prev, [albumId]: res.data.album[0] }));
+        setAlbumCache((prev) => ({ ...prev, [albumId]: res.data.album[0] }));
         return res.data.album[0];
       }
     } catch {
@@ -80,10 +83,12 @@ const Post: React.FC = () => {
   }
 
   // Estado para controlar expansão dos comentários por post
-  const [expandedComments, setExpandedComments] = useState<{ [key: number]: boolean }>({});
+  const [expandedComments, setExpandedComments] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const handleToggleComment = (postId: number) => {
-    setExpandedComments(prev => ({ ...prev, [postId]: !prev[postId] }));
+    setExpandedComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
   };
 
   return (
@@ -98,7 +103,9 @@ const Post: React.FC = () => {
               <img
                 src={
                   users[post.userid]?.profilePicture
-                    ? `http://localhost:3000/uploads/profile/${users[post.userid].profilePicture}`
+                    ? `http://localhost:3000/uploads/profile/${
+                        users[post.userid].profilePicture
+                      }`
                     : "http://localhost:3000/uploads/profile/default-profile.png"
                 }
                 alt="profile"
@@ -106,23 +113,32 @@ const Post: React.FC = () => {
               />
             </div>
             <div className="flex-1">
-              <p className="text-lg font-semibold">{users[post.userid]?.username || "Listener"}</p>
+              <p className="text-lg font-semibold">
+                {users[post.userid]?.username || "Listener"}
+              </p>
               <p className="text-xs text-white/60">{timeAgo(post.createdAt)}</p>
             </div>
           </header>
 
           {post.postMention && (
             <div className="mt-5">
-              <AlbumMention albumId={post.postMention} fetchAlbum={fetchAlbum} />
+              <AlbumMention
+                albumId={post.postMention}
+                fetchAlbum={fetchAlbum}
+              />
             </div>
           )}
 
-          <p className="mt-5 text-base leading-relaxed text-white/90">{post.postText}</p>
+          <p className="mt-5 text-base leading-relaxed text-white/90">
+            {post.postText}
+          </p>
 
           {post.postImg && (
-            <div className="mt-4 overflow-hidden rounded-2xl border border-white/10">
-              <img src={`/uploads/${post.postImg}`} alt="post" className="h-64 w-full object-cover" />
-            </div>
+            <img
+              src={`http://localhost:3000/uploads/posts/${post.postImg}`}
+              alt="post"
+              className="h-64 w-full object-cover mt-2 rounded-xl"
+            />
           )}
 
           <footer className="mt-6 flex items-center gap-4 text-white/60">
@@ -151,7 +167,12 @@ const Post: React.FC = () => {
             />
           </footer>
 
-          <CommentSection postId={post.id} users={users} expandedArea show={!!expandedComments[post.id]} />
+          <CommentSection
+            postId={post.id}
+            users={users}
+            expandedArea
+            show={!!expandedComments[post.id]}
+          />
         </article>
       ))}
     </div>
@@ -159,10 +180,10 @@ const Post: React.FC = () => {
 };
 
 // Album mention component
-const AlbumMention: React.FC<{ albumId: string; fetchAlbum: (id: string) => Promise<Album | undefined> }> = ({
-  albumId,
-  fetchAlbum,
-}) => {
+const AlbumMention: React.FC<{
+  albumId: string;
+  fetchAlbum: (id: string) => Promise<Album | undefined>;
+}> = ({ albumId, fetchAlbum }) => {
   const [album, setAlbum] = useState<Album | undefined>(undefined);
 
   useEffect(() => {
@@ -173,7 +194,11 @@ const AlbumMention: React.FC<{ albumId: string; fetchAlbum: (id: string) => Prom
   return (
     <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
       {album.strAlbumThumb ? (
-        <img src={album.strAlbumThumb} alt={album.strAlbum} className="h-20 w-20 rounded-xl object-cover" />
+        <img
+          src={album.strAlbumThumb}
+          alt={album.strAlbum}
+          className="h-20 w-20 rounded-xl object-cover"
+        />
       ) : (
         <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-white/10 text-xs uppercase text-white/60">
           No cover
@@ -181,7 +206,9 @@ const AlbumMention: React.FC<{ albumId: string; fetchAlbum: (id: string) => Prom
       )}
       <div className="text-sm font-semibold text-white">
         <p>{album.strAlbum}</p>
-        <p className="text-xs uppercase tracking-[0.3em] text-white/60">{album.strArtist}</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-white/60">
+          {album.strArtist}
+        </p>
       </div>
     </div>
   );
