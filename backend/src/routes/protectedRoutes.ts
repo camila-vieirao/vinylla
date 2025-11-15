@@ -33,7 +33,19 @@ import {
 
 import { likePost, unlikePost } from "../controllers/LikeController";
 
-import { createReview, deleteReviewById } from "../controllers/ReviewController";
+import {
+  createReview,
+  deleteReviewById,
+} from "../controllers/ReviewController";
+
+import {
+  followUser,
+  unfollowUser,
+  getFollowCounts,
+  getFollowers,
+  getFollowing,
+  isFollowing,
+} from "../controllers/FollowController";
 
 const protectedRoutes = Router();
 
@@ -72,5 +84,9 @@ protectedRoutes.delete("/posts/:postId/like", unlikePost); // Require userId fro
 protectedRoutes.post("/reviews/:albumId", createReview); // Require userId from token)
 protectedRoutes.delete("/reviews/:reviewId", deleteReviewById); // Require userId from token
 
+// Follows
+protectedRoutes.post("/follows/:userId", followUser); // Require userId from token
+protectedRoutes.delete("/follows/:userId", unfollowUser); // Require userId from token
+protectedRoutes.get("/follows/:userId/isFollowing", isFollowing); // Require userId from token
 
 export { protectedRoutes };
