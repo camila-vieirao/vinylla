@@ -4,7 +4,7 @@ type Album = {
   idAlbum: string;
   strAlbum: string;
   strArtist: string;
-  strAlbumThumb: string;
+  strAlbumThumb?: string;
 };
 
 interface AlbumSearchModalProps {

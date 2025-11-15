@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import api from "../../services/api/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AlbumSearchModal } from "../../components/ReviewModal/AlbumSearchModal";
 
 type StoryAction = "post" | "review" | "marketplace";
 
@@ -91,6 +92,13 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
   const [postText, setPostText] = useState("");
   const [postImg, setPostImg] = useState<File | null>(null);
   const [storiesCollapsed, setStoriesCollapsed] = useState(false);
+  const [showTrackModal, setShowTrackModal] = useState(false);
+  const [selectedTrack, setSelectedTrack] = useState<{
+    idAlbum: string;
+    strAlbum: string;
+    strArtist: string;
+    strAlbumThumb?: string;
+  } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -123,6 +131,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
       const formData = new FormData();
       formData.append("postText", postText);
       if (postImg) formData.append("postImg", postImg);
+      if (selectedTrack) formData.append("postMention", selectedTrack.idAlbum);
 
       await api.post("/api/posts", formData, {
         headers: {
@@ -133,6 +142,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
 
       setPostText("");
       setPostImg(null);
+      setSelectedTrack(null);
       toast.success("Post created successfully!");
     } catch (error: any) {
       toast.error(error);
@@ -284,6 +294,20 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                         );
                       }
 
+                      if (action.id === "music") {
+                        return (
+                          <button
+                            type="button"
+                            key={action.id}
+                            onClick={() => setShowTrackModal(true)}
+                            className={`flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
+                          >
+                            <Icon size={16} />
+                            <span>{action.label}</span>
+                          </button>
+                        );
+                      }
+
                       return (
                         <button
                           type="button"
@@ -296,6 +320,39 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                       );
                     })}
                   </div>
+
+                  {selectedTrack && (
+                    <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
+                      <div className="flex items-center gap-3">
+                        {selectedTrack.strAlbumThumb ? (
+                          <img
+                            src={selectedTrack.strAlbumThumb}
+                            alt={selectedTrack.strAlbum}
+                            className="h-12 w-12 rounded-xl object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-xs uppercase text-white/50">
+                            Album
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-white font-semibold">
+                            {selectedTrack.strAlbum}
+                          </p>
+                          <p className="text-white/60 text-xs">
+                            {selectedTrack.strArtist}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="text-xs uppercase tracking-[0.3em] text-white/60 transition hover:text-white"
+                        onClick={() => setSelectedTrack(null)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
 
                   <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-4">
                     <button
@@ -484,6 +541,15 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
           </aside>
         </div>
       </div>
+      {showTrackModal && (
+        <AlbumSearchModal
+          onSelect={(album) => {
+            setSelectedTrack(album);
+            setShowTrackModal(false);
+          }}
+          onClose={() => setShowTrackModal(false)}
+        />
+      )}
     </div>
   );
 };

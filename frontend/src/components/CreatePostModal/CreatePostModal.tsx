@@ -3,6 +3,7 @@ import { FaImage, FaMusic, FaVideo } from "react-icons/fa";
 import avatar from "../../assets/borabill_avatar.jpeg";
 import api from "../../services/api/api";
 import { toast } from "react-toastify";
+import { AlbumSearchModal } from "../ReviewModal/AlbumSearchModal";
 
 interface CreatePostModalProps {
   onClose: () => void;
@@ -12,6 +13,13 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
   const [user, setUser] = useState<any>(null);
   const [postText, setPostText] = useState("");
   const [postImg, setPostImg] = useState<File | null>(null);
+  const [showTrackModal, setShowTrackModal] = useState(false);
+  const [selectedTrack, setSelectedTrack] = useState<{
+    idAlbum: string;
+    strAlbum: string;
+    strArtist: string;
+    strAlbumThumb?: string;
+  } | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -42,6 +50,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
       const formData = new FormData();
       formData.append("postText", postText);
       if (postImg) formData.append("postImg", postImg);
+      if (selectedTrack) formData.append("postMention", selectedTrack.idAlbum);
 
       await api.post("/api/posts", formData, {
         headers: {
@@ -52,6 +61,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
 
       setPostText("");
       setPostImg(null);
+      setSelectedTrack(null);
       toast.success("Post created successfully!");
       onClose();
     } catch (error: any) {
@@ -118,6 +128,39 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
               onChange={(e) => setPostText(e.target.value)}
             />
 
+            {selectedTrack && (
+              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
+                <div className="flex items-center gap-3">
+                  {selectedTrack.strAlbumThumb ? (
+                    <img
+                      src={selectedTrack.strAlbumThumb}
+                      alt={selectedTrack.strAlbum}
+                      className="h-12 w-12 rounded-xl object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-xs uppercase text-white/50">
+                      Album
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold text-white">
+                      {selectedTrack.strAlbum}
+                    </p>
+                    <p className="text-xs text-white/60">
+                      {selectedTrack.strArtist}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="text-xs uppercase tracking-[0.3em] text-white/60 transition hover:text-white"
+                  onClick={() => setSelectedTrack(null)}
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+
             <div className="flex flex-wrap items-center gap-3">
               <label
                 htmlFor="modal-post-image"
@@ -143,6 +186,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
               <button
                 type="button"
                 className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/40 hover:bg-white/5"
+                onClick={() => setShowTrackModal(true)}
               >
                 <FaMusic size={16} />
                 <span>Track</span>
@@ -161,6 +205,15 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
           </div>
         )}
       </div>
+      {showTrackModal && (
+        <AlbumSearchModal
+          onSelect={(album) => {
+            setSelectedTrack(album);
+            setShowTrackModal(false);
+          }}
+          onClose={() => setShowTrackModal(false)}
+        />
+      )}
     </div>
   );
 };
