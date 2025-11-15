@@ -160,3 +160,23 @@ export const getMe = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getUserByUsername = async (req: Request, res: Response) => {
+  const username = req.params.username;
+  const sql =
+    "SELECT id, name, username, email, profilePicture, headerPicture, description FROM users WHERE username = ?";
+
+  try {
+    const [rows] = await pool.query(sql, [username]);
+    const results = rows as any[];
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json(results[0]);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to fetch user" });
+  }
+};
