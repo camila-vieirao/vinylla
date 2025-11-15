@@ -136,6 +136,38 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+export const updateUserPicture = async (req: Request, res: Response) => {
+  const userId = (req as any).user?.id;
+
+  const file = (req as any).file;
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  const filename = file.filename;
+
+  const sql = `UPDATE users SET profilePicture = ? WHERE id = ?`;
+
+  try {
+    const [result] = await pool.query(sql, [filename, userId]);
+    const updateResult = result as any;
+
+    if (updateResult.affectedRows === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Profile picture updated", profilePicture: filename });
+  } catch (error) {
+    console.error("updateUserPicture error:", error);
+    res.status(500).json({ error: "Failed to update profile picture" });
+  }
+};
+
 export const getMe = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user?.id;
