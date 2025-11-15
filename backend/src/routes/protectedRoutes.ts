@@ -6,6 +6,7 @@ import {
   updateUser,
   getMe,
   getUserByUsername,
+  updateProfilePicture,
 } from "../controllers/UserController";
 import { authMiddleware } from "../middlewares/AuthMiddleware";
 import {
@@ -90,5 +91,12 @@ protectedRoutes.delete("/reviews/:reviewId", deleteReviewById); // Require userI
 protectedRoutes.post("/follows/:userId", followUser); // Require userId from token
 protectedRoutes.delete("/follows/:userId", unfollowUser); // Require userId from token
 protectedRoutes.get("/follows/:userId/isFollowing", isFollowing); // Require userId from token
+
+// Profile Picture
+protectedRoutes.put(
+  "/users/me/picture",
+  upload.single("profilePicture"),
+  updateProfilePicture
+);
 
 export { protectedRoutes };
