@@ -5,6 +5,7 @@ import {
   deleteUser,
   updateUser,
   getMe,
+  getUserByUsername,
 } from "../controllers/UserController";
 import { authMiddleware } from "../middlewares/AuthMiddleware";
 import {
@@ -54,6 +55,7 @@ protectedRoutes.use(authMiddleware);
 
 // Users
 protectedRoutes.get("/users", getUsers);
+protectedRoutes.get("/profile/:username", getUserByUsername);
 protectedRoutes.get("/users/me", getMe);
 protectedRoutes.get("/users/:id", getUserById);
 protectedRoutes.delete("/users/:id", deleteUser);

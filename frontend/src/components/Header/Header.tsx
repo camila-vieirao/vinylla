@@ -99,15 +99,17 @@ const Header: React.FC = () => {
                 type="button"
                 className="flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-1 text-sm text-white shadow-inner transition hover:border-white/40 hover:bg-white/10 active:scale-95"
               >
-                <img
-                  className="h-12 w-12 rounded-full object-cover object-center"
-                  src={
-                    user.profilePicture
-                      ? `http://localhost:3000/uploads/profile/${user.profilePicture}`
-                      : avatar
-                  }
-                  alt="user photo"
-                />
+                <Link to="/user/profile">
+                  <img
+                    className="h-12 w-12 rounded-full object-cover object-center"
+                    src={
+                      user.profilePicture
+                        ? `http://localhost:3000/uploads/profile/${user.profilePicture}`
+                        : avatar
+                    }
+                    alt="user photo"
+                  />
+                </Link>
               </button>
               <button
                 onClick={handleLogout}

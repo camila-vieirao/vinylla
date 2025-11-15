@@ -18,6 +18,7 @@ import { ExplorePage } from "./pages/Explore/ExplorePage";
 import SelectTags from "./pages/SelectTags/SelectTags";
 import Marketplace from "./pages/Marketplace/Marketplace";
 import { GroupPage } from "./pages/Group/Group";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -76,6 +77,8 @@ function App() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/groups/:groupId" element={<GroupPage />} />
+          <Route path="/user/profile" element={<Profile />} />
+          <Route path="/profile/:username" element={<Profile />} />
         </Routes>
       </main>
       {showPostModal && (
