@@ -40,6 +40,11 @@ interface Post {
   };
 }
 
+interface FollowStats {
+  followers: number;
+  following: number;
+}
+
 const Profile = () => {
   const { username } = useParams();
   const navigate = useNavigate();
@@ -49,6 +54,10 @@ const Profile = () => {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [followStats, setFollowStats] = useState<FollowStats>({
+    followers: 0,
+    following: 0,
+  });
 
   useEffect(() => {
     fetchProfileData();
@@ -72,16 +81,35 @@ const Profile = () => {
 
       if (!username) {
         setUser(currentUserRes.data);
-        await fetchUserPosts(currentUserRes.data.id);
+        await Promise.all([
+          fetchUserPosts(currentUserRes.data.id),
+          fetchFollowStats(currentUserRes.data.id),
+        ]);
         return;
       }
 
       try {
-        const userRes = await api.get(`/api/profile/${username}`, {
+        const allUsersRes = await api.get("/api/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUser(userRes.data);
-        await fetchUserPosts(userRes.data.id);
+
+        const foundUser = allUsersRes.data.find(
+          (u: User) => u.username === username
+        );
+
+        if (!foundUser) {
+          toast.error("User not found");
+          navigate("/");
+          return;
+        }
+
+        setUser(foundUser);
+
+        await Promise.all([
+          fetchUserPosts(foundUser.id),
+          fetchFollowStats(foundUser.id),
+          checkIfFollowing(foundUser.id),
+        ]);
       } catch (error: any) {
         if (error.response?.status === 404) {
           toast.error("User not found");
@@ -118,45 +146,72 @@ const Profile = () => {
     }
   };
 
-  const handleFollow = async () => {
+  const fetchFollowStats = async (userId: number) => {
     try {
-      if (!user) return;
-
-      if (isFollowing) {
-        setIsFollowing(false);
-        toast.success(`Unfollowed ${user.name}`);
-      } else {
-        setIsFollowing(true);
-        toast.success(`Now following ${user.name}`);
-      }
+      const statsRes = await api.get(`/api/follows/${userId}/counts`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setFollowStats(statsRes.data);
     } catch (error) {
-      toast.error("Error updating follow status");
+      console.error("Error fetching follow stats:", error);
+      setFollowStats({ followers: 0, following: 0 });
     }
   };
 
-  const handleCreatePost = async (postText: string, postImg?: File) => {
+  const checkIfFollowing = async (userId: number) => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please login to create posts");
+      if (!currentUser || currentUser.id === userId) {
+        setIsFollowing(false);
         return;
       }
 
-      const formData = new FormData();
-      formData.append("postText", postText);
-      if (postImg) formData.append("postImg", postImg);
-
-      await api.post("/api/posts", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
+      const followRes = await api.get(`/api/follows/${userId}/isFollowing`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      setIsFollowing(followRes.data.isFollowing);
+    } catch (error) {
+      console.error("Error checking follow status:", error);
+      setIsFollowing(false);
+    }
+  };
 
-      toast.success("Post created successfully!");
-      fetchProfileData();
+  const handleFollow = async () => {
+    try {
+      if (!user || !currentUser) return;
+
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      if (isFollowing) {
+        await api.delete(`/api/follows/${user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsFollowing(false);
+        setFollowStats((prev) => ({
+          ...prev,
+          followers: Math.max(0, prev.followers - 1),
+        }));
+        toast.success(`Unfollowed ${user.name}`);
+      } else {
+        await api.post(
+          `/api/follows/${user.id}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setIsFollowing(true);
+        setFollowStats((prev) => ({
+          ...prev,
+          followers: prev.followers + 1,
+        }));
+        toast.success(`Now following ${user.name}`);
+      }
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Error creating post");
+      console.error("Follow error:", error);
+      toast.error(
+        error.response?.data?.error || "Error updating follow status"
+      );
     }
   };
 
@@ -173,6 +228,18 @@ const Profile = () => {
       setUserPosts((prev) => prev.filter((post) => post.id !== postId));
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Error deleting post");
+    }
+  };
+
+  const handleSendMessage = () => {
+    toast.info("Message feature coming soon!");
+  };
+
+  const handleShareProfile = () => {
+    if (user) {
+      const profileUrl = `${window.location.origin}/profile/${user.username}`;
+      navigator.clipboard.writeText(profileUrl);
+      toast.success("Profile link copied to clipboard!");
     }
   };
 
@@ -259,8 +326,8 @@ const Profile = () => {
                         onClick={handleFollow}
                         className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all ${
                           isFollowing
-                            ? "bg-white/10 border border-white/20 text-white"
-                            : "bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] text-white"
+                            ? "bg-white/10 border border-white/20 text-white hover:bg-white/20"
+                            : "bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] text-white hover:opacity-90"
                         }`}
                       >
                         {isFollowing ? (
@@ -275,12 +342,18 @@ const Profile = () => {
                           </>
                         )}
                       </button>
-                      <button className="flex items-center gap-2 p-3 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition">
+                      <button
+                        onClick={handleSendMessage}
+                        className="flex items-center gap-2 p-3 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition"
+                      >
                         <FiMessageCircle size={18} />
                       </button>
                     </>
                   )}
-                  <button className="p-3 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition">
+                  <button
+                    onClick={handleShareProfile}
+                    className="p-3 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition"
+                  >
                     <FiShare2 size={18} />
                   </button>
                 </div>
@@ -288,11 +361,11 @@ const Profile = () => {
 
               <div className="flex gap-6 mt-6">
                 <div className="text-center">
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">{followStats.followers}</p>
                   <p className="text-white/60 text-sm">Followers</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">{followStats.following}</p>
                   <p className="text-white/60 text-sm">Following</p>
                 </div>
                 <div className="text-center">
@@ -329,69 +402,7 @@ const Profile = () => {
               </div>
             </div>
 
-            {isCurrentUserProfile && (
-              <div className="rounded-3xl border border-white/10 bg-[#080b16]/90 p-6 shadow-2xl backdrop-blur">
-                <div className="flex items-center gap-4 mb-4">
-                  <img
-                    src={
-                      user.profilePicture &&
-                      user.profilePicture !== "default-profile.png"
-                        ? `http://localhost:3000/uploads/profile/${user.profilePicture}`
-                        : avatar
-                    }
-                    alt={user.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <p className="font-semibold">{user.name}</p>
-                    <p className="text-white/60 text-sm">@{user.username}</p>
-                  </div>
-                </div>
-
-                <textarea
-                  placeholder="What are you spinning today?"
-                  className="w-full resize-none rounded-2xl border border-white/10 bg-white/5 p-4 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
-                  rows={3}
-                  id="postText"
-                />
-
-                <div className="flex justify-between items-center mt-4">
-                  <div className="flex gap-2">
-                    <label
-                      htmlFor="postImage"
-                      className="cursor-pointer p-2 rounded-full bg-white/5 hover:bg-white/10 transition"
-                    >
-                      <FaImage size={18} />
-                    </label>
-                    <input
-                      type="file"
-                      id="postImage"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => {
-                        console.log("Image selected:", e.target.files?.[0]);
-                      }}
-                    />
-                  </div>
-                  <button
-                    onClick={() => {
-                      const textarea = document.getElementById(
-                        "postText"
-                      ) as HTMLTextAreaElement;
-                      if (textarea.value.trim()) {
-                        handleCreatePost(textarea.value);
-                        textarea.value = "";
-                      } else {
-                        toast.error("Please write something to post");
-                      }
-                    }}
-                    className="bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-6 py-2 rounded-full font-semibold hover:opacity-90 transition"
-                  >
-                    Post
-                  </button>
-                </div>
-              </div>
-            )}
+            {isCurrentUserProfile && <div></div>}
 
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
               {activeTab === "posts" && (
@@ -478,8 +489,8 @@ const Profile = () => {
               <div className="space-y-3 text-sm text-white/60">
                 <p>Joined recently</p>
                 <p>{userPosts.length} posts</p>
-                <p>0 followers</p>
-                {isCurrentUserProfile && user.email && <p>{user.email}</p>}
+                <p>{followStats.followers} followers</p>
+                <p>{followStats.following} following</p>
               </div>
             </div>
 
@@ -492,6 +503,9 @@ const Profile = () => {
                       Posted {userPosts.length} times
                     </p>
                     <p className="text-white/60">Active this week</p>
+                    {!isCurrentUserProfile && isFollowing && (
+                      <p className="text-green-400">You follow this user</p>
+                    )}
                   </>
                 ) : (
                   <p className="text-white/60">No recent activity</p>
