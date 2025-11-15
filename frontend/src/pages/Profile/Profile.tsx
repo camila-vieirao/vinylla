@@ -65,23 +65,19 @@ const Profile = () => {
         return;
       }
 
-      // Buscar usuário atual
       const currentUserRes = await api.get("/api/users/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCurrentUser(currentUserRes.data);
 
-      // Se não há username na URL, mostrar perfil do usuário atual
       if (!username) {
         setUser(currentUserRes.data);
         await fetchUserPosts(currentUserRes.data.id);
         return;
       }
 
-      // Se há username, buscar esse usuário específico - URL CORRETA
       try {
         const userRes = await api.get(`/api/profile/${username}`, {
-          // ← AGORA ESTÁ CORRETO
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(userRes.data);
@@ -127,11 +123,9 @@ const Profile = () => {
       if (!user) return;
 
       if (isFollowing) {
-        // Lógica para deixar de seguir
         setIsFollowing(false);
         toast.success(`Unfollowed ${user.name}`);
       } else {
-        // Lógica para seguir
         setIsFollowing(true);
         toast.success(`Now following ${user.name}`);
       }
@@ -160,7 +154,7 @@ const Profile = () => {
       });
 
       toast.success("Post created successfully!");
-      fetchProfileData(); // Refresh posts
+      fetchProfileData();
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Error creating post");
     }
@@ -226,10 +220,8 @@ const Profile = () => {
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 lg:px-6 py-10">
-        {/* Header do Perfil */}
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl mb-8">
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
-            {/* Avatar */}
             <div className="relative">
               <img
                 src={
@@ -250,8 +242,6 @@ const Profile = () => {
                 </button>
               )}
             </div>
-
-            {/* Informações do usuário */}
             <div className="flex-1">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
@@ -296,7 +286,6 @@ const Profile = () => {
                 </div>
               </div>
 
-              {/* Stats */}
               <div className="flex gap-6 mt-6">
                 <div className="text-center">
                   <p className="text-2xl font-bold">0</p>
@@ -316,9 +305,7 @@ const Profile = () => {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-          {/* Conteúdo principal */}
           <section className="space-y-6">
-            {/* Tabs de navegação */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur">
               <div className="flex overflow-x-auto">
                 {tabs.map((tab) => {
@@ -342,7 +329,6 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Criar Post (apenas para próprio perfil) */}
             {isCurrentUserProfile && (
               <div className="rounded-3xl border border-white/10 bg-[#080b16]/90 p-6 shadow-2xl backdrop-blur">
                 <div className="flex items-center gap-4 mb-4">
@@ -383,7 +369,6 @@ const Profile = () => {
                       className="hidden"
                       accept="image/*"
                       onChange={(e) => {
-                        // Handle image upload here
                         console.log("Image selected:", e.target.files?.[0]);
                       }}
                     />
@@ -408,7 +393,6 @@ const Profile = () => {
               </div>
             )}
 
-            {/* Conteúdo das tabs */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
               {activeTab === "posts" && (
                 <div className="space-y-6">
@@ -488,9 +472,7 @@ const Profile = () => {
             </div>
           </section>
 
-          {/* Sidebar */}
           <aside className="space-y-6">
-            {/* About */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
               <h3 className="text-xl font-semibold mb-4">About</h3>
               <div className="space-y-3 text-sm text-white/60">
@@ -501,7 +483,6 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Recent Activity */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
               <h3 className="text-xl font-semibold mb-4">Recent Activity</h3>
               <div className="space-y-3 text-sm">
