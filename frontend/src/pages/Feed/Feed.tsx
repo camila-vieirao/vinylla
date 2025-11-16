@@ -391,7 +391,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                             type="button"
                             key={action.id}
                             onClick={() => setShowTrackModal(true)}
-                            className={`flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
+                            className={`cursor-pointer flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
                           >
                             <Icon size={16} />
                             <span>{action.label}</span>
@@ -403,7 +403,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                         <button
                           type="button"
                           key={action.id}
-                          className={`flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
+                          className={`cursor-pointer flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
                         >
                           <Icon size={16} />
                           <span>{action.label}</span>
@@ -564,7 +564,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                     </div>
                     <button
                       type="button"
-                      className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#0d0d15]"
+                      className="cursor-pointer rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#0d0d15] transition hover:bg-white/80"
                       onClick={() => {
                         if (group.id === "indie") {
                           navigate(`/groups/${group.id}`);
@@ -581,7 +581,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
 
               <button
                 type="button"
-                className="mt-6 w-full rounded-full border border-white/20 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="cursor-pointer mt-6 w-full rounded-full border border-white/20 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
               >
                 See all groups
               </button>
@@ -620,7 +620,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                     </div>
                     <button
                       type="button"
-                      className="rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-3 py-1 text-xs font-semibold"
+                      className="cursor-pointer rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-3 py-1 text-xs font-semibold transition text-white shadow-xl hover:opacity-70"
                     >
                       Follow
                     </button>
@@ -639,7 +639,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                 {trendingTopics.map((topic) => (
                   <span
                     key={topic}
-                    className="rounded-full border border-white/15 px-3 py-1 text-sm font-semibold text-white/80"
+                    className="cursor-pointer rounded-full border border-white/15 px-3 py-1 text-sm font-semibold text-white/80"
                   >
                     #{topic}
                   </span>
