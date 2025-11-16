@@ -33,7 +33,11 @@ import {
   getMyTags,
 } from "../controllers/TagController";
 
-import { likePost, unlikePost } from "../controllers/LikeController";
+import {
+  likePost,
+  unlikePost,
+  isLikedByMe,
+} from "../controllers/LikeController";
 
 import {
   createReview,
@@ -82,6 +86,7 @@ protectedRoutes.get("/users/:userId/tags", getTagsPerUser);
 // Likes
 protectedRoutes.post("/posts/:postId/like", likePost); // Require userId from token
 protectedRoutes.delete("/posts/:postId/like", unlikePost); // Require userId from token
+protectedRoutes.get("/posts/:postId/like/me", isLikedByMe); // Require userId from token
 
 // Reviews
 protectedRoutes.post("/reviews/:albumId", createReview); // Require userId from token)

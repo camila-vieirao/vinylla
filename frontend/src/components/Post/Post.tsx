@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../../services/api/api";
 import CommentSection from "../CommentSection/CommentSection";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 interface Post {
   id: number;
@@ -34,10 +36,12 @@ const Post: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<{ [key: number]: User }>({});
   const [albumCache, setAlbumCache] = useState<{ [key: string]: Album }>({});
+  const [likeCounts, setLikeCounts] = useState<{ [key: number]: number }>({});
+  const [likedByMe, setLikedByMe] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     // Get all posts (public) including minimal user info
-    axios.get("http://localhost:3000/api/posts").then((res) => {
+    axios.get("http://localhost:3000/api/posts").then(async (res) => {
       const ordered: Post[] = [...res.data].sort(
         (a: Post, b: Post) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -55,8 +59,103 @@ const Post: React.FC = () => {
         };
       });
       setUsers(userMap);
+
+      // Fetch like counts for each post (public endpoint)
+      try {
+        const pairs = await Promise.all(
+          ordered.map(async (p) => {
+            try {
+              const res = await api.get(`/api/likes/post/${p.id}`);
+              return [p.id, res.data?.likeCount ?? 0] as const;
+            } catch {
+              return [p.id, 0] as const;
+            }
+          })
+        );
+        const counts: { [key: number]: number } = {};
+        pairs.forEach(([id, count]) => {
+          counts[id] = count;
+        });
+        setLikeCounts(counts);
+      } catch {
+        // ignore errors here; default counts stay 0
+      }
+
+      // If logged in, fetch whether each post is liked by me
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const likedPairs = await Promise.all(
+            ordered.map(async (p) => {
+              try {
+                const res = await api.get(`/api/posts/${p.id}/like/me`);
+                return [p.id, !!res.data?.liked] as const;
+              } catch {
+                return [p.id, false] as const;
+              }
+            })
+          );
+          const likedMap: { [key: number]: boolean } = {};
+          likedPairs.forEach(([id, liked]) => {
+            likedMap[id] = liked;
+          });
+          setLikedByMe(likedMap);
+        } catch {
+          // ignore; leave likedByMe as defaults
+        }
+      }
     });
   }, []);
+
+  const handleToggleLike = async (postId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be signed in to like.");
+      return;
+    }
+
+    try {
+      if (likedByMe[postId]) {
+        await api.delete(`/api/posts/${postId}/like`);
+        setLikedByMe((prev) => ({ ...prev, [postId]: false }));
+        setLikeCounts((prev) => ({
+          ...prev,
+          [postId]: Math.max(0, (prev[postId] ?? 0) - 1),
+        }));
+      } else {
+        await api.post(`/api/posts/${postId}/like`);
+        setLikedByMe((prev) => ({ ...prev, [postId]: true }));
+        setLikeCounts((prev) => ({
+          ...prev,
+          [postId]: (prev[postId] ?? 0) + 1,
+        }));
+      }
+    } catch (error: any) {
+      const status = error?.response?.status;
+      const message: string = error?.response?.data?.message || "";
+      // Try to reconcile local state based on backend response
+      if (
+        !likedByMe[postId] &&
+        status === 400 &&
+        /already liked/i.test(message)
+      ) {
+        setLikedByMe((prev) => ({ ...prev, [postId]: true }));
+      } else if (
+        likedByMe[postId] &&
+        status === 404 &&
+        /like not found/i.test(message)
+      ) {
+        setLikedByMe((prev) => ({ ...prev, [postId]: false }));
+      } else if (
+        status === 404 &&
+        /post not found/i.test(message.toLowerCase())
+      ) {
+        toast.error("Post not found.");
+      } else {
+        toast.error("Failed to update like.");
+      }
+    }
+  };
 
   // Helper: fetch album info if needed
   const fetchAlbum = async (albumId: string) => {
@@ -151,11 +250,19 @@ const Post: React.FC = () => {
           <footer className="mt-6 flex items-center gap-4 text-white/60">
             <button
               type="button"
-              className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white"
-              title="Upvote"
+              onClick={() => handleToggleLike(post.id)}
+              className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white ${
+                likedByMe[post.id]
+                  ? "border-white/30 text-white"
+                  : "border-white/10"
+              }`}
+              title={likedByMe[post.id] ? "Undo upvote" : "Upvote"}
             >
               <FaRegThumbsUp />
-              Upvote
+              Upvote{" "}
+              {typeof likeCounts[post.id] === "number"
+                ? likeCounts[post.id]
+                : 0}
             </button>
             <button
               type="button"
