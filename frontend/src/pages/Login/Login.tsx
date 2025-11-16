@@ -46,7 +46,7 @@ const Login: React.FC = () => {
                 </Link>
                 <div className="space-y-3">
                   <p className="text-xs uppercase tracking-[0.4em] text-white/60">Community</p>
-                  <h1 className="text-3xl font-semibold leading-tight">Spin up your next record session</h1>
+                  <h1 className="text-3xl font-semibold leading-tight">Spin stories, trade vibes</h1>
                   <p className="text-white/70 text-base">
                     Drop into your personalized feed of vinyl reviews, collector stories, and marketplace drops curated by the crate.
                   </p>

@@ -69,10 +69,15 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ onClose }) => {
     }
   }
 
+  function handleBackdropClick() {
+    if (showTrackModal) return;
+    onClose();
+  }
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-      onClick={onClose}
+      onClick={handleBackdropClick}
     >
       <div
         className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-[#080b16] text-white shadow-2xl"

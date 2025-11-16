@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaBagShopping } from "react-icons/fa6";
-import { IoIosNotifications, IoIosPeople, IoMdSettings } from "react-icons/io";
+import { IoIosNotifications, IoMdSettings } from "react-icons/io";
+import { FaUserPlus } from "react-icons/fa";
 import { SearchBar } from "../Search/SearchBar";
 import { useEffect, useState, useRef } from "react";
 import api from "../../services/api/api";
@@ -142,8 +143,9 @@ const Header: React.FC = () => {
                       ? "text-white shadow-lg shadow-indigo-500/20"
                       : ""
                   }`}
+                  title="Find people"
                 >
-                  <IoIosPeople />
+                  <FaUserPlus />
                 </button>
 
                 {/* Dropdown de busca de usuários */}

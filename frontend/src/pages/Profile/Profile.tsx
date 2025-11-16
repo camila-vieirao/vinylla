@@ -88,9 +88,7 @@ const Profile = () => {
   });
   const [reviews, setReviews] = useState<Review[]>([]);
   const [reviewsLoading, setReviewsLoading] = useState(false);
-  const [reviewAlbums, setReviewAlbums] = useState<Record<string, ReviewAlbum>>(
-    {},
-  );
+  const [albumCache, setAlbumCache] = useState<Record<string, ReviewAlbum>>({});
   const applyDraftFromUser = (userData: User) => {
     setProfileDraft({
       name: userData.name || "",
@@ -188,6 +186,11 @@ const Profile = () => {
         },
       }));
       setUserPosts(postsWithUser);
+      postsRes.data.forEach((post: ProfilePost) => {
+        if (post.postMention) {
+          fetchAlbumDetails(post.postMention);
+        }
+      });
     } catch (error) {
       console.error("Error fetching posts:", error);
       setUserPosts([]);
@@ -212,7 +215,7 @@ const Profile = () => {
       const res = await api.get(`/api/reviews/user/${userId}`);
       setReviews(res.data);
       res.data.forEach((review: Review) => {
-        fetchAlbumForReview(review.audiodb_album_id);
+        fetchAlbumDetails(review.audiodb_album_id);
       });
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -222,12 +225,12 @@ const Profile = () => {
     }
   };
 
-  const fetchAlbumForReview = async (albumId: string) => {
-    if (reviewAlbums[albumId]) return;
+  const fetchAlbumDetails = async (albumId: string) => {
+    if (albumCache[albumId]) return;
     try {
       const res = await api.get(`/api_audiodb/v1/lookup/album/${albumId}`);
       if (res.data?.album?.length > 0) {
-        setReviewAlbums((prev) => ({
+        setAlbumCache((prev) => ({
           ...prev,
           [albumId]: res.data.album[0],
         }));
@@ -467,15 +470,6 @@ const Profile = () => {
                     alt={user.name}
                     className="h-full w-full rounded-2xl object-cover"
                   />
-                  {canEditProfile && (
-                    <button
-                      className="absolute -bottom-2 -right-2 rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] p-2 shadow-lg transition hover:scale-105"
-                      onClick={() => navigate("/settings")}
-                      title="Open profile settings"
-                    >
-                      <FiSettings size={16} />
-                    </button>
-                  )}
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.4em] text-white/60">
@@ -613,6 +607,9 @@ const Profile = () => {
                   ) : (
                     userPosts.map((post) => {
                       const owner = post.user || user || undefined;
+                      const mentionedAlbum = post.postMention
+                        ? albumCache[post.postMention]
+                        : undefined;
                       return (
                         <article
                           key={post.id}
@@ -651,6 +648,29 @@ const Profile = () => {
                           <p className="mt-4 text-sm text-white/90">
                             {post.postText}
                           </p>
+                          {mentionedAlbum && (
+                            <div className="mt-4 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                              {mentionedAlbum.strAlbumThumb ? (
+                                <img
+                                  src={mentionedAlbum.strAlbumThumb}
+                                  alt={mentionedAlbum.strAlbum}
+                                  className="h-16 w-16 rounded-xl object-cover"
+                                />
+                              ) : (
+                                <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-white/10 text-xs uppercase text-white/50">
+                                  Album
+                                </div>
+                              )}
+                              <div>
+                                <p className="text-sm font-semibold text-white">
+                                  {mentionedAlbum.strAlbum}
+                                </p>
+                                <p className="text-xs text-white/60">
+                                  {mentionedAlbum.strArtist}
+                                </p>
+                              </div>
+                            </div>
+                          )}
                           {post.postImg && (
                             <img
                               src={`http://localhost:3000/uploads/posts/${post.postImg}`}
@@ -689,7 +709,7 @@ const Profile = () => {
                   ) : (
                     reviews.map((review) => {
                       const ratingValue = Number(review.reviewRating) || 0;
-                      const album = reviewAlbums[review.audiodb_album_id];
+                      const album = albumCache[review.audiodb_album_id];
                       return (
                         <article
                           key={review.id}

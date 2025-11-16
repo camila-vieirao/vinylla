@@ -99,6 +99,11 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
     strArtist: string;
     strAlbumThumb?: string;
   } | null>(null);
+  const [userStats, setUserStats] = useState({
+    followers: 0,
+    following: 0,
+    posts: 0,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -112,6 +117,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);
+        fetchUserStats(res.data.id);
       } catch (err) {
         console.error("Failed to fetch user:", err);
         setUser(null);
@@ -120,6 +126,23 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
 
     fetchUser();
   }, []);
+
+  async function fetchUserStats(userId: number) {
+    try {
+      const [followRes, postsRes] = await Promise.all([
+        api.get(`/api/follows/${userId}/counts`),
+        api.get(`/api/posts/user/${userId}`),
+      ]);
+      setUserStats({
+        followers: followRes.data.followers || 0,
+        following: followRes.data.following || 0,
+        posts: Array.isArray(postsRes.data) ? postsRes.data.length : 0,
+      });
+    } catch (error) {
+      console.error("Failed to fetch user stats:", error);
+      setUserStats({ followers: 0, following: 0, posts: 0 });
+    }
+  }
 
   async function handleCreatePost() {
     if (!postText.trim()) return;
@@ -419,16 +442,16 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                 </div>
                 <div className="mt-6 grid grid-cols-3 gap-3 text-center text-sm">
                   <div className="rounded-2xl bg-white/5 p-3">
-                    <p className="text-lg font-semibold">356</p>
+                    <p className="text-lg font-semibold">{userStats.followers}</p>
                     <p className="text-white/60 text-xs">Followers</p>
                   </div>
                   <div className="rounded-2xl bg-white/5 p-3">
-                    <p className="text-lg font-semibold">128</p>
+                    <p className="text-lg font-semibold">{userStats.following}</p>
                     <p className="text-white/60 text-xs">Following</p>
                   </div>
                   <div className="rounded-2xl bg-white/5 p-3">
-                    <p className="text-lg font-semibold">42</p>
-                    <p className="text-white/60 text-xs">Reviews</p>
+                    <p className="text-lg font-semibold">{userStats.posts}</p>
+                    <p className="text-white/60 text-xs">Posts</p>
                   </div>
                 </div>
               </div>

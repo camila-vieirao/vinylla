@@ -5,7 +5,6 @@ import api from "./services/api/api";
 import Feed from "./pages/Feed/Feed";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
 import { AlbumSearchModal } from "./components/ReviewModal/AlbumSearchModal";
 import { ReviewFormModal } from "./components/ReviewModal/ReviewFormModal";
 import { useState } from "react";
@@ -86,7 +85,6 @@ function App() {
           <Route path="/cart" element={<Cart />} />
         </Routes>
       </main>
-      {!hideLayout && <Footer />}
       {showPostModal && (
         <CreatePostModal onClose={() => setShowPostModal(false)} />
       )}
