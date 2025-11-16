@@ -2,6 +2,11 @@ import pool from "../db";
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 export const getUsers = async (req: Request, res: Response) => {
   const sql = "SELECT * FROM users";
 
@@ -34,6 +39,10 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
   const { username, email, password, name } = req.body;
+
+  if (isValidEmail(email) === false) {
+    return res.status(400).json({ error: "Invalid email format" });
+  }
 
   const salt = await bcrypt.genSalt(Number(process.env.BCRYPT_SALT_ROUNDS));
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -101,6 +110,9 @@ export const updateUser = async (req: Request, res: Response) => {
     values.push(username);
   }
   if (email) {
+    if (isValidEmail(email) === false) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
     updateFields.push("email = ?");
     values.push(email);
   }
