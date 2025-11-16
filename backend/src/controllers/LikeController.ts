@@ -74,3 +74,20 @@ export const getLikesByPostId = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// Check if the authenticated user liked a specific post
+export const isLikedByMe = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const postId = req.params.postId;
+
+    const sql = "SELECT 1 FROM likes WHERE userid = ? AND postid = ? LIMIT 1";
+    const [rows] = await pool.query(sql, [userId, postId]);
+    const results = rows as any[];
+    return res.status(200).json({ liked: results.length > 0 });
+  } catch (error) {
+    console.error("Error checking like status:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

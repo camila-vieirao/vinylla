@@ -4,7 +4,22 @@ import { Request, Response } from "express";
 // Get de todos os Posts do DB. Útil para não precisarmos pensar em um
 // algoritmo de paginação agora.
 export const getPosts = async (req: Request, res: Response) => {
-  const sql = "SELECT * FROM posts";
+  // Return posts along with minimal user info (public-safe fields)
+  const sql = `
+    SELECT 
+      p.id,
+      p.postText,
+      p.postImg,
+      p.userid,
+      p.postMention,
+      p.createdAt,
+      u.name       AS userName,
+      u.username   AS userUsername,
+      u.profilePicture AS userProfilePicture
+    FROM posts p
+    JOIN users u ON u.id = p.userid
+    ORDER BY p.createdAt DESC
+  `;
 
   try {
     const [rows] = await pool.query(sql);
@@ -37,7 +52,7 @@ export const getPostById = async (req: Request, res: Response) => {
 // Get de todos os Posts de um usuário específico pelo ID do usuário
 export const getPostsByUserId = async (req: Request, res: Response) => {
   const userId = req.params.userId;
-  const sql = "SELECT * FROM posts WHERE userid = ?";
+  const sql = "SELECT * FROM posts WHERE userid = ? ORDER BY createdAt DESC";
 
   try {
     const [rows] = await pool.query(sql, [userId]);
