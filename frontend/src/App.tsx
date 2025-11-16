@@ -21,6 +21,7 @@ import { GroupPage } from "./pages/Group/Group";
 import Profile from "./pages/Profile/Profile";
 import Product from "./pages/Product/Product";
 import Cart from "./pages/Cart/Cart";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -137,6 +138,7 @@ function App() {
           }}
         />
       )}
+      <Footer />
     </>
   );
 }
