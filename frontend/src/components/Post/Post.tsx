@@ -10,6 +10,10 @@ interface Post {
   userid: number;
   postMention?: string;
   createdAt: string;
+  // Provided by backend join for public feed
+  userName?: string;
+  userUsername?: string;
+  userProfilePicture?: string;
 }
 
 interface User {
@@ -32,26 +36,25 @@ const Post: React.FC = () => {
   const [albumCache, setAlbumCache] = useState<{ [key: string]: Album }>({});
 
   useEffect(() => {
-    // Get all posts
+    // Get all posts (public) including minimal user info
     axios.get("http://localhost:3000/api/posts").then((res) => {
-      const ordered = [...res.data].sort(
+      const ordered: Post[] = [...res.data].sort(
         (a: Post, b: Post) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       setPosts(ordered);
-      // Get all users for mapping
-      const token = localStorage.getItem("token");
-      axios
-        .get("http://localhost:3000/api/users", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        })
-        .then((userRes) => {
-          const userMap: { [key: number]: User } = {};
-          userRes.data.forEach((u: User) => {
-            userMap[u.id] = u;
-          });
-          setUsers(userMap);
-        });
+
+      // Build a users map from the returned user fields
+      const userMap: { [key: number]: User } = {};
+      ordered.forEach((p) => {
+        userMap[p.userid] = {
+          id: p.userid,
+          name: p.userName || "",
+          username: p.userUsername,
+          profilePicture: p.userProfilePicture,
+        };
+      });
+      setUsers(userMap);
     });
   }, []);
 
@@ -102,9 +105,10 @@ const Post: React.FC = () => {
             <div className="h-14 w-14 rounded-full border border-white/20 bg-white/10">
               <img
                 src={
-                  users[post.userid]?.profilePicture
+                  users[post.userid]?.profilePicture || post.userProfilePicture
                     ? `http://localhost:3000/uploads/profile/${
-                        users[post.userid].profilePicture
+                        users[post.userid]?.profilePicture ||
+                        post.userProfilePicture
                       }`
                     : "http://localhost:3000/uploads/profile/default-profile.png"
                 }
@@ -114,7 +118,10 @@ const Post: React.FC = () => {
             </div>
             <div className="flex-1">
               <p className="text-lg font-semibold">
-                {users[post.userid]?.username || "Listener"}
+                {users[post.userid]?.username ||
+                  post.userUsername ||
+                  post.userName ||
+                  "Listener"}
               </p>
               <p className="text-xs text-white/60">{timeAgo(post.createdAt)}</p>
             </div>
