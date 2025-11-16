@@ -133,7 +133,7 @@ export const Product: React.FC = () => {
               <span>{listing.price}</span>
               <button
                 type="button"
-                className="rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-6 py-2 text-base font-semibold text-white shadow-xl transition hover:opacity-90"
+                className="cursor-pointer rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-6 py-2 text-base font-semibold text-white shadow-xl transition hover:opacity-90"
                 onClick={handleAddToBag}
               >
                 Add to bag
