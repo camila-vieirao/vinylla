@@ -251,7 +251,7 @@ const Post: React.FC = () => {
             <button
               type="button"
               onClick={() => handleToggleLike(post.id)}
-              className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white ${
+              className={`cursor-pointer flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white ${
                 likedByMe[post.id]
                   ? "border-white/30 text-white"
                   : "border-white/10"
@@ -266,7 +266,7 @@ const Post: React.FC = () => {
             </button>
             <button
               type="button"
-              className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white"
+              className="cursor-pointer flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold transition hover:border-white/30 hover:text-white"
               title="Downvote"
             >
               <FaRegThumbsDown />
