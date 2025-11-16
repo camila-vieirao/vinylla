@@ -138,7 +138,7 @@ const Header: React.FC = () => {
               <li className="relative">
                 <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                  className={`flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-300 hover:text-white hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 ${
+                  className={`cursor-pointer flex h-10 w-10 items-center justify-center rounded-2xl transition-all duration-300 hover:text-white hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 ${
                     isUserDropdownOpen
                       ? "text-white shadow-lg shadow-indigo-500/20"
                       : ""

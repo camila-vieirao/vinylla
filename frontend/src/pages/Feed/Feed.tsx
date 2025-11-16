@@ -56,18 +56,54 @@ const curatedStories: CuratedStory[] = [
 ];
 
 const featuredGroups = [
-  { id: "indie", name: "Indie Underground", members: "18.4k members", image: groupIndie },
-  { id: "jazz", name: "Late Night Jazz Club", members: "9.2k members", image: groupJazz },
-  { id: "electro", name: "Analog Synth Circle", members: "12.1k members", image: groupElectro },
+  {
+    id: "indie",
+    name: "Indie Underground",
+    members: "18.4k members",
+    image: groupIndie,
+  },
+  {
+    id: "jazz",
+    name: "Late Night Jazz Club",
+    members: "9.2k members",
+    image: groupJazz,
+  },
+  {
+    id: "electro",
+    name: "Analog Synth Circle",
+    members: "12.1k members",
+    image: groupElectro,
+  },
 ];
 
 const suggestedPeople = [
-  { id: "marina", name: "Marina Flores", tagline: "Curates dream pop gems", avatar: marinaAvatar },
-  { id: "liam", name: "Liam Duarte", tagline: "Analog synth collector", avatar: liamAvatar },
-  { id: "sofia", name: "Sofia Reis", tagline: "Vinyl photographer", avatar: sofiaAvatar },
+  {
+    id: "marina",
+    name: "Marina Flores",
+    tagline: "Curates dream pop gems",
+    avatar: marinaAvatar,
+  },
+  {
+    id: "liam",
+    name: "Liam Duarte",
+    tagline: "Analog synth collector",
+    avatar: liamAvatar,
+  },
+  {
+    id: "sofia",
+    name: "Sofia Reis",
+    tagline: "Vinyl photographer",
+    avatar: sofiaAvatar,
+  },
 ];
 
-const trendingTopics = ["shoegaze", "vinylfinds", "nowplaying", "analoglove", "festivaldiaries"];
+const trendingTopics = [
+  "shoegaze",
+  "vinylfinds",
+  "nowplaying",
+  "analoglove",
+  "festivaldiaries",
+];
 
 type MediaAction = {
   id: "image" | "video" | "music";
@@ -77,9 +113,24 @@ type MediaAction = {
 };
 
 const mediaActions: MediaAction[] = [
-  { id: "image", label: "Photo", icon: FaImage, accent: "from-[#ffe0ef] to-[#ffb8f6]" },
-  { id: "video", label: "Video", icon: FaVideo, accent: "from-[#dff2ff] to-[#9fd8ff]" },
-  { id: "music", label: "Track", icon: FaMusic, accent: "from-[#ddffe8] to-[#8fffc2]" },
+  {
+    id: "image",
+    label: "Photo",
+    icon: FaImage,
+    accent: "from-[#ffe0ef] to-[#ffb8f6]",
+  },
+  {
+    id: "video",
+    label: "Video",
+    icon: FaVideo,
+    accent: "from-[#dff2ff] to-[#9fd8ff]",
+  },
+  {
+    id: "music",
+    label: "Track",
+    icon: FaMusic,
+    accent: "from-[#ddffe8] to-[#8fffc2]",
+  },
 ];
 
 type FeedProps = {
@@ -167,6 +218,8 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
       setPostImg(null);
       setSelectedTrack(null);
       toast.success("Post created successfully!");
+      // refreshing the feed
+      window.location.reload();
     } catch (error: any) {
       toast.error(error);
     }
@@ -214,7 +267,9 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                         onClick={() => handleStoryAction(story.action)}
                         className={`flex items-center gap-2 rounded-full border border-white/15 bg-gradient-to-r ${story.gradient} px-4 py-2 text-xs font-semibold text-[#100b1f] shadow-sm transition hover:-translate-y-0.5`}
                       >
-                        <span className="text-[0.6rem] uppercase tracking-[0.3em]">{story.badge}</span>
+                        <span className="text-[0.6rem] uppercase tracking-[0.3em]">
+                          {story.badge}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -228,9 +283,15 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                         className={`group relative flex aspect-square flex-col justify-between rounded-3xl bg-gradient-to-br ${story.gradient} p-4 text-left text-[#100b1f] shadow-xl transition-transform duration-300 hover:-translate-y-1 focus:outline-none`}
                       >
                         <div className="space-y-2">
-                          <p className="text-[0.6rem] uppercase tracking-[0.35em] opacity-70">{story.badge}</p>
-                          <p className="text-lg font-semibold leading-tight">{story.title}</p>
-                          <p className="text-xs opacity-80">{story.description}</p>
+                          <p className="text-[0.6rem] uppercase tracking-[0.35em] opacity-70">
+                            {story.badge}
+                          </p>
+                          <p className="text-lg font-semibold leading-tight">
+                            {story.title}
+                          </p>
+                          <p className="text-xs opacity-80">
+                            {story.description}
+                          </p>
                         </div>
                         <span className="text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[#100b1f]/60 transition group-hover:text-[#100b1f]">
                           Tap to open
@@ -242,9 +303,12 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
               </div>
             ) : (
               <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-white/0 p-10 text-center shadow-2xl backdrop-blur">
-                <h2 className="text-3xl font-semibold mb-3">Join the conversation</h2>
+                <h2 className="text-3xl font-semibold mb-3">
+                  Join the conversation
+                </h2>
                 <p className="text-white/70 mb-8 text-base">
-                  Sign in to upload sleeves, tag tracks, and chat with collectors worldwide.
+                  Sign in to upload sleeves, tag tracks, and chat with
+                  collectors worldwide.
                 </p>
                 <button
                   type="button"
@@ -276,10 +340,12 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                     />
                   </button>
                   <div>
-                    <p className="text-lg font-semibold leading-tight">{user.name}</p>
+                    <p className="text-lg font-semibold leading-tight">
+                      {user.name}
+                    </p>
                     <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] pt-1 text-white/60">
-                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                      @{user.username}
+                      <span className="h-2 w-2 rounded-full bg-emerald-400" />@
+                      {user.username}
                     </p>
                   </div>
                 </div>
@@ -311,7 +377,9 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                               accept="image/*"
                               className="hidden"
                               id="post-image"
-                              onChange={(e) => setPostImg(e.target.files?.[0] || null)}
+                              onChange={(e) =>
+                                setPostImg(e.target.files?.[0] || null)
+                              }
                             />
                           </label>
                         );
@@ -323,7 +391,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                             type="button"
                             key={action.id}
                             onClick={() => setShowTrackModal(true)}
-                            className={`flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
+                            className={`cursor-pointer flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
                           >
                             <Icon size={16} />
                             <span>{action.label}</span>
@@ -335,7 +403,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                         <button
                           type="button"
                           key={action.id}
-                          className={`flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
+                          className={`cursor-pointer flex items-center gap-2 rounded-full bg-gradient-to-r ${action.accent} px-4 py-2 text-sm font-semibold text-[#1c0f2b] shadow-sm transition hover:-translate-y-0.5`}
                         >
                           <Icon size={16} />
                           <span>{action.label}</span>
@@ -394,7 +462,9 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-xl font-semibold">Community feed</p>
-                  <p className="text-sm text-white/60">Fresh drops from artists and fans</p>
+                  <p className="text-sm text-white/60">
+                    Fresh drops from artists and fans
+                  </p>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-white/60">
                   <button
@@ -436,17 +506,24 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                   <div>
                     <p className="text-lg font-semibold">{user.name}</p>
                     <p className="text-sm text-white/60">
-                      @{user.username || user.name?.split(" ")[0]?.toLowerCase() || "listener"}
+                      @
+                      {user.username ||
+                        user.name?.split(" ")[0]?.toLowerCase() ||
+                        "listener"}
                     </p>
                   </div>
                 </div>
                 <div className="mt-6 grid grid-cols-3 gap-3 text-center text-sm">
                   <div className="rounded-2xl bg-white/5 p-3">
-                    <p className="text-lg font-semibold">{userStats.followers}</p>
+                    <p className="text-lg font-semibold">
+                      {userStats.followers}
+                    </p>
                     <p className="text-white/60 text-xs">Followers</p>
                   </div>
                   <div className="rounded-2xl bg-white/5 p-3">
-                    <p className="text-lg font-semibold">{userStats.following}</p>
+                    <p className="text-lg font-semibold">
+                      {userStats.following}
+                    </p>
                     <p className="text-white/60 text-xs">Following</p>
                   </div>
                   <div className="rounded-2xl bg-white/5 p-3">
@@ -461,7 +538,9 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <p className="text-xl font-semibold">Groups</p>
-                  <p className="text-sm text-white/60">Rooms buzzing right now</p>
+                  <p className="text-sm text-white/60">
+                    Rooms buzzing right now
+                  </p>
                 </div>
                 <MdGroups size={26} />
               </div>
@@ -485,7 +564,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                     </div>
                     <button
                       type="button"
-                      className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#0d0d15]"
+                      className="cursor-pointer rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#0d0d15] transition hover:bg-white/80"
                       onClick={() => {
                         if (group.id === "indie") {
                           navigate(`/groups/${group.id}`);
@@ -502,7 +581,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
 
               <button
                 type="button"
-                className="mt-6 w-full rounded-full border border-white/20 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="cursor-pointer mt-6 w-full rounded-full border border-white/20 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
               >
                 See all groups
               </button>
@@ -512,7 +591,9 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <p className="text-xl font-semibold">Suggestions</p>
-                  <p className="text-sm text-white/60">People curating similar sounds</p>
+                  <p className="text-sm text-white/60">
+                    People curating similar sounds
+                  </p>
                 </div>
                 <IoPersonAddSharp size={22} />
               </div>
@@ -529,13 +610,17 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                         alt={person.name}
                       />
                       <div>
-                        <p className="font-semibold text-white">{person.name}</p>
-                        <p className="text-xs text-white/60">{person.tagline}</p>
+                        <p className="font-semibold text-white">
+                          {person.name}
+                        </p>
+                        <p className="text-xs text-white/60">
+                          {person.tagline}
+                        </p>
                       </div>
                     </div>
                     <button
                       type="button"
-                      className="rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-3 py-1 text-xs font-semibold"
+                      className="cursor-pointer rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-3 py-1 text-xs font-semibold transition text-white shadow-xl hover:opacity-70"
                     >
                       Follow
                     </button>
@@ -554,7 +639,7 @@ const Feed: React.FC<FeedProps> = ({ onOpenPostModal, onOpenReviewModal }) => {
                 {trendingTopics.map((topic) => (
                   <span
                     key={topic}
-                    className="rounded-full border border-white/15 px-3 py-1 text-sm font-semibold text-white/80"
+                    className="cursor-pointer rounded-full border border-white/15 px-3 py-1 text-sm font-semibold text-white/80"
                   >
                     #{topic}
                   </span>

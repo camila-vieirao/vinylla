@@ -89,7 +89,7 @@ const Cart: React.FC = () => {
           <p className="mt-2 text-sm text-white/60">Shipping and taxes are calculated at checkout.</p>
           <button
             type="button"
-            className="mt-6 w-full rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-6 py-3 text-base font-semibold text-white shadow-xl transition hover:opacity-90 disabled:opacity-30"
+            className="cursor-pointer mt-6 w-full rounded-full bg-gradient-to-r from-[#7c5bff] to-[#ff6ec4] px-6 py-3 text-base font-semibold text-white shadow-xl transition hover:opacity-90 disabled:opacity-30"
             disabled={items.length === 0}
           >
             Finalize purchase
