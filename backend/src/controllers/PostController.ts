@@ -52,7 +52,7 @@ export const getPostById = async (req: Request, res: Response) => {
 // Get de todos os Posts de um usuário específico pelo ID do usuário
 export const getPostsByUserId = async (req: Request, res: Response) => {
   const userId = req.params.userId;
-  const sql = "SELECT * FROM posts WHERE userid = ?";
+  const sql = "SELECT * FROM posts WHERE userid = ? ORDER BY createdAt DESC";
 
   try {
     const [rows] = await pool.query(sql, [userId]);
