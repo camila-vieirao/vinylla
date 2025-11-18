@@ -6,7 +6,7 @@ export const getTopAlbumsByTag = async (req: Request, res: Response) => {
     const limit = req.query.limit || 10;
     const url = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=${encodeURIComponent(
       tag
-    )}&api_key=1fd382b4e756d14c5210be25d94093b9&format=json&limit=${limit}`;
+    )}&api_key=${process.env.LASTFM_API_KEY}&format=json&limit=${limit}`;
     const response = await fetch(url);
     if (!response.ok) {
       return res
@@ -26,7 +26,7 @@ export const getTopTags = async (req: Request, res: Response) => {
   try {
     const limit = 50;
 
-    const url = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptags&api_key=1fd382b4e756d14c5210be25d94093b9&format=json&limit=${limit}`;
+    const url = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptags&api_key=${process.env.LASTFM_API_KEY}&format=json&limit=${limit}`;
 
     const response = await fetch(url);
 
